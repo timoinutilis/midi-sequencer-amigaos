@@ -1,0 +1,669 @@
+Global M68K Construktors
+	_INIT_0_InitFiles
+	_INIT_1_Intuition_c__IntuitionBase
+	_INIT_1_DOS_c__DOSBase
+	_INIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase
+	_INIT_2_MathIEEESingBas_c__MathIeeeSingBasBase
+	_INIT_2_Graphics_c__GfxBase
+	_INIT_2_GadTools_c__GadToolsBase
+	_INIT_2_DiskFont_c__DiskfontBase
+	_INIT_2_Asl_c__AslBase
+	_INIT_5_InitStdIOFiles
+	_INIT_8_Gui2_c
+	_INIT_8_Gui_c
+	_INIT_8_Sequenzen_c
+Global M68K Destruktors
+	_EXIT_5_InitFiles
+	_EXIT_5_InitStdIOFiles
+	_EXIT_4_free
+	_EXIT_2_Asl_c__AslBase
+	_EXIT_2_DiskFont_c__DiskfontBase
+	_EXIT_2_GadTools_c__GadToolsBase
+	_EXIT_2_Graphics_c__GfxBase
+	_EXIT_2_MathIEEESingBas_c__MathIeeeSingBasBase
+	_EXIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase
+	_EXIT_1_DOS_c__DOSBase
+	_EXIT_1_Intuition_c__IntuitionBase
+	_EXIT_0_Main
+No Global PPC Destruktors
+No Global PPC Destruktors
+
+M68K Code
+
+
+  Hunk #0 ( Far Public ) 51468 Bytes (0xc90c)
+  __startup68K = 0 (0x0) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/startups/startup.o
+  _exit = 424 (0x1a8) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/startups/startup.o
+  _Frisch = 460 (0x1cc) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _Aufnehmen = 574 (0x23e) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _Abspielen = 1048 (0x418) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _AktualisiereEditFeld = 1726 (0x6be) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _haupt = 1800 (0x708) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _wbmain = 7008 (0x1b60) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Start.o
+  _main = 7054 (0x1b8e) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Start.o
+  _Frage = 7104 (0x1bc0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _Meldung = 7178 (0x1c0a) referenced 5 times
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _ErstelleAslReqs = 7252 (0x1c54) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _EntferneAslReqs = 7344 (0x1cb0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _EndungAnfuegen = 7372 (0x1ccc) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _AslProjLaden = 7472 (0x1d30) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _AslProjSpeichern = 7604 (0x1db4) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _ErstelleMenu = 7964 (0x1f1c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Menu.o
+  _EntferneMenu = 8110 (0x1fae) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Menu.o
+  _MenuPunkt = 8170 (0x1fea) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Menu.o
+  _InitLied = 8372 (0x20b4) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _ErstelleCamdRealTime = 8780 (0x224c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _EntferneCamdRealTime = 9120 (0x23a0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _EntferneLinks = 9244 (0x241c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _ErstelleLinks = 9358 (0x248e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _ResetteZeit = 9630 (0x259e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _AktualisiereTakt = 9652 (0x25b4) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _TesteMidiThru = 9726 (0x25fe) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _SendeInstrument = 9870 (0x268e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _SpurAufnehmen = 10120 (0x2788) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _AbspielenVorbereiten = 10704 (0x29d0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _LoopVorbereiten = 12030 (0x2efe) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _SpurAbspielen = 12844 (0x322c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _SpurAbklingen = 13904 (0x3650) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _SpieleMetronom = 14120 (0x3728) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _INIT_8_Sequenzen_c = 14472 (0x3888) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SequenzenOrdnen = 14486 (0x3896) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _NeueSequenzEinordnen = 14732 (0x398c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SequenzEntfernen = 15142 (0x3b26) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SpurSequenzenEntfernen = 15230 (0x3b7e) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SequenzAusSpurEntfernen = 15360 (0x3c00) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _TaktSequenz = 15514 (0x3c9a) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenVerschieben = 15628 (0x3d0c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenEntfernen = 15918 (0x3e2e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _NeuesAlias = 16072 (0x3ec8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenAlias = 16282 (0x3f9a) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _NeueKopie = 16416 (0x4020) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenKopieren = 16700 (0x413c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _NichtsMarkieren = 16838 (0x41c6) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SequenzenSpuren = 16950 (0x4236) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SpurenTauschen = 17000 (0x4268) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SpurLoeschen = 17182 (0x431e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SequenzZerschneiden = 17722 (0x453a) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenZerschneiden = 18416 (0x47f0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _SequenzenVerbinden = 18548 (0x4874) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenVerbinden = 18954 (0x4a0a) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenStartVerschieben = 19122 (0x4ab2) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _MarkSequenzenEndeVerschieben = 19412 (0x4bd4) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Sequenzen.o
+  _AliaseAnpassen = 19796 (0x4d54) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/MidiEdit.o
+  _EventsVerschieben = 19952 (0x4df0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/MidiEdit.o
+  _OrdneEvents = 20030 (0x4e3e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/MidiEdit.o
+  _QuantisiereSequenz = 20230 (0x4f06) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/MidiEdit.o
+  _MarkSequenzenQuantisieren = 20430 (0x4fce) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/MidiEdit.o
+  _PrintEvents = 20574 (0x505e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/MidiEdit.o
+  _INIT_8_Gui_c = 20792 (0x5138) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ErstelleGuiClasses = 20808 (0x5148) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _EntferneGuiClasses = 21128 (0x5288) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ErstelleFarben = 21252 (0x5304) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _EntferneFarben = 21464 (0x53d8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ErstelleHauptfenster = 21534 (0x541e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _EntferneHauptfenster = 21914 (0x559a) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _SetzeFont = 21970 (0x55d2) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _Fett = 22008 (0x55f8) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ErstelleGadgets = 22078 (0x563e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _EntferneGadgets = 24504 (0x5fb8) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _AktualisiereGadgets = 24622 (0x602e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _BildFrei = 25000 (0x61a8) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _Schreibe = 25146 (0x623a) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _SchreibeZahl = 25346 (0x6302) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _RahmenEin = 25434 (0x635a) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _RahmenAus = 25800 (0x64c8) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _Balken = 26166 (0x6636) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _Linie = 26326 (0x66d6) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _Farbe = 26510 (0x678e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _Punkt = 26562 (0x67c2) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _PunktPosition = 26638 (0x680e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ZeichnePosition = 26740 (0x6874) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _KeinePosition = 27066 (0x69ba) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _INIT_8_Gui2_c = 27576 (0x6bb8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _InitGuiWerte = 27596 (0x6bcc) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _ZeichneSequenzen = 27640 (0x6bf8) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _ZeichneSpuren = 28786 (0x7072) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _PunktSpur = 29636 (0x73c4) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _ZeichneZeitleiste = 29698 (0x7402) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _ZeichneInfobox = 30334 (0x767e) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _TestePunktInfo = 31600 (0x7b70) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _TestePunktBereich = 31732 (0x7bf4) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _ChannelPortFenster = 32144 (0x7d90) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Fenster.o
+  _StringFenster = 33474 (0x82c2) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Fenster.o
+  _QuantisierungsFenster = 34006 (0x84d6) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Fenster.o
+  _IntegerFenster = 34828 (0x880c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Fenster.o
+  _InstrumentenFenster = 35376 (0x8a30) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Fenster.o
+  _Speichern = 37072 (0x90d0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Disk.o
+  _Laden = 37488 (0x9270) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Disk.o
+  _fflush = 38392 (0x95f8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _setvbuf = 38476 (0x964c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaread = 38696 (0x9728) referenced 6 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigareadunget = 39120 (0x98d0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigawrite = 39220 (0x9934) referenced 4 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaeof = 39788 (0x9b6c) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaseek = 39812 (0x9b84) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigagetc = 40156 (0x9cdc) referenced 5 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigagetcunget = 40212 (0x9d14) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaungetc = 40244 (0x9d34) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaputc = 40276 (0x9d54) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaflush = 40336 (0x9d90) referenced 8 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaclose = 40592 (0x9e90) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _INIT_0_InitFiles = 40700 (0x9efc) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _EXIT_5_InitFiles = 40772 (0x9f44) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _memcpy = 40856 (0x9f98) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _malloc = 40920 (0x9fd8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _free = 41308 (0xa15c) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _EXIT_4_free = 41484 (0xa20c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _formatted_out = 42144 (0xa4a0) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _printf = 44212 (0xacb4) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _sprintf = 44264 (0xace8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _INIT_5_InitStdIOFiles = 44328 (0xad28) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _EXIT_5_InitStdIOFiles = 44562 (0xae12) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _strcpy = 44608 (0xae40) referenced 4 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _strncat = 44636 (0xae5c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _strcmp = 44688 (0xae90) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _strrchr = 44744 (0xaec8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _strlen = 44792 (0xaef8) referenced 5 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _signed_out = 44820 (0xaf14) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _signed_out_l = 45474 (0xb1a2) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _unsigned_out = 45564 (0xb1fc) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _unsigned_out_l = 46156 (0xb44c) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _char_out = 46676 (0xb654) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _string_out = 46816 (0xb6e0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _NewList = 47008 (0xb7a0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Close = 47028 (0xb7b4) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Close = 47028 (0xb7b4) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Read = 47048 (0xb7c8) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Read = 47048 (0xb7c8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Write = 47076 (0xb7e4) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Write = 47076 (0xb7e4) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Input = 47104 (0xb800) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Input = 47104 (0xb800) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Output = 47120 (0xb810) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Output = 47120 (0xb810) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Seek = 47136 (0xb820) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Seek = 47136 (0xb820) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  DeleteFile = 47164 (0xb83c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _DeleteFile = 47164 (0xb83c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  IoErr = 47184 (0xb850) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _IoErr = 47184 (0xb850) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  IsInteractive = 47200 (0xb860) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _IsInteractive = 47200 (0xb860) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  NameFromFH = 47220 (0xb874) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _NameFromFH = 47220 (0xb874) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  GetProgramName = 47248 (0xb890) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _GetProgramName = 47248 (0xb890) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  FilePart = 47276 (0xb8ac) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _FilePart = 47276 (0xb8ac) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  AddPart = 47296 (0xb8c0) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _AddPart = 47296 (0xb8c0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  VPrintf = 47324 (0xb8dc) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _VPrintf = 47324 (0xb8dc) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Allocate = 47352 (0xb8f8) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Allocate = 47352 (0xb8f8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Deallocate = 47376 (0xb910) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Deallocate = 47376 (0xb910) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  AllocMem = 47404 (0xb92c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _AllocMem = 47404 (0xb92c) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  FreeMem = 47428 (0xb944) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _FreeMem = 47428 (0xb944) referenced 4 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  AddHead = 47452 (0xb95c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _AddHead = 47452 (0xb95c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Remove = 47476 (0xb974) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Remove = 47476 (0xb974) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  RemHead = 47496 (0xb988) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _RemHead = 47496 (0xb988) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  FindTask = 47516 (0xb99c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _FindTask = 47516 (0xb99c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  CloseLibrary = 47536 (0xb9b0) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _CloseLibrary = 47536 (0xb9b0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  OpenLibrary = 47556 (0xb9c4) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _OpenLibrary = 47556 (0xb9c4) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  EasyRequest = 47580 (0xb9dc) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _EasyRequest = 47580 (0xb9dc) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _setjmp = 47612 (0xb9fc) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _longjmp = 47628 (0xba0c) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _floor = 47648 (0xba20) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _frexp = 47672 (0xba38) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  lib_int2float = 47780 (0xbaa4) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  lib_float2int = 47800 (0xbab8) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  lib_float_add = 47820 (0xbacc) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  lib_float_div = 47840 (0xbae0) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _double_out = 48408 (0xbd18) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  main() = 49864 (0xc2c8) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  main(int,char **) = 49872 (0xc2d0) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _wbmain__FP9WBStartup = 49880 (0xc2d8) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  wbmain(WBStartup *) = 49880 (0xc2d8) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  main(int,char *) = 49888 (0xc2e0) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_0_Main = 50348 (0xc4ac) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_Asl_c__AslBase = 50400 (0xc4e0) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_Asl_c__AslBase = 50436 (0xc504) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_DiskFont_c__DiskfontBase = 50472 (0xc528) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_DiskFont_c__DiskfontBase = 50508 (0xc54c) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_1_DOS_c__DOSBase = 50548 (0xc574) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_1_DOS_c__DOSBase = 50584 (0xc598) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_GadTools_c__GadToolsBase = 50620 (0xc5bc) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_GadTools_c__GadToolsBase = 50656 (0xc5e0) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_Graphics_c__GfxBase = 50696 (0xc608) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_Graphics_c__GfxBase = 50732 (0xc62c) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _InitModules = 50812 (0xc67c) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _CleanupModules = 50888 (0xc6c8) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_1_Intuition_c__IntuitionBase = 50948 (0xc704) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_1_Intuition_c__IntuitionBase = 50984 (0xc728) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  LibBaseC::LibBaseC(char *,unsigned long,short) = 51052 (0xc76c) referenced 8 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+
+  Hunk #1 ( Far Public ) 372 Bytes (0x174)
+  LibBaseC::~LibBaseC() = 0 (0x0) referenced 8 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase = 32 (0x20) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase = 68 (0x44) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_MathIEEESingBas_c__MathIeeeSingBasBase = 116 (0x74) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_MathIEEESingBas_c__MathIeeeSingBasBase = 152 (0x98) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  Neg64 = 200 (0xc8) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___neg64 = 200 (0xc8) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  SDiv64 = 208 (0xd0) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  UDiv64 = 248 (0xf8) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___uintdivmod64 = 248 (0xf8) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___intdivmod64 = 208 (0xd0) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  UMod64 = 348 (0x15c) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___uintmod64 = 348 (0x15c) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  SMod64 = 360 (0x168) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___intmod64 = 360 (0x168) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+
+PowerPC Code
+
+
+Data
+
+
+  Hunk #2 ( Far Public ) 2492 Bytes (0x9bc)
+  _snum = 0 (0x0) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _wahlseq = 4 (0x4) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _loop = 8 (0x8) referenced 3 times
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _projreq = 24 (0x18) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _projdatei = 28 (0x1c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Requester.o
+  _menu = 328 (0x148) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Menu.o
+  _vi = 332 (0x14c) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Menu.o
+  _menue = 336 (0x150) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Menu.o
+  _CamdBase = 696 (0x2b8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _midi = 700 (0x2bc) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _midiin = 704 (0x2c0) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _RealTimeBase = 708 (0x2c4) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _player = 712 (0x2c8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _takt = 716 (0x2cc) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _zeit = 720 (0x2d0) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _altzeit = 724 (0x2d4) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _neuseq = 728 (0x2d8) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _altmetro = 732 (0x2dc) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _midisig = 734 (0x2de) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _bpm = 736 (0x2e0) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _metro = 740 (0x2e4) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _zeroData = 752 (0x2f0) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _playData = 800 (0x320) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _recData = 824 (0x338) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _mrecData = 848 (0x350) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _mplayData = 900 (0x384) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _loopData = 952 (0x3b8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _imgzero = 1028 (0x404) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _imgstop = 1048 (0x418) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _imgplay = 1068 (0x42c) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _imgrec = 1088 (0x440) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _imgmrec = 1108 (0x454) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _imgmplay = 1128 (0x468) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _imgloop = 1148 (0x47c) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _farbe = 1168 (0x490) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ButtonBase = 1420 (0x58c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ScrollerBase = 1424 (0x590) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _ChooserBase = 1428 (0x594) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _StringBase = 1432 (0x598) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _IntegerBase = 1436 (0x59c) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _SliderBase = 1440 (0x5a0) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _CheckBoxBase = 1444 (0x5a4) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _font = 1448 (0x5a8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _hfenster = 1452 (0x5ac) referenced 4 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _aktfenster = 1456 (0x5b0) referenced 3 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _altposx = 1460 (0x5b4) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _gui = 1464 (0x5b8) referenced 3 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _guibox = 1480 (0x5c8) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui2.o
+  _std__out = 1864 (0x748) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _std__in = 1952 (0x7a0) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _std__err = 2040 (0x7f8) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _AslBase = 2320 (0x910) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _DiskfontBase = 2324 (0x914) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _DOSBase = 2328 (0x918) referenced 18 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _GadToolsBase = 2332 (0x91c) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _GfxBase = 2336 (0x920) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _IntuitionBase = 2348 (0x92c) referenced 7 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _not_open__LibBaseC = 2352 (0x930) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _MathIeeeDoubBasBase = 2356 (0x934) referenced 5 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _MathIeeeSingBasBase = 2360 (0x938) referenced 4 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  ___stacksize = 2364 (0x93c) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  ___init_table68k = 2368 (0x940) referenced 2 times
+    File <Internal Assembled>
+  ___exit_table68k = 2432 (0x980) referenced 1 times
+    File <Internal Assembled>
+
+BSS
+
+
+  Hunk #3 ( Far Public ) 17744 Bytes (0x4550)
+  _SysBase = 0 (0x0) referenced 17 times
+    File Work:Programmieren/StormC4/StormSYS/startups/startup.o
+  _lied = 176 (0xb0) referenced 6 times
+    File Eigenes:C/Horny0.1/objects_debug/Main.o
+  _midiout = 248 (0xf8) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _midiname = 312 (0x138) referenced 2 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _spur = 376 (0x178) referenced 5 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _sp = 7288 (0x1c78) referenced 3 times
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _notean = 8824 (0x2278) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Midi.o
+  _gadget = 17016 (0x4278) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _randlr = 17068 (0x42ac) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _randou = 17070 (0x42ae) referenced 1 times
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _guifar = 17072 (0x42b0) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Gui.o
+  _head = 17176 (0x4318) unused, maybe local
+    File Eigenes:C/Horny0.1/objects_debug/Disk.o
+
+END

@@ -1,0 +1,538 @@
+Global M68K Construktors
+	_INIT_0_InitFiles
+	_INIT_1_Intuition_c__IntuitionBase
+	_INIT_1_DOS_c__DOSBase
+	_INIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase
+	_INIT_2_Graphics_c__GfxBase
+	_INIT_2_GadTools_c__GadToolsBase
+	_INIT_5_InitStdIOFiles
+	_INIT_8_Gui2_c
+	_INIT_8_Sequenzen_c
+Global M68K Destruktors
+	_EXIT_5_InitFiles
+	_EXIT_5_InitStdIOFiles
+	_EXIT_4_free
+	_EXIT_2_GadTools_c__GadToolsBase
+	_EXIT_2_Graphics_c__GfxBase
+	_EXIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase
+	_EXIT_1_DOS_c__DOSBase
+	_EXIT_1_Intuition_c__IntuitionBase
+	_EXIT_0_Main
+No Global PPC Destruktors
+No Global PPC Destruktors
+
+M68K Code
+
+
+  Hunk #0 ( Far Public ) 36700 Bytes (0x8f5c)
+  __startup68K = 0 (0x0) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/startups/startup.o
+  _exit = 424 (0x1a8) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/startups/startup.o
+  _Aufnehmen = 460 (0x1cc) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _Abspielen = 882 (0x372) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _Quantisiere = 1138 (0x472) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _Loesche = 1254 (0x4e6) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _MarkierungenAufheben = 1348 (0x544) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _AktualisiereEditFeld = 1426 (0x592) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _main = 1488 (0x5d0) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _ErstelleMenu = 4300 (0x10cc) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Menu.o
+  _EntferneMenu = 4446 (0x115e) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Menu.o
+  _MenuPunkt = 4506 (0x119a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Menu.o
+  _InitSpuren = 4664 (0x1238) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _ErstelleCamdRealTime = 5006 (0x138e) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _EntferneCamdRealTime = 5282 (0x14a2) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _EntferneLinks = 5376 (0x1500) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _ErstelleLinks = 5490 (0x1572) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _ResetteZeit = 5762 (0x1682) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _AktualisiereTakt = 5784 (0x1698) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _TesteMidiThru = 5858 (0x16e2) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _SendeInstrument = 6002 (0x1772) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _SpurAufnehmen = 6252 (0x186c) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _AbspielenVorbereiten = 6824 (0x1aa8) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _SpurAbspielen = 7850 (0x1eaa) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _SpurAbklingen = 8806 (0x2266) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _SpieleMetronom = 9020 (0x233c) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _INIT_8_Sequenzen_c = 9240 (0x2418) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _SequenzenOrdnen = 9262 (0x242e) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _NeueSequenzEinordnen = 9508 (0x2524) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _SequenzEntfernen = 9884 (0x269c) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _SequenzenEntfernen = 9972 (0x26f4) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _SequenzAusSpurEntfernen = 10102 (0x2776) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _TaktSequenz = 10250 (0x280a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _MarkSequenzenVerschieben = 10314 (0x284a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _MarkSequenzenEntfernen = 10546 (0x2932) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _NeuesAlias = 10642 (0x2992) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _MarkSequenzenAlias = 10850 (0x2a62) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _NichtsMarkieren = 10950 (0x2ac6) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Sequenzen.o
+  _AliaseAnpassen = 11008 (0x2b00) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/MidiEdit.o
+  _OrdneEvents = 11124 (0x2b74) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/MidiEdit.o
+  _QuantisiereSequenz = 11324 (0x2c3c) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/MidiEdit.o
+  _MarkSequenzenQuantisieren = 11560 (0x2d28) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/MidiEdit.o
+  _PrintEvents = 11656 (0x2d88) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/MidiEdit.o
+  _ErstelleGuiClasses = 11872 (0x2e60) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _EntferneGuiClasses = 11994 (0x2eda) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _ErstelleHauptfenster = 12086 (0x2f36) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _EntferneHauptfenster = 12458 (0x30aa) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _ErstelleGadgets = 12508 (0x30dc) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _EntferneGadgets = 14388 (0x3834) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _AktualisiereGadgets = 14506 (0x38aa) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _BildFrei = 14660 (0x3944) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _Schreibe = 14806 (0x39d6) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _SchreibeZahl = 14996 (0x3a94) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _RahmenEin = 15084 (0x3aec) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _RahmenAus = 15440 (0x3c50) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _Balken = 15796 (0x3db4) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _Linie = 15946 (0x3e4a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _PunktPosition = 16120 (0x3ef8) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _ZeichnePosition = 16212 (0x3f54) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _KeinePosition = 16540 (0x409c) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _KeinTransport = 16682 (0x412a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _INIT_8_Gui2_c = 16908 (0x420c) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _ZeichneSequenzen = 16928 (0x4220) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _ZeichneSpuren = 17670 (0x4506) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _PunktSpur = 18186 (0x470a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _ZeichneZeitleiste = 18248 (0x4748) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _ZeichneInfobox = 18528 (0x4860) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _TestePunktInfo = 19790 (0x4d4e) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _TestePunktBereich = 19922 (0x4dd2) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui2.o
+  _ChannelPortFenster = 20348 (0x4f7c) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Fenster.o
+  _StringFenster = 21678 (0x54ae) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Fenster.o
+  _QuantisierungsFenster = 22210 (0x56c2) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Fenster.o
+  _IntegerFenster = 23032 (0x59f8) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Fenster.o
+  _fflush = 23716 (0x5ca4) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _setvbuf = 23800 (0x5cf8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaread = 24020 (0x5dd4) referenced 6 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigareadunget = 24444 (0x5f7c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigawrite = 24544 (0x5fe0) referenced 4 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaeof = 25112 (0x6218) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaseek = 25136 (0x6230) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigagetc = 25480 (0x6388) referenced 5 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigagetcunget = 25536 (0x63c0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaungetc = 25568 (0x63e0) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaputc = 25600 (0x6400) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaflush = 25660 (0x643c) referenced 8 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _amigaclose = 25916 (0x653c) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _INIT_0_InitFiles = 26024 (0x65a8) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _EXIT_5_InitFiles = 26096 (0x65f0) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _memcpy = 26180 (0x6644) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _malloc = 26244 (0x6684) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _free = 26632 (0x6808) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _EXIT_4_free = 26808 (0x68b8) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _formatted_out = 27468 (0x6b4c) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _printf = 29536 (0x7360) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _sprintf = 29588 (0x7394) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _INIT_5_InitStdIOFiles = 29652 (0x73d4) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _EXIT_5_InitStdIOFiles = 29886 (0x74be) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _strcpy = 29932 (0x74ec) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _strlen = 29960 (0x7508) referenced 5 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _signed_out = 29988 (0x7524) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _signed_out_l = 30642 (0x77b2) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _unsigned_out = 30732 (0x780c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _unsigned_out_l = 31324 (0x7a5c) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _char_out = 31844 (0x7c64) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _string_out = 31984 (0x7cf0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _NewList = 32176 (0x7db0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Close = 32196 (0x7dc4) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Close = 32196 (0x7dc4) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Read = 32216 (0x7dd8) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Read = 32216 (0x7dd8) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Write = 32244 (0x7df4) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Write = 32244 (0x7df4) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Input = 32272 (0x7e10) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Input = 32272 (0x7e10) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Output = 32288 (0x7e20) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Output = 32288 (0x7e20) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Seek = 32304 (0x7e30) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Seek = 32304 (0x7e30) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  DeleteFile = 32332 (0x7e4c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _DeleteFile = 32332 (0x7e4c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  IoErr = 32352 (0x7e60) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _IoErr = 32352 (0x7e60) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  IsInteractive = 32368 (0x7e70) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _IsInteractive = 32368 (0x7e70) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  NameFromFH = 32388 (0x7e84) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _NameFromFH = 32388 (0x7e84) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  GetProgramName = 32416 (0x7ea0) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _GetProgramName = 32416 (0x7ea0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  FilePart = 32444 (0x7ebc) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _FilePart = 32444 (0x7ebc) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  AddPart = 32464 (0x7ed0) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _AddPart = 32464 (0x7ed0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  VPrintf = 32492 (0x7eec) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _VPrintf = 32492 (0x7eec) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Allocate = 32520 (0x7f08) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Allocate = 32520 (0x7f08) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Deallocate = 32544 (0x7f20) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Deallocate = 32544 (0x7f20) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  AllocMem = 32572 (0x7f3c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _AllocMem = 32572 (0x7f3c) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  FreeMem = 32596 (0x7f54) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _FreeMem = 32596 (0x7f54) referenced 4 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  AddHead = 32620 (0x7f6c) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _AddHead = 32620 (0x7f6c) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  Remove = 32644 (0x7f84) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _Remove = 32644 (0x7f84) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  RemHead = 32664 (0x7f98) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _RemHead = 32664 (0x7f98) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  FindTask = 32684 (0x7fac) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _FindTask = 32684 (0x7fac) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  CloseLibrary = 32704 (0x7fc0) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _CloseLibrary = 32704 (0x7fc0) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  OpenLibrary = 32724 (0x7fd4) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _OpenLibrary = 32724 (0x7fd4) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  EasyRequest = 32748 (0x7fec) unused, maybe local
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _EasyRequest = 32748 (0x7fec) referenced 1 times
+    File Work:Programmieren/StormC4/Lib/amiga.lib
+  _setjmp = 32780 (0x800c) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _longjmp = 32796 (0x801c) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _floor = 32816 (0x8030) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _frexp = 32840 (0x8048) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  _double_out = 33496 (0x82d8) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/math020.lib
+  main() = 34952 (0x8888) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  main(int,char **) = 34960 (0x8890) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _wbmain__FP9WBStartup = 34968 (0x8898) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  wbmain(WBStartup *) = 34968 (0x8898) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _wbmain = 34976 (0x88a0) referenced 2 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  main(int,char *) = 34980 (0x88a4) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_0_Main = 35440 (0x8a70) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_1_DOS_c__DOSBase = 35492 (0x8aa4) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_1_DOS_c__DOSBase = 35528 (0x8ac8) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_GadTools_c__GadToolsBase = 35564 (0x8aec) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_GadTools_c__GadToolsBase = 35600 (0x8b10) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_Graphics_c__GfxBase = 35640 (0x8b38) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_Graphics_c__GfxBase = 35676 (0x8b5c) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _InitModules = 35756 (0x8bac) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _CleanupModules = 35832 (0x8bf8) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_1_Intuition_c__IntuitionBase = 35892 (0x8c34) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_1_Intuition_c__IntuitionBase = 35928 (0x8c58) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  LibBaseC::LibBaseC(char *,unsigned long,short) = 35996 (0x8c9c) referenced 5 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  LibBaseC::~LibBaseC() = 36412 (0x8e3c) referenced 5 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _INIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase = 36444 (0x8e5c) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _EXIT_2_MathIEEEDoubBas_c__MathIeeeDoubBasBase = 36480 (0x8e80) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  Neg64 = 36528 (0x8eb0) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___neg64 = 36528 (0x8eb0) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  SDiv64 = 36536 (0x8eb8) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  UDiv64 = 36576 (0x8ee0) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___uintdivmod64 = 36576 (0x8ee0) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___intdivmod64 = 36536 (0x8eb8) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  UMod64 = 36676 (0x8f44) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___uintmod64 = 36676 (0x8f44) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  SMod64 = 36688 (0x8f50) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+  ___intmod64 = 36688 (0x8f50) unused, maybe local
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcsupport020.lib
+
+PowerPC Code
+
+
+Data
+
+
+  Hunk #1 ( Far Public ) 1388 Bytes (0x56c)
+  _snum = 0 (0x0) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _spuranz = 2 (0x2) referenced 3 times
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _wahlseq = 4 (0x4) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Main.o
+  _menu = 8 (0x8) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Menu.o
+  _vi = 12 (0xc) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Menu.o
+  _menue = 16 (0x10) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Menu.o
+  _CamdBase = 320 (0x140) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _midi = 324 (0x144) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _midiin = 328 (0x148) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _RealTimeBase = 332 (0x14c) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _player = 336 (0x150) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _zeit = 340 (0x154) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _altzeit = 344 (0x158) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _takt = 348 (0x15c) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _bpm = 352 (0x160) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _taktanz = 354 (0x162) referenced 4 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _neuseq = 356 (0x164) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _altmetro = 360 (0x168) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _midisig = 362 (0x16a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _ButtonBase = 368 (0x170) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _ScrollerBase = 372 (0x174) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _ChooserBase = 376 (0x178) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _StringBase = 380 (0x17c) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _IntegerBase = 384 (0x180) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _font = 388 (0x184) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _hfenster = 392 (0x188) referenced 3 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _aktfenster = 396 (0x18c) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guispur = 400 (0x190) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guispsicht = 402 (0x192) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guisph = 404 (0x194) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guitakt = 408 (0x198) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guitasicht = 412 (0x19c) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guitab = 414 (0x19e) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guispalte = 416 (0x1a0) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _guibox = 418 (0x1a2) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _altposx = 420 (0x1a4) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _std__out = 800 (0x320) referenced 3 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _std__in = 888 (0x378) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _std__err = 976 (0x3d0) referenced 2 times
+    File Work:Programmieren/StormC4/Lib/storm020.lib
+  _DOSBase = 1256 (0x4e8) referenced 15 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _GadToolsBase = 1260 (0x4ec) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _GfxBase = 1264 (0x4f0) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _IntuitionBase = 1276 (0x4fc) referenced 5 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _not_open__LibBaseC = 1280 (0x500) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  _MathIeeeDoubBasBase = 1284 (0x504) referenced 5 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  ___stacksize = 1288 (0x508) referenced 1 times
+    File Work:Programmieren/StormC4/StormSYS/lib/stormcstartup020.lib
+  ___init_table68k = 1296 (0x510) referenced 2 times
+    File <Internal Assembled>
+  ___exit_table68k = 1344 (0x540) referenced 1 times
+    File <Internal Assembled>
+
+BSS
+
+
+  Hunk #2 ( Far Public ) 15760 Bytes (0x3d90)
+  _SysBase = 0 (0x0) referenced 16 times
+    File Work:Programmieren/StormC4/StormSYS/startups/startup.o
+  _midiout = 176 (0xb0) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _midiname = 240 (0xf0) referenced 2 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _spur = 304 (0x130) referenced 4 times
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _notean = 6960 (0x1b30) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Midi.o
+  _gadget = 15152 (0x3b30) unused, maybe local
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _randlr = 15192 (0x3b58) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+  _randou = 15194 (0x3b5a) referenced 1 times
+    File Eigenes:C/Sequencer/objects_debug/Gui.o
+
+END

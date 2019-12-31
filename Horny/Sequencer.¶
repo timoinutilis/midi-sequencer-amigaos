@@ -1,0 +1,297 @@
+Storm Shell Project (0018)
+Settings (Start)
+C/C++ Environment
+"StormC:include"
+0
+Includepath (End)
+0 "" 80
+1 "objects_debug"
+1 0 "makelog.txt"
+""
+0
+0 0
+0
+0 1
+C/C++ Preprozessor
+0 "NDEBUG" ""
+0
+Defines (End)
+1 1 1
+0 0
+C/C++ Options
+0 0 0 2 1 0 0 0 1 0 0 1 0 0 0
+0 0 0
+0
+0 1 0
+C/C++ Optimizer
+9
+C/C++ Warnings
+1 1 1 1 1 1 0 1
+0 0
+GCC Options (1)
+0 "NDEBUG" ""
+0
+Defines (End)
+1 0 0 1 0
+1 0 0 0 0 1 0
+0 2 1 0 0
+0 0 1 0 1 0 0
+0 0 0 0
+0 ""
+2 0 0 0
+1 0 0 1 0 1 0 1 0 1
+1 1 0 1 0 1
+0 1 1 1 1 0 0
+1 0 0 0 0
+Assembler
+0 ""
+0 "CON://640/200/Storm Assembler/AUTO/WAIT/SCREEN StormScreen"
+0 0
+0 1 60 0 1 0 0 20 0
+Sets (End)
+0 1 0 0 0 2 1 0 0
+1 1 1 1 0 0 0 0 0
+1 0
+0 0 0 0 0
+Linker
+0 0 "PROGDIR:startup.o" 0 0 1 0 1 0 0
+"StormC:lib/" 0 "StormC:lib/logfile" 0 0 0
+0 "_WizardSurface"
+0 0 50 0 50 0 50 0 0
+0 0 0 0 0 0 0 0
+Run
+30 "" "" "" 0
+""
+
+1 "CON://400/180/Storm Console/AUTO/WAIT/SCREEN StormScreen" "RAM:Output" "RAM:Input"
+1 0
+0 0 0 "" ""
+Settings (End)
+Storm Shell Project (Custom Sections End)
+Section
+1 1 100
+0 1 1 0
+4
+File
+1 "Main.c"
+"Main.c"
+"Midi.h"
+"Gui.h"
+"Strukturen.h"
+"Fenster.h"
+"MidiEdit.h"
+"Gui2.h"
+"Menu.h"
+"Sequenzen.h"
+"Disk.h"
+"Requester.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Main.o" "objects_debug/Main.debug"
+""
+1 1
+File
+1 "Start.c"
+"Start.c"
+Storm Shell Project (Dependencies)
+"objects_debug/Start.o" "objects_debug/Start.debug"
+""
+1 1
+File
+1 "Requester.c"
+"Requester.c"
+Storm Shell Project (Dependencies)
+"objects_debug/Requester.o" "objects_debug/Requester.debug"
+""
+1 1
+File
+1 "Menu.c"
+"Menu.c"
+"Menu.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Menu.o" "objects_debug/Menu.debug"
+""
+1 1
+File
+1 "Midi.c"
+"Midi.c"
+"Strukturen.h"
+"Requester.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Midi.o" "objects_debug/Midi.debug"
+""
+1 1
+File
+1 "Sequenzen.c"
+"Sequenzen.c"
+"Strukturen.h"
+"Requester.h"
+"MidiEdit.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Sequenzen.o" "objects_debug/Sequenzen.debug"
+""
+1 1
+File
+1 "MidiEdit.c"
+"MidiEdit.c"
+"Strukturen.h"
+Storm Shell Project (Dependencies)
+"objects_debug/MidiEdit.o" "objects_debug/MidiEdit.debug"
+""
+1 1
+File
+1 "Gui.c"
+"Gui.c"
+"Strukturen.h"
+"Requester.h"
+"Images.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Gui.o" "objects_debug/Gui.debug"
+""
+1 1
+File
+1 "Gui2.c"
+"Gui2.c"
+"Strukturen.h"
+"Gui.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Gui2.o" "objects_debug/Gui2.debug"
+""
+1 1
+File
+1 "Fenster.c"
+"Fenster.c"
+"Strukturen.h"
+"Gui.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Fenster.o" "objects_debug/Fenster.debug"
+""
+1 1
+File
+1 "Disk.c"
+"Disk.c"
+"Strukturen.h"
+"Midi.h"
+"Sequenzen.h"
+"Requester.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Disk.o" "objects_debug/Disk.debug"
+""
+1 1
+Section
+2 1 95
+0 1 1 0
+2
+File
+2 "Strukturen.h"
+"Strukturen.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Midi.h"
+"Midi.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Sequenzen.h"
+"Sequenzen.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "MidiEdit.h"
+"MidiEdit.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Gui.h"
+"Gui.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Gui2.h"
+"Gui2.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Fenster.h"
+"Fenster.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Menu.h"
+"Menu.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Requester.h"
+"Requester.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Disk.h"
+"Disk.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Images.h"
+"Images.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+Section
+10 1 40
+0 0 0 0
+7
+File
+10 "Horny"
+"Horny"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+Section
+5 1 -50
+0 0 0 0
+7
+File
+5 "storm.lib"
+"storm.lib"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+5 "amiga.lib"
+"amiga.lib"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+5 "debug.lib"
+"debug.lib"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+Storm Shell Project (End)
