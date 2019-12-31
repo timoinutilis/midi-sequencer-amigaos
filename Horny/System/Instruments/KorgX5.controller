@@ -1,0 +1,26 @@
+HORNY INSTRUMENT CONTROLLER
+
+0 Bank Select
+1 Pitch Modulation
+2 VDF Cutoff
+4 Foot Controller
+6 Data Entry
+7 Volume
+10+ Panpot
+11 Expression
+12 Effect Control 1
+13 Effect Control 2
+32 Bank Select LSB
+38 Data Entry LSB
+64- Damper on/off
+72 Release Time
+73 Attack Time
+74 Brightness
+91 Reverb Level
+92- Effect 1 on/off
+93 Chorus Level
+94- Effect 2 on/off
+96 Data Increment
+97 Data Decrement
+100 RPN LSB
+101 RPN MSB

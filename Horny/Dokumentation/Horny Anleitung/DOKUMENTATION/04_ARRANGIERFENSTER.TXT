@@ -1,0 +1,91 @@
+ARRANGIERFENSTER
+
+1. Spuren
+
+1.1. Aktivieren, Erzeugen, Löschen, Tauschen
+Ein Klick auf die linke Spalte einer exisitierenden Spur aktiviert sie. Außerdem kann die aktive Spur über die Cursor-Tasten hoch/runter gewählt werden. Ein <ALT>-Klick auf eine nicht vorhandene (graue) Spur erzeugt eine neue (oder Menü "Spur/Hinzufügen") und ein <ALT>-Klick auf eine vorhandene Spur dupliziert diese (aber ohne Sequenzen). Gelöscht wird die aktive Spur über den Menüpunkt "Spur/Löschen". Um die Reihenfolge der Spuren zu ändern, kann man jede per Drag&Drop verschieben.
+
+1.2. Mute, Solo
+Das grüne Kästchen ist ein Mute-Knopf, der die entsprechende Spur stumm schaltet, bzw. nach nochmaligem Klicken das Mute wieder deaktiviert. Durch einen <SHIFT>-Klick auf Mute wird die Spur auf Solo geschaltet. Ein <ALT>-Klick schaltet alle Mutes aus. Alle Mute-Funktionen sind auch über das Menü "Spur" erreichbar.
+
+1.3. Name, Kanal, Programm, Zeitverschiebung
+Die Einstellungen der aktiven Spur werden unten in der Infobox angezeigt ("Spur"-Spalte). Ein Klick auf einen der Werte lässt ein Requester zur Änderung erscheinen. Der "Thru"-Modus in der Kanalauswahl passt nicht in das Konzept von Horny und existiert nur aus Kompatibilitätsgründen fürs Importieren von SMF-Dateien. Sonst sollte er nicht benutzt werden.
+Für die Kanal- und Programm-Requester sollten die Projekt-Einstellungen richtig konfiguriert sein (Menü "Projekt/Einstellungen").
+
+1.4. Midi-Programm-Wechsel
+Jede Spur repräsentiert ein Midi-Programm (Sound) über einen Midi-Kanal. Will man das Programm während eines Liedes auf einem Kanal wechseln, so muss man zwei Spuren mit dem selben Kanal und unterschiedlichen Programm-Angaben (Infobox) benutzen. Jenachdem, welches Programm gerade gespielt werden soll, müssen sich die Sequenzen in der entsprechenden Spur befinden. Es dürfen dann aber nicht in beiden Spuren Sequenzen sein, sonst kommt es zu Problemen.
+
+1.5. Breite der linken Spalte ändern
+Der Rand zwischen der linken Spalte und dem Sequenzenbereich kann verschoben werden.
+
+1.6. Automation
+Innerhalb der Spuren lassen sich Mischpult-Parameter automatisieren. Somit lassen sich z.B. Lautstärkenverläufe erzeugen. Die Erklärung dazu befindet sich im Kapitel "Spurautomation".
+
+
+2. Sequenzen
+
+2.1. Erzeugen, Löschen
+Durch einen <ALT>-Klick in eine existierende Spur wird an der Mausposition eine neue und leere Sequenz erzeugt. Außerdem wird beim Aufnehmen automatisch eine Sequenz in der aktiven Spur erzeugt, sobald Midi-Daten empfangen werden. Mit der Taste <DEL> oder dem Menüpunkt "Sequenz(en)/Löschen" werden alle markierten Sequenzen wieder gelöscht.
+
+2.2. Markieren
+Ein einfacher Klick auf eine Sequenz markiert nur diese und hebt alle anderen Markierungen auf. Wird gleichzeitig <SHIFT> gedrückt, so bleiben alle bisherigen Markierungen bestehen und die der angeklickten Sequenz wird je nach aktuellem Zustand aktiviert bzw. deaktiviert. Klickt man in einen freien Bereich (oder bei gedrücktem <CTRL>) und hält die Taste gedrückt, so erscheint eine Lassoauswahl, die ebenfalls mit <SHIFT> funktioniert.
+Ein <SHIFT>-Klick auf die linke Spalte einer Spur markiert alle darauf gelegenen Sequenzen (oder Menüpunkt "Sequenz(en)/Markieren/alle in aktiver Spur"). Der Menüpunkt "Sequenz(en)/Markieren/alle im Lied" tut Sinngemäßes.
+Alle Sequenzfunktionen gelten immer für alle markierten Sequenzen.
+
+2.3. Verschieben, Länge ändern
+Sequenzen können per Drag&Drop verschoben werden. Um die Länge zu ändern, müssen Anfangs- oder End-Rand verschoben werden, was aber erst ab einem gewissen Zoom funktioniert. Falls Pfeile an den Rändern erscheinen, heißt dies, dass sich Midi-Events außerhalb des dargestellten Sequenzrahmens befinden. Diese gehen nicht verloren und werden ebenfalls korrekt abgespielt, sofern sie sich nicht mit Midi-Events aus anderen Sequenzen überlappen.
+
+2.4. Kopieren, Aliase
+Wird beim Verschieben <ALT> gedrückt, so werden nicht direkt die markierten Sequenzen verschoben, sondern Kopien davon. Falls nicht zusätzlich <SHIFT> gedrückt wird, handelt es sich bei den Kopien um Aliase, die lediglich Verweise auf Originale sind und automatisch deren Änderungen übernehmen. Die Namen der Originale werden fett dargestellt, die der Aliase dünn.
+
+2.5. Name, Transponierung
+In der Infobox werden die Einstellungen und Informationen der zuletzt angeklickten Sequenz angezeigt ("Sequenz"- bzw. "Alias"-Spalte). Der Name und die Transponierung können durch Anklicken geändert werden.
+
+2.6. Bearbeiten
+Durch einen Doppelklick auf eine Sequenz erscheint das Editorfenster zum Bearbeiten und Erzeugen von Noten- oder Controller-Events.
+Des Weiteren gibt es Funktionen, die direkt im Arrangierfenster durchgeführt werden können. Sie befinden sich im Menü unter "Sequenz(en)" und wirken sich auf alle markierten Sequenzen aus. Zerschneiden und Unterteilen beziehen sich außerdem auf die aktuelle Editposition (gestrichelte Linie).
+
+
+3. Marken, Tempo-, Taktartwechsel
+
+3.1. Erzeugen, Verschieben, Löschen
+Text-, Tempo- und Taktart-Marken befinden sich in den drei Leisten über der Zeitleiste. Durch einen <ALT>-Klick in eine Leiste wird eine entsprechende Marke erzeugt. Außer den Marken ganz am Anfang können alle weiteren nachträglich per Drag&Drop verschoben werden. Wird eine Marke über den oberen Rand geschoben, so wird sie gelöscht.
+
+3.2. Ändern
+Die aktiven Marken werden weiß dargestellt und hängen von der Editposition (gestrichelte Linie) ab. Deren Einstellungen werden in der Infobox ("Editposition"-Spalte) angezeigt und können durch Anklicken geändert werden.
+
+3.3. Textmarken anspringen
+Textmarken dienen auch zum schnellen Anspringen von Liedpositionen. Die ersten 20 Textmarken werden in dem PopUp-Menü in der linken oberen Ecke aufgelistet und können darüber angesprungen werden. Die ersten neun sind zusätzlich über die Tasten <1> bis <9> zu erreichen. Mit <+> und <-> wird jeweils die nächste rechte/linke Textmarke angesprungen.
+
+
+4. Zeitleiste
+
+4.1. Abspielposition
+Die Abspielposition (durchgezogene Linie) kann durch einen Klick in die Zeitleiste gesetzt werden.
+
+4.2. Schleife
+Klickt man in die Zeitleiste, hält die Taste gedrückt und schiebt die Maus nach rechts, so wird ein Schleifenbereich aufgezogen. Der Anfang, das Ende, und der gesamte Bereich können nachträglich verschoben werden. Über den Knopf mit dem runden Pfeil am unteren Fensterrand kann die Schleifenfunktion ein- und ausgeschaltet werden.
+
+
+5. Projektübersicht
+
+Unten rechts im Arrangierfenster befindet sich eine grobe Übersicht über das gesamte Projekt. Der farblich hervorgehobene Bereich deutet den zur Zeit sichtbaren Ausschnitt an. Ein Mausklick in die Übersicht ändert diesen Ausschnitt und ermöglicht so ein schnelles Navigieren.
+
+
+6. Transportfunktionen
+
+<ENTER>: Wiedergabe starten
+<0>: Wiedergabe stoppen, zum Schleifenanfang springen, zum Liedanfang springen
+<LEER>: Wiedergabe starten, Wiedergabe stoppen
+<*>: Aufnahme starten
+<[>: Bei Stopp zurückspulen
+<]>: Bei Stopp vorspulen
+Weitere Transportfunktionen sind über Textmarken möglich (siehe dort).
+
+7. Sonstige Funktionen
+
+Metronom bei Aufnahme
+Metronom bei Wiedergabe
+Schleife
+Folgen
+Midi-Thru (für Midi-Port der aktiven Spur)

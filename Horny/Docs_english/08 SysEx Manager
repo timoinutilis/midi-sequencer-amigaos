@@ -1,0 +1,16 @@
+SYSEX MANAGER
+
+1. What is SysEx?
+
+SysEx messages are data packages, which are sent by MIDI, but does not include ordinary events. Most SysEx datas are device specific ("System Exclusive") and only understood by the device, from which they were originally sent.
+
+SysEx is often used to record complete settings of a device and send them back later.
+
+More information can be found in manuals of most MIDI modules/synthesizers.
+
+
+2. Managment
+
+SysEx messages are organized in groups. The SysEx groups can be edited in the left hand list of this window. The right hand list contains the individual messages of the group selected in the left hand list. The messages can be recorded and managed using the gadgets at the bottom of the message list.
+
+The group list has a check box for each group. Only groups with the check box ticked will be sent when the "Send All Groups" gadget is clicked or the menu item "Project/Send all SysEx" is used.

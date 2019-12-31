@@ -1,0 +1,75 @@
+HORNY INSTRUMENT
+#$VER: Zoom MicroRhythmTrak MRT-3 1.01
+
+* Basic Kits
+#BANK0 -1
+#BANK32 -1
+#PROG 3
+Live Rock
+Studio
+Standard
+Funk Trap
+Epic Rock
+Ballad
+#PROG 10
+Modern
+Rap/HipHop
+Techno Beat
+General Drum
+
+* Variations
+Live Rock variation 1
+Live Rock variation 2
+Live Rock variation 3
+#PROG 18
+Studio variation 1
+Studio variation 2
+Studio variation 3
+Standard variation 1
+Standard variation 2
+Standard variation 3
+Funk Trap variation 1
+#PROG 27
+Funk Trap variation 2
+Funk Trap variation 3
+Epic Rock variation 1
+Epic Rock variation 2
+Ballad variation 1
+Ballad variation 2
+#PROG 34
+Modern variation 1
+Modern variation 2
+Rap/HipHop variation 1
+Rap/HipHop variation 2
+Rap/HipHop variation 3
+Techno Beat variation 1
+Techno Beat variation 2
+#PROG 42
+Techno Beat variation 3
+
+* General Drums
+General Drum Room
+General Drum Power
+General Drum Electronic
+General Drum Analog
+General Drum Brush
+
+* Percussion
+Latin Special
+Percussions
+
+* Mastering
+Live Rock Mastering
+Studio Mastering
+Funk Trap Mastering
+Epic Rock Mastering
+Ballad Mastering
+Modern Mastering
+
+* FX
+Power-benddown
+Special Effect Sounds 1
+Special Effect Sounds 2
+
+* User Kits
+#NUM User 51 70

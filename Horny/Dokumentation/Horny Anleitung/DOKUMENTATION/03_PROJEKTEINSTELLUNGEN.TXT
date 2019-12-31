@@ -1,0 +1,25 @@
+PROJEKT-EINSTELLUNGEN
+
+Alle Einstellungen, die in diesem Fenster gemacht werden können, gelten nur für das aktuelle Projekt und werden auch mit diesem gespeichert.
+
+1. Midi Ports
+
+1.1. Ausgänge
+Hier können alle Midi-Cluster von CAMD gewählt werden, über die das Senden von Midi-Daten möglich sein soll. Die Ausgänge werden in den Kanal-Auswahl-Requestern angeboten.
+
+1.2. Ausgang Instrumente
+Hier kann das Instrument, welches sich am gewählten Midi-Port (Ausgang) befindet, ausgewählt werden. Dies beeinflusst die Listen beim Wählen von Midi-Programmen (Sounds) und Controllern. Bisher existieren die Instrumente "General Midi", "Korg X5" und "Quasimidi Sirius". Sie befinden sich im Verzeichnis "System/Instruments", wo weitere hinzugefügt werden können.
+Falls man über einen Midi-Port mehrere Synthsizer betreibt, kann man in den weiteren Zeilen diese angeben, wenn vorher der Midi-Kanal gewählt wird, ab dem das Instrument gelten soll. Kanal 17 bedeutet, dass diese Zeile ignoriert wird.
+
+1.3. Eingänge
+Hier können alle Midi-Cluster von CAMD gewählt werden, über die Midi-Daten empfangen werden sollen.
+
+
+2. Metronom
+
+Ja, was soll man sagen...
+
+
+3. SMPTE
+
+Diese Einstellungen betreffen die SMPTE-Zeitleiste. Synchronisation ist noch nicht möglich.

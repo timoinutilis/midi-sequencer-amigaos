@@ -1,0 +1,42 @@
+HORNY INSTRUMENT
+#$VER: Access Virus b 1.0
+
+* Bank A
+#BANK 0
+#PROG 0
+#NUM A 0 127
+
+* Bank B
+#BANK 1
+#PROG 0
+#NUM B 0 127
+
+* Bank C
+#BANK 2
+#PROG 0
+#NUM C 0 127
+
+* Bank D
+#BANK 3
+#PROG 0
+#NUM D 0 127
+
+* Bank E
+#BANK 4
+#PROG 0
+#NUM E 0 127
+
+* Bank F
+#BANK 5
+#PROG 0
+#NUM F 0 127
+
+* Bank G
+#BANK 6
+#PROG 0
+#NUM G 0 127
+
+* Bank H
+#BANK 7
+#PROG 0
+#NUM H 0 127

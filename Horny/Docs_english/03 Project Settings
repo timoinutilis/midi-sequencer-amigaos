@@ -1,0 +1,28 @@
+PROJECT SETTINGS
+
+The settings made with the Project/Settings menu only apply to the current project and any changes to the settings will be saved together with the project. 
+
+1. Midi Ports
+
+1.1. Outputs
+
+This list shows the CAMD MIDI OUT ports available to the project.  The CAMD MIDI OUT interfaces installed on your computer can be added to the list using the Add pull-down menu gadget. They can be removed by selecting the interface and using the Remove gadget. The 'active' MIDI OUT port to which the MIDI signals are sent can be chosen from the list by using the Change Active pull-down menu gadget.
+
+1.2. Output Instruments
+
+The MIDI module that Horny expects to see can be chosen by selecting the MIDI OUT port in the Outputs list and selecting the module by using the Output Instruments cycle gadget. This setting determines the program and controller messages sent to the module. The GM setting will be appropriate for many modules that are General MIDI complient, but there are some other module settings included with 'Horny',  More can be added to "System/Instruments" drawer.
+
+If you use more than one MIDI module (e.g. synthesizer) on one MIDI port, you can associate up to three additional modules with individual MIDI channel ranges. Select the channel from which the module should be used and then choose the instrument/module with cycle gadget. Setting the channel to 17 will remove the channel to module association..
+
+1.3. Inputs
+
+This list shows the CAMD MIDI IN ports available to the project. MIDI IN ports may be added or removed from the list using the Add and Remove gadgets. 
+
+
+2. Metronome
+
+The metronome feature is set by selecting the Metronome tab. The metronome plays through the chosen MIDI port and channel. The time signature, and Main/Side beat metronome sounds are set using the gadgets.
+
+3. SMPTE
+
+These settings apply to SMPTE time line. SMPTE synchronisation has not been implemented in Horny for this release.

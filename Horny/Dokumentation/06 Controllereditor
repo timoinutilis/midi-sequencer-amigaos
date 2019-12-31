@@ -1,0 +1,32 @@
+CONTROLLER-EDITOR
+
+1. Zeitleiste
+
+1.1. Abspielposition
+Die Abspielposition (durchgezogene Linie) kann durch einen Klick in die Zeitleiste gesetzt werden.
+
+1.2. Sequenzgrenzen
+Der weiße Bereich in der Zeitleiste gibt die Größe der Sequenz an. Dennoch können sich Noten auch außerhalb dieses Bereichs befinden.
+
+
+2. Controller
+
+2.1. Neue Controller-Spur
+Mit einem <ALT>-Klick auf eine leere Spur in der linken Spalte wird eine neue Controller-Spur erzeugt. Alternativ kann das Menü Controller/Hinzufügen“gewählt werden. Die Liste der verfügbaren Controller ist abhängig von den Instrumenten, die vorher konfiguriert werden sollten (Menü Projekt/Einstellungen).
+
+2.2. Controller-Events ändern, erzeugen
+Durch Anklicken und Bewegen können die Controller-Events in den Spuren geändert werden. Wird zusätzlich <ALT> gedrückt, so werden neue Events auf dem unten gewählten Raster (1/4 - frei) erzeugt, sofern sich an den Stellen nicht schon welche befinden.
+
+2.3. Markieren, Löschen
+Einzelne Events (oder Eventbereiche) können markiert werden, indem man mit gedrücktem <SHIFT> und gedrückter Maustaste über sie fährt. Um alle Events einer Controller-Spur zu markieren, reicht ein Klick auf die linke Spalte der Spur. Um alle Markierungen aufzuheben gibt es das Menü „Controller/nichts markieren“. 
+
+	Die Markierungen gelten nur fürs Löschen (<DEL> oder Menü Controller/Löschen) und die weiteren Funktionen im Menü Controller.
+
+2.4. Reduzieren
+Die Funktion „Reduzieren im Menü Controller quantisiert alle markierten Events und löscht jene, die danach gleichzeitig sind oder den selben Wert haben. Je gröber das zu wählende Quantisierungsraster ist, desto mehr Controller-Events werden gelöscht.
+
+2.5. Kompressor
+Mit dem Kompressor lassen sich die markierten Controller-Werte flexibel anpassen.
+
+2.6. Glätten
+Der Werteverlauf der markierten Controller-Events wird durch einfache Durchschnittsberechnungen geglättet.

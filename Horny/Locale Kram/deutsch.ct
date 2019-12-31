@@ -1,0 +1,919 @@
+## version $VER: Horny.catalog 1.2
+## language deutsch
+;
+;==Automation.c==================================
+;
+MSG_0000
+Es gab keine passenden Controller-Events\nin den markierten Sequenzen
+;
+MSG_0001
+Die Automation, zu der konvertiert werden\nsoll, muss ausgewählt sein
+;
+;==CtrlWandler.c=================================
+;
+MSG_0005
+Name
+;
+MSG_0005A
+Original
+;
+MSG_0005B
+Ziel
+;
+MSG_0005C
+Controller Transformator
+;
+MSG_0005D
+Neu
+;
+MSG_0005E
+Löschen
+;
+MSG_0005F
+Transformator anpassen
+;
+MSG_0005G
+Setze Original
+;
+MSG_0005H
+Setze Ziel
+;
+;==Mischpult.c===================================
+;
+MSG_0006
+Mischpult
+;
+;==Spuren.c======================================
+;
+MSG_0007
+Spur %d
+;
+MSG_0009
+Mehr als 16 Spuren sind in der\nLite-Version nicht möglich
+;
+MSG_0010
+Mehr Spuren sind nicht möglich
+;
+MSG_0011
+Spur enthält Originalsequenz(en) von Aliasen
+;
+;==Einstellungen.c===============================
+;
+MSG_0016
+<keine Ports verfügbar>
+;
+MSG_0017
+%s: Kanal %d
+;
+MSG_0018
+Ausgänge
+;
+MSG_0019
+Aktuellen ändern
+;
+MSG_0020
+Hinzufügen
+;
+MSG_0021
+Entfernen
+;
+MSG_0022
+Ausgang Instrumente
+;
+MSG_0023
+Eingänge
+;
+MSG_0026
+1/8 Noten
+;
+MSG_0027
+1/4 Noten
+;
+MSG_0028
+1/2 Noten
+;
+MSG_0029
+Takte
+;
+MSG_0030
+Kanal
+;
+MSG_0031
+Raster
+;
+MSG_0032 
+Hauptschlag
+;
+MSG_0033
+Taste
+;
+MSG_0034
+Anschlag
+;
+MSG_0035
+Nebenschlag
+;
+MSG_0041
+Startzeit   HH:MM:SS:FF
+;
+MSG_0042
+Löschen
+;
+MSG_0043
+Übernehmen
+;
+MSG_0044
+Midi Ports
+;
+MSG_0045
+Metronom
+;
+MSG_0046
+SMPTE
+;
+MSG_0047
+Projekt-Einstellungen
+;
+;==Marker.c======================================
+;
+MSG_0048
+Zu wenig Speicher für Marke\n<Marker.c>
+;
+MSG_0049
+Anfang
+;
+;==Umgebung.c====================================
+;
+MSG_0053
+Workbench benutzen
+;
+MSG_0054
+Modus
+;
+MSG_0055
+Hauptfenster als Hintergrund
+;
+MSG_0057
+Horny-Projekte
+;
+MSG_0058
+Midi-Dateien (SMF)
+;
+MSG_0058A
+SysEx Dateien
+;
+MSG_0059
+Startprojekt
+;
+MSG_0060
+Für neue Projekte benutzen
+;
+MSG_0062
+Datei
+;
+MSG_0062A
+Transport Funktionen (Ziffernblock)
+;
+MSG_0062B
+Amiga Tastatur (Aufn.: <*> Spulen: <[> <]> Marken: <+> <->)
+;
+MSG_0062C
+PC Tastatur (Aufn.: <-> Spulen: </> <*> Marken: <PgUp> <PgDn>)
+;
+MSG_0062I
+Mausräder
+;
+MSG_0062J
+Tausche horizontal/vertikal
+;
+MSG_0062D
+System-Einstellungen wirken erst nach Programmneustart
+;
+MSG_0062E
+Multitasking Prioritäten
+;
+MSG_0062F
+Player Prozess
+;
+MSG_0062G
+Thru Prozess
+;
+MSG_0062H
+SysEx-Empfangspuffergröße (kB)
+;
+MSG_0063
+Bildschirm
+;
+MSG_0064
+Pfade
+;
+MSG_0064A
+Steuerung
+;
+MSG_0064B
+System
+;
+MSG_0065
+Umgebungs-Einstellungen
+;
+MSG_0066
+Speichern
+;
+MSG_0067
+Benutzen
+;
+MSG_0068
+Abbrechen
+;
+;==Gui.c=========================================
+;
+MSG_0138
+Horny's Bildschirm
+;
+MSG_0140
+Konnte Bildschirm nicht öffnen
+;
+MSG_0141
+Es sind noch Fenster geöffnet.\nKann Bildschirm nicht schließen.
+;
+;==Midi.c========================================
+;
+MSG_0158
+Zu wenig Speicher für Sequenz/Event-Block\n<Midi.c>
+;
+;==Main.c========================================
+;
+MSG_0159A
+Kann wärend der Wiedergabe nicht den Sync-Status ändern
+;
+MSG_0159
+Unbenannt
+;
+MSG_0160
+Spur wirklich löschen?
+;
+MSG_0161
+Ja|Nein
+;
+MSG_0162
+Projekt wirklich öffnen?
+;
+MSG_0163
+Konnte Player-Prozess nicht erstellen
+;
+MSG_0163A
+Konnte Thru-Prozess nicht erstellen
+;
+MSG_0164
+Programm wirklich beenden?
+;
+;==Fenster.c=====================================
+;
+MSG_0194
+Abbruch
+;
+MSG_0195
+Okay
+;
+MSG_0197
+Schwellwert
+;
+MSG_0198
+Kompression
+;
+MSG_0199
+Verstärkung
+;
+;==MidiEdit.c====================================
+;
+MSG_0206
+Es wurden Korrekturen ausgeführt
+;
+MSG_0207
+Alle Noten sind in Ordnung
+;
+MSG_0208
+Es liegen Noten auf der Trennstelle.
+;
+MSG_0209
+Zerschneiden|Kürzen
+;
+;==Projekt.c=====================================
+;
+MSG_0210
+Unbenannt
+;
+MSG_0211
+Standard
+;
+MSG_0212
+Programm wirklich beenden?
+;
+MSG_0213
+Ja|Nein
+;
+MSG_0214
+Wirklich neues Projekt beginnen?
+;
+MSG_0216
+Sollen wirklich alle SysEx-Nachrichten\n(außer gesperrte) gesendet werden?
+;
+MSG_0217
+Speichern als '
+;
+;==Gui2.c========================================
+;
+MSG_0218
+Lautstärke
+;
+MSG_0219
+Panorama
+;
+MSG_0224
+Titel:
+;
+MSG_0225
+Länge:
+;
+MSG_0226
+Editposition
+;
+MSG_0227
+Tempo:
+;
+MSG_0228
+Taktart:
+;
+MSG_0229
+Text:
+;
+MSG_0230
+Spur:
+;
+MSG_0231
+Kanal:
+;
+MSG_0232
+Thru
+;
+MSG_0233
+Program.:
+;
+MSG_0236
+nicht gewählt
+;
+MSG_0237
+Schieben:
+;
+MSG_0238
+Sequenz:
+;
+MSG_0240
+Transpon.:
+;
+MSG_0241
+Mute:
+;
+MSG_0241A
+AN
+;
+MSG_0241B
+AUS
+;
+MSG_0242
+Aliase:
+;
+;==Menu.c========================================
+;
+MSG_0247
+Programm
+;
+MSG_0248
+Über...
+;
+MSG_0249
+Umgebung...
+;
+MSG_0251
+Alle Fenster fixieren
+;
+MSG_0252
+Beenden
+;
+MSG_0254
+Projekt
+;
+MSG_0255
+Neu
+;
+MSG_0257
+Laden...
+;
+MSG_0259
+Importieren SMF...
+;
+MSG_0260
+Speichern
+;
+MSG_0261
+Als Startprojekt speichern
+;
+MSG_0262
+Speichern als...
+;
+MSG_0263
+Exportieren SMF...
+;
+MSG_0264
+Einstellungen...
+;
+MSG_0266
+SysEx Verwaltung...
+;
+MSG_0268
+Mischpult...
+;
+MSG_0269
+Controller Transformator...
+;
+MSG_0270
+Programme senden
+;
+MSG_0271
+Alle SysEx senden
+;
+MSG_0272
+Mix senden
+;
+MSG_0273
+All Notes Off senden
+;
+MSG_0275
+Spur
+;
+MSG_0276
+Hinzufügen
+;
+MSG_0278
+Duplizieren
+;
+MSG_0280
+Löschen
+;
+MSG_0282
+Mute an/aus
+;
+MSG_0284
+Solo
+;
+MSG_0286
+Alle Mutes aus
+;
+MSG_0288
+Spurautomation
+;
+MSG_0289
+Lautstärke
+;
+MSG_0290
+Panorama
+;
+MSG_0291
+Controller 1
+;
+MSG_0292
+Controller 2
+;
+MSG_0293
+Controller 3
+;
+MSG_0294
+Controller 4
+;
+MSG_0295 
+Controller 5
+;
+MSG_0296
+Controller 6
+;
+MSG_0297
+Automation verbergen
+;
+MSG_0298A
+Zu Sequenz konvertieren
+;
+MSG_0298B
+Von Sequenzen holen
+;
+MSG_0299
+Sequenz(en)
+;
+MSG_0300
+Markieren
+;
+MSG_0301
+Alle in aktiver Spur
+;
+MSG_0302
+Alle im Lied
+;
+MSG_0303
+Alle ab Editposition
+;
+MSG_0303A
+Schleife um Sequenz(en) setzen
+;
+MSG_0304
+Kopieren
+;
+MSG_0306
+Einfügen
+;
+MSG_0308
+Löschen
+;
+MSG_0310
+Quantisieren...
+;
+MSG_0312
+Zerschneiden
+;
+MSG_0314
+Unterteilen
+;
+MSG_0316
+Verbinden
+;
+MSG_0318
+Alias zu Real
+;
+MSG_0376
+Bearbeiten
+;
+MSG_0377
+Rückgängig (Undo)
+;
+MSG_0379
+Wiederherstellen (Redo)
+;
+MSG_0380
+Note(n)
+;
+MSG_0381
+Markieren
+;
+MSG_0382
+Alle
+;
+MSG_0383
+Höhere und gleiche Noten
+;
+MSG_0384
+Tiefere und gleiche Noten
+;
+MSG_0385
+Leisere Noten
+;
+MSG_0386
+Alle mit gleichem Kanal
+;
+MSG_0387
+Löschen
+;
+MSG_0389
+Quantisieren
+;
+MSG_0390
+Notenanfänge
+;
+MSG_0392
+Notenenden
+;
+MSG_0393
+Anfänge nähern
+;
+MSG_0395
+Anschlag Kompressor...
+;
+MSG_0397
+Noten reparieren
+;
+MSG_0399
+Controller
+;
+MSG_0400
+Nichts markiert
+;
+MSG_0402
+Hinzufügen...
+;
+MSG_0404
+Löschen
+;
+MSG_0406
+Reduzieren...
+;
+MSG_0408
+Kompressor...
+;
+MSG_0410
+Glätten
+;
+;==Sequenzen.c===================================
+;
+MSG_0412
+Zu wenig Speicher für Event-Block\n<Sequenzen.c>
+;
+MSG_0413
+Zu wenig Speicher für Sequenz\n<Sequenzen.c>
+;
+MSG_0414
+Sequenzen mit Aliasen (evtl. im Clipboard)\nkönnen nicht gelöscht werden
+;
+MSG_0415
+Zu wenig Speicher für Alias\n<Sequenzen.c>
+;
+MSG_0421
+Aliase können nicht zerschnitten werden
+;
+MSG_0422
+Die zu verbindenen Sequenzen müssen Originale sein
+;
+;==DiskSMF.c=====================================
+;
+MSG_0437
+Fehler beim Importieren
+;
+MSG_0438
+Zu wenig Speicher für SMF-Chunk\n<DiskSMF.c>
+;
+MSG_0438A
+SysEx-Daten wurden gefunden und in die SysEx-Verwaltung kopiert
+;
+MSG_0439
+Keine SMF Datei
+;
+MSG_0440
+Konnte Datei nicht speichern
+;
+MSG_0441
+Zu wenig Speicher für Schreibpuffer\n<DiskSMF.c>
+;
+;==Requester.c===================================
+;
+MSG_0444
+Meldung
+;
+MSG_0446
+Okay
+;
+MSG_0449
+Horny Projekt laden
+;
+MSG_0450
+Horny Projekt speichern
+;
+MSG_0452
+Datei mit diesem Namen existiert schon
+;
+MSG_0453
+Überschreiben|Abbruch
+;
+MSG_0454
+MIDI Projekt laden
+;
+MSG_0455
+MIDI Projekt speichern
+;
+MSG_0456
+SysEx Datei laden
+;
+MSG_0457
+SysEx Datei speichern
+;
+;==Instrumente.c=================================
+;
+MSG_0470
+Standard
+;
+MSG_0471
+Programm %d
+;
+MSG_0472
+Folgende Instrumenten-Dateien\nfehlen für dieses Projekt:\n
+;
+MSG_0474
+Programmwahl (%s)
+;
+MSG_0477
+Abbruch
+;
+MSG_0478
+Nichts
+;
+MSG_0479
+Übernehmen
+;
+MSG_0483
+Controller-Wahl (%s)
+;
+MSG_0485
+Okay
+;
+MSG_0486
+Alle zeigen
+;
+;==EditorNotenGui.c==============================
+;
+MSG_0505
+frei
+;
+MSG_0506
+Raster
+;
+MSG_0507
+Länge
+;
+MSG_0508
+Triolen
+;
+MSG_0512
+Piano-Editor <-> Controller-Editor
+;
+MSG_0513
+xxx
+;
+MSG_0514
+Editor [ %s: %s ]     UNDO: %s, REDO: %s
+;
+MSG_0518
+Rel Pos:
+; "Relative Position"
+;
+MSG_0520
+Note:
+;
+MSG_0521
+Anschlag:
+;
+MSG_0522
+Kanal:
+;
+;==SysEx.c===================================
+;
+MSG_0525A
+Fehler in SysEx-Datei
+;
+MSG_0525B
+Es muss mindestens eine SysEx-Nachricht zum Speichern gewählt sein
+;
+MSG_0525
+Fehlerhafte SysEx-Nachricht empfangen
+;
+MSG_0526
+Zu wenig Speicher für SysEx\n<SysEx.c>
+;
+MSG_0527
+SysEx Verwaltung
+;
+MSG_0528
+Gruppen
+;
+MSG_0529
+Neu
+;
+MSG_0530
+Löschen
+;
+MSG_0531
+Gruppe senden
+;
+MSG_0532
+Alle Gruppen senden
+;
+MSG_0533
+SysEx Nachrichten
+;
+MSG_0535
+Senden
+;
+MSG_0535A
+Laden...
+;
+MSG_0535B
+Speichern...
+;
+MSG_0536
+SysEx Aufnehmen
+;
+MSG_0538
+Standard
+;
+;==EditorContrGui.c==============================
+;
+MSG_0545
+Rel Pos:
+; "Relative Position"
+;
+MSG_0546
+Control.:
+; "Controller:"
+;
+MSG_0547
+Wert:
+;
+MSG_0548
+Kanal:
+;
+;==DiskHornyLaden.c==============================
+;
+MSG_0549
+Das Projekt entstand in einer anderen Midi-Konfiguration.\nBitte Port-Einstellungen anpassen.
+;
+MSG_0550
+Zu wenig Speicher für SysEx-Data\n<DiskHornyLaden.c>
+;
+MSG_0551
+Zu wenig Speicher für Event-Block\n<DiskHornyLaden.c>
+;
+MSG_0552
+Fehlerhafte Datei
+;
+MSG_0553
+Zu wenig Speicher für Area\n<DiskHornyLaden.c>
+;
+MSG_0554
+Veraltetes Horny Dateiformat\nwird nicht mehr unterstützt
+;
+MSG_0555
+Keine Horny Datei
+;
+MSG_0556
+Konnte Projekt nicht laden
+;
+;==DiskHornySpeichern.c==========================
+;
+MSG_0592
+Puffer zu klein
+;
+MSG_0593
+Konnte Projekt nicht speichern
+;
+MSG_0594
+Zu wenig Speicher für Area-Puffer\n<DiskHornySpeichern.c>
+;
+;==EditorNoten.c=================================
+;
+MSG_0595
+Aliase können nicht editiert werden. Soll...\n...das Original bearbeitet werden, oder...\n...das Alias zur Realseq. gewandelt werden?
+;
+MSG_0596
+Original|Alias zu Real|Abbrechen
+;
+MSG_0598
+Dynamik bearbeiten
+;
+MSG_0599
+Noten bewegen
+;
+MSG_0600
+Note erzeugen
+;
+MSG_0601
+Controller erzeugen
+;
+MSG_0602
+Controller bewegen
+;
+MSG_0603
+Löschen
+;
+MSG_0606
+Es muss eine Referenznote markiert sein
+;
+MSG_0609
+Dynamik bearbeiten
+;
+MSG_0610
+Quantisieren
+;
+MSG_0611
+Quantisierung auf freiem Raster bringt nichts
+;
+MSG_0612
+Quantisieren (Enden)
+;
+MSG_0614
+Quantisieren (Nähern)
+;
+MSG_0616
+Reparieren
+;
+MSG_0617
+Reduzieren
+;
+MSG_0618
+Glätten
+;
+MSG_0619
+Löschen

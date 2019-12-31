@@ -1,0 +1,16 @@
+SYSEX-VERWALTUNG
+
+1. Was ist SysEx?
+
+SysEx-Nachrichten sind Datenblöcke, die zwar über Midi verschickt werden, deren Inhalt jedoch nichts mit den üblichen Events zu tun hat. Meistens sind SysEx-Daten gerätespezifisch (System Exclusive) und werden nur von den Klangerzeugern verstanden, von denen sie auch ursprünglich gesendet wurden.
+
+	Eine oft genutzte Möglichkeit davon ist, dass die kompletten Einstellungen eines Gerätes als SysEx aufgenommen werden und später wieder hergestellt werden können.
+
+	Nähere Information sind in den Handbüchern der Klangerzeuger zu finden.
+
+
+2. Verwaltung
+
+SysEx-Nachrichten werden in Gruppen organisiert, die in der linken Liste des SysEx-Fensters bearbeitet werden können. Die rechte Liste beinhaltet immer den Inhalt der zur Zeit gewählten Gruppe.
+
+	Das Fenster dürfte selbsterklärend sein, mit einer Ausnahme: In der Gruppenliste befinden sich Check-Boxen. Alle Gruppen, die damit deaktiviert werden, sind für Alle Gruppen senden“und die Menüaktion Projekt/Alle SysEx senden“gesperrt, d.h. sie werden nicht gesendet.

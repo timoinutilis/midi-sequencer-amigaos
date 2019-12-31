@@ -1,0 +1,110 @@
+HORNY INSTRUMENT CONTROLLER
+
+0 Bank Select
+1 Mod Wheel
+2 Breath
+4 Foot
+5 Porta Time
+6 Data Entry
+7 Volume
+8+ Balance
+10+ Pan
+11 Expression
+17+ Osc1 Shape
+18 Osc1 Pulsewidth
+19 Osc1 Wave Select
+20+ Osc1 Semitone
+21+ Osc1 Keyfollow
+22+ Osc2 Shape
+23 Osc2 Pulsewidth
+24 Osc2 Wave Select
+25+ Osc2 Semitone
+26 Osc2 Detune
+27 Osc2 FM Amount
+28 Osc2 Sync
+29+ Osc2 Filt Env Amt
+30+ FM Filt Env Amt
+31+ Osc2 Keyfollow
+32 Bank Select
+33 Osc Balance
+34 Suboscillator Volume
+35 Suboscillator Shape
+36 Osc Mainvolume
+37 Noise Volume
+38 Ringmodulator Volume
+39+ Noise Color
+40 Cutoff
+41+ Cutoff2
+42 Filter1 Resonance
+43 Filter2 Resonance
+44 Filter1 Env Amt
+45 Filter2 Env Amt
+46+ Filter1 Keyfollow
+47+ Filter2 Keyfollow
+48+ Filter Balance
+49 Saturation Curve
+51 Filter1 Mode
+52 Filter2 Mode
+53 Filter Routing
+54 Filter Env Attack
+55 Filter Env Decay
+56 Filter Env Sustain
+57+ Filter Env Sustain Time
+58 Filter Env Release
+59 Amp Env Attack
+60 Amp Env Decay
+61 Amp Env Sustain
+62+ Amp Env Sustain Time
+63 Amp Env Release
+64 Hold Pedal
+65 Portamento Pedal
+66 Sostenuto Pedal
+67 Lfo1 Rate
+68 Lfo1 Shape
+69 Lfo1 Env Mode
+70 Lfo1 Mode
+71+ Lfo1 Symmetry
+72 Lfo1 Keyfollow
+73 Lfo1 Keytrigger
+74+ Osc1 Lfo1 Amount
+75+ Osc2 Lfo1 Amount
+76+ PW Lfo1 Amount
+77+ Reso Lfo1 Amount
+78+ FiltGain Lfo1 Amount
+79 Lfo2 Rate
+80 Lfo2 Shape
+81 Lfo2 Env Mode
+82 Lfo2 Mode
+83+ Lfo2 Symmetry
+84 Lfo2 Keyfollow
+85 Lfo2 Keytrigger
+86+ OscShape Lfo2 Amount
+87+ FmAmount Lfo2 Amount
+88+ Cutoff1 Lfo2 Amount
+89+ Cutoff2 Lfo2 Amount
+90+ Panorama Lfo2 Amount
+91 Patch Volume
+93+ Transpose
+94 Key Mode
+97 Unison Mode
+98 Unison Detune
+99 Unison Panorama Spread
+100+ Unison Lfo Phase
+101 Input Mode
+102 Input Select
+105 Chorus Mix
+106 Chorus Rate
+107 Chorus Depth
+108 Chorus Delay
+109+ Chorus Feedback
+110 Chorus Lfo Shape
+112 Delay/Reverb Mode
+113 Effect Send
+114 Delay Time
+115 Delay Feedback
+116 Delay Rate / Reverb Decay Time
+117 Delay Depth / Reverb Room Size
+118 Delay Lfo Shape / Reverb Damping
+119+ Delay Color
+122 Keyb Local
+123 All Notes Off

@@ -1,0 +1,408 @@
+HORNY INSTRUMENT
+#$VER: Quasimidi Sirius 0.9
+
+#CHAN 14 16
+
+* Bass Sounds
+#BANK 1
+#PROG 0
+A Wet Bass 2
+A Sine Bass
+A Cool Bass
+A Modulo BX
+A Mod 2 Bass
+A Fat Boy
+A Wet Long
+A Wet & Bass
+A Disco Bas
+A Atom
+A Perc Sine
+A Reso Bass
+A Trance BS
+A Filter!
+A Wave Bass
+A Deep Bass
+#BANK 2
+#PROG 0
+B Wet Bass
+B Trancer
+B Wet Filter
+B Modulo BX
+B Mod Bass
+B Fat Boy
+B Wet Long
+B Perc Bass
+B Disco Bass
+B DA Hool
+B Sine Bass
+B Xeno Bass
+B Trance Bass
+B Filter!
+B Wave Bass
+B Stopped
+#BANK 3
+#PROG 0
+C Junky CP
+C Glider
+C Acid Mod
+C D+Bass
+C Pizza Bass
+C Off Beat
+C Deep Haus
+C Funk-Man
+C Frogger
+C Phase Bass
+C MKS-50 Bass
+C Ultra Bass
+C Funky HK
+C 202 Bass
+C Slfobass
+C Mod Bass
+#BANK 0
+#PROG 0
+#NUM U 1 16
+
+* Dirty Bass
+#BANK 1
+#PROG 16
+A Dirt Synt
+A Dirt 309
+A Lucky Bas
+A Saver Sex
+A 303 Velo
+A Very Dirt
+A MixOct
+A Short Bas
+A Guitar Bs
+A S-Faster
+A Fat Dirty
+A Zap Bass
+A Saw Bass
+A PPG-Bass
+A Wet Moog!
+A String Bs
+#BANK 2
+#PROG 16
+B Down Swep
+B Forte
+B Lucky Bass
+B Saver Sex
+B 303 Velo
+B Detune!
+B Mix Bass
+B Short Bass
+B Synced!
+B JenY?
+B Bitterfd
+B Eraser
+B Voice Bass
+B Intro Bass
+B Classic!
+B Classic 2
+#BANK 3
+#PROG 16
+C SH-X
+C Nova Bass
+C 80s Lead
+C Board
+C Rebirth 2
+C 80s Bass
+C Pad-Bass
+C Bi-Bass
+C Masse X
+C 303 like
+C Rebirth
+C Weich Bass
+C Instable
+C Bass ???
+C Bassline
+C 309 Bass
+#BANK 0
+#PROG 16
+#NUM U 1 16
+
+* Pad-Sounds
+#BANK 1
+#PROG 32
+A Shine On
+A VS Chor
+A Bright Pd
+A Shimmer
+A Chor
+A Mellotrn
+A Sentinel
+A Tubular P
+A Tec Pad
+A Spectral
+A Gate Synt
+A Swallow
+A Orchestr
+A Deep Pad
+A Jet Pad 1
+A Big Pad
+#BANK 2
+#PROG 32
+B VS Spect
+B Fat Pad
+B Lush Spec
+B Hohner
+B Anti Swep
+B High Swep
+B Big Swep
+B Strings
+B Seq Pad
+B Tangram
+B Poly Synth
+B Fast String
+B Hight Synt
+B Long Pad
+B Mod Pad 1
+B Rising
+#BANK 3
+#PROG 32
+C X-Voice
+C Koyaa
+C Strange P
+C Enfrhmki
+C Rel-Pad 1
+C D. I. Auge
+C Deep-Pad
+C Stoffich
+C Wunder Pad
+C Dune Pad 1
+C Feel It!
+C Juno-Org
+C Histring
+C Portella
+C Digistrings
+C Digichor
+#BANK 0
+#PROG 32
+#NUM U 1 16
+
+* Plugged Sounds
+#BANK 1
+#PROG 48
+A Picant
+A Clavonit
+A Floating
+A Quintchd
+A Short Seq
+A Mod Sequa
+A Block C
+A Perco
+A Spectacu
+A Percular
+A Bottom
+A Sequenz C
+A Into Spa
+A Ambient T
+A Chor Seq!
+A <Synth Y
+#BANK 2
+#PROG 48
+B Edgar F
+B Clavinet
+B Bells
+B Sequent
+B Soft Seq 1
+B Mod Plug
+B |P|C|B|
+B Perco Chd
+B Spectral
+B Percuter
+B Kraftwer
+B Sequenz 1
+B In Motion
+B In Motion 2
+B Sequenz 1
+B Ancient
+#BANK 3
+#PROG 48
+C Psycorg 2
+C Tadavoc
+C Mellows
+C Madseq
+C House Og 1
+C House Og 2
+C Digi Drum
+C Shibuya
+C Orbit Piano
+C Trancer
+C Water Syn
+C PKS-50Bs
+C Sequ Bell
+C Banjojo
+C Psycorg
+C Clavity
+#BANK 0
+#PROG 48
+#NUM U 1 16
+
+* Solo Sounds
+#BANK 1
+#PROG 64
+A Arpeggio
+A Trancer
+A Goa !
+A Arpeggi 2
+A Trancer 3
+A Hard Seq!
+A Sync Synt
+A Sequenz A
+A Techno!
+A Filter S1
+A High Seq 2
+A Upper Cls
+A Syncer 2
+A Orgelton
+A Orc Solo
+A Puls Solo
+#BANK 2
+#PROG 64
+B Lucky Solo
+B Filt Solo
+B Flute Solo
+B Sin Sequ
+B Westwoop
+B Eastbam 2
+B Eastbam 3
+B Eastbam C
+B DA Cool
+B High Seq 1
+B Syn Sequ
+B Up Sync
+B Syncer
+B Fat Solo
+B Orc Solo
+B Dirty Solo
+#BANK 3
+#PROG 64
+C Solojam
+C Bigsolo
+C Hot Fat
+C Wheel It
+C Cosmic B
+C Tecno Syn
+C Angel Vox
+C Tech Seq
+C Orbi Bell
+C Mind Solo
+C VCA Solo
+C FSOL seq
+C Quintor
+C Flange
+C Reso Lead
+C Syncline
+#BANK 0
+#PROG 64
+#NUM U 1 16
+
+* Effect Sounds
+#BANK 1
+#PROG 80
+A Vocoder C
+A Filter^!
+A Zipper
+A Tiny Dirt
+A Swallow
+A FX Pad
+A Psychos*
+A Lush Pad 2
+A Rhythm FX
+A Atmo
+A Dreams
+A Atom Orc
+A Psychoa
+A Pre Nat
+A Mello Up
+A Cult
+#BANK 2
+#PROG 80
+B Effector
+B Filter ^!
+B Zipper
+B Organ 1
+B Swallow
+B FX Pad
+B Guitar
+B Lush Pad 2
+B Rythm FX
+B Atmo
+B Dreams
+B Atom Orc
+B Force Ma
+B Pre Nat
+B Mello Up
+B Futur Sir
+#BANK 3
+#PROG 80
+C Filter EG
+C Galactic
+C Kotzrobb
+C Crazykor
+C Space Choir
+C LFO Pad
+C FSOL bell
+C UFO-Fly
+C Lopho LFO
+C Space Amb
+C Fat-Guit
+C UFO world
+C LFO Noiz
+C Funky FX
+C LFOitsch
+C Goa Fix
+#BANK 0
+#PROG 80
+#NUM U 1 16
+
+#CHAN 10 13
+
+* Natural Drums
+#BANK 1
+#PROG 0
+#NUM Preset 1 16
+#BANK 0
+#PROG 0
+#NUM User 1 16
+
+* Dirty Natural
+#BANK 1
+#PROG 16
+#NUM Preset 1 16
+#BANK 0
+#PROG 16
+#NUM User 1 16
+
+* Electronic Drums
+#BANK 1
+#PROG 32
+#NUM Preset 1 16
+#BANK 0
+#PROG 32
+#NUM User 1 16
+
+* 909-Type
+#BANK 1
+#PROG 48
+#NUM Preset 1 16
+#BANK 0
+#PROG 48
+#NUM User 1 16
+
+* 808-Type
+#BANK 1
+#PROG 64
+#NUM Preset 1 16
+#BANK 0
+#PROG 64
+#NUM User 1 16
+
+* Drum-SFX
+#BANK 1
+#PROG 80
+#NUM Preset 1 16
+#BANK 0
+#PROG 80
+#NUM User 1 16

@@ -1,0 +1,38 @@
+TRACK AUTOMATION
+
+1. Description
+
+1.1. Allgemeines
+Die Automation dient dazu, Verläufe der Mischpult-Parameter zu erzeugen. Somit können z.B. Fades am Ende eines Liedes (Lautstärkenverläufe), oder sich im Stereobild bewegende Instrumente (Panoramaverläufe) realisiert werden.
+
+1.2. Zugehörigkeit
+Automationen werden zwar in den Spuren angezeigt, sie gehören aber nicht direkt zu der Spur, sondern vielmehr zum Midikanal, der für diese gewählt ist. Ändert man also den Midikanal, so verschwindet die Automation, oder es erscheint sogar eine andere, die für diesen Kanal erzeugt wurde.
+
+1.3. Als SMF exportieren
+Die Midi-Events einer Automation werden während des Abspielens berechnet. Wird ein Projekt als SMF exportiert, so werden nur Noten- und Controller-Events aus den Sequenzen gespeichert, also keine Automation. Somit müssen Automationen erst in Sequenzen konvertiert werden.
+
+
+2. Bedienung
+
+2.1. Anzeige
+Um die Automation bearbeiten zu können, muss die entsprechende Spur, und dann einer der ersten acht Punkte  im Menü "Spurautomation" gewählt werden. Es stehen "Lautstärke", "Panorama" und "Controller 1-6" zur Verfügung. Die Controller sind die, die man im Mischpult für den entsprechenden Kanal eingestellt hat.
+Um wieder in die normale Spuransicht zu gelangen, wählt man den Menüpunkt "Spurautomation/Automation verbergen". Genannte Menüpunkte wirken sich bei gedrücktem <SHIFT> auf alle Spuren aus.
+
+2.2. Punkte erzeugen
+Verläufe bestehen aus Eckpunkten, die mit einer Linie (also weichen Übergängen) verbunden sind. Einen neuen Punkt erzeugt man, indem man mit gehaltenem <ALT> in die Spur klickt. Solange die Maustaste noch gedrückt ist, kann der Punkt verschoben werden.
+
+2.3. Punkte verschieben
+Einfach anklicken und halten, dann verschieben. Einfach anklicken ist aber gelogen, man muss etwas wissen: Horny testet nicht, ob man mit der Maus so ein kleines Kästchen getroffen hat, sondern es errechnet erst aus der Mausposition eine Taktposition (auf Viertel gerundet) und prüft dann, ob an dieser Position ein Automationspunkt ist. Also gleiches Spiel wie bei den Marken über der Zeitleiste: Immer innerhalb des nächsten Viertelnotenwerts klicken (somit ist der Toleranzbereich sogar Zoom-abhängig).
+
+2.4. Punkte löschen
+Wie Verschieben, nur ohne den Punkt zu verschieben. Also nur kurz anklicken.
+
+2.5. Alle Punkte löschen
+Im Menü "Spurautomation/Löschen" wählen. Dies betrifft nur die angezeigte Automation der Spur (z.B. "Lautstärke"). Andere Verläufe bleiben erhalten (z.B. "Panorama").
+
+2.6. Automation kopieren
+Automationen können mit den Menüpunkten "Spurautomation/Kopieren" und "-/Einfügen" von einer Spur in eine andere kopiert werden. Sowohl "Kopieren" als auch "Einfügen" beziehen sich auf die aktive Spur und dessen zur Zeit sichtbare Automation. Somit ist es z.B. auch möglich, einen Lautstärkenverlauf auf einen anderen Controller zu übertragen.
+
+2.7. Automation konvertieren
+Automationsverläufe können in normale Sequenzen mit entsprechenden Controller-Events konvertiert werden, und umgekehrt. Ersteres muss man machen, wenn man ein Projekt als SMF exportieren will. Der umgekehrte Weg ist sinnvoll, da eine "echte" Automation besser editierbar ist, jedoch können bei der Umwandlung Details verloren gehen.
+Nach einer Umwandlung ist zu beachten, dass beide Varianten existieren. Für ein korrektes Abspielen muss die ungewünschte noch gelöscht werden.

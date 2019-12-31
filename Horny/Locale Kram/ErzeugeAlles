@@ -1,0 +1,4 @@
+echo "CatComp..."
+cd "eigenes:horny/"
+catcomp DESCRIPTOR="locale kram/horny.cd" TRANSLATION="locale kram/deutsch.ct" CATALOG="Catalogs/deutsch/Horny.catalog" CFILE="eigenes:Horny/catalogids.h"
+echo "Fertig"

@@ -1,0 +1,34 @@
+PIANOEDITOR
+
+1. Zeitleiste
+
+1.1. Abspielposition
+Die Abspielposition (durchgezogene Linie) kann durch einen Klick in die Zeitleiste gesetzt werden.
+
+1.2. Sequenzgrenzen
+Der weiße Bereich in der Zeitleiste gibt die Größe der Sequenz an. Dennoch können sich Noten auch außerhalb dieses Bereichs befinden.
+
+
+2. Tastatur
+
+2.1. Spielen
+Durch Anklicken der Tastatur können die entsprechenden Töne gespielt werden.
+
+
+3. Noten
+
+3.1. Markieren
+Einzelne Noten lassen sich durch Anklicken markieren. Noten auf schwarzen Tasten reagieren dabei nur in der unteren Hälfte. Mehrfachauswahl ist mit <SHIFT> und/oder Lassoauswahl möglich. Ein <SHIFT>-Klick auf eine Pianotaste am linken Rand markiert alle darauf liegenden Noten. Weitere Markierungsfunktionen gibt es im Menü "Note(n)/Markieren/". Außer beim Punkt "Alle" beziehen sich diese Funktionen auf die zuletzt angeklickte Note.
+Alle Bearbeitungsfunktionen wirken sich auf alle markierten Noten aus.
+
+3.2. Erzeugen, Löschen
+Eine neue Note wird durch einen <ALT>-Klick in der unten gewählten Länge (1/1 - 1/32) auf dem Raster (1/4 - frei) erzeugt. Wird die Maustaste gehalten, so lassen sich Tonhöhe und Länge anpassen. Mit <DEL> (oder Menü "Note(n)/Löschen") werden alle markierten Noten gelöscht.
+
+3.3. Verschieben, Länge ändern
+Noten können per Drag&Drop auf dem unten gewählten Raster (1/4 - frei) verschoben werden. Wird das hintere Drittel einer Note verschoben, so wird nur die Länge geändert.
+
+3.4. Kopieren
+Werden Noten bei gedrücktem <ALT> verschoben, so werden Kopien erzeugt.
+
+3.5. Anschlag (Velocity) ändern
+Klickt man mit gedrücktem <CTRL> auf eine Note und hält die Maustaste gedrückt, lässt sich durch Hoch- und Runterbewegen der Maus die Anschlagstärke ändern. Mit dem Anschlag-Kompressor (Menü "Note(n)") lässt sich die Dynamik flexibler ändern.

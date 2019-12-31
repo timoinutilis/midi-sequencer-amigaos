@@ -1,0 +1,73 @@
+HORNY INSTRUMENT CONTROLLER
+
+0 Bank Select
+1 Mod Wheel
+2 Breath
+4 Foot
+5 Porta Time
+6 Data Entry
+7 Volume
+8+ Balance
+10+ Pan
+11 Expression
+12 Effect Control 1
+13 Effect Control 2
+16 General 1
+17 General 2
+18 General 3
+19 General 4
+32 Bank LSB
+33 Mod Wheel LSB
+34 Breath LSB
+36 Foot LSB
+37 Porta Time LSB
+38 Data Entry LSB
+39 Volume LSB
+40+ Balance LSB
+42+ Pan LSB
+43 Expression LSB
+44 Effect Control 1 LSB
+45 Effect Control 2 LSB
+48 General 1 LSB
+49 General 2 LSB
+50 General 3 LSB
+51 General 4 LSB
+64- Damper on/off
+65- Portamento on/off
+66- Sustenuto on/off
+67- Soft Pedal on/off
+68- Legato on/off
+69 Hold 2
+70 Sound Variation
+71 Timbre
+72 Release Time
+73 Attack Time
+74 Brightness
+75 Decay Time
+76 Vibrato Rate
+77 Vibrato Depth
+78 Vibrato Delay
+80 General 5
+81 General 6
+82 General 7
+83 General 8
+84 Portamento
+91 FX 1 Depth
+92 FX 2 Depth
+93 FX 3 Depth
+94 FX 4 Depth
+95 FX 5 Depth
+96 Data Increment
+97 Data Decrement
+98 Non-Reg. LSB
+99 Non-Reg. MSB
+100 Registered LSB
+101 Registered MSB
+120 All Sound Off
+121 Reset Ctrl
+122- Local on/off
+123 All Notes Off
+124 Omni Off
+125 Omni On
+126 Mono
+127 Poly

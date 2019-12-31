@@ -1,0 +1,93 @@
+ARRANGER WINDOW
+
+1. Tracks
+
+1.1. Activate, Create, Delete, Move
+Click on the left column of an existing track to activate it. You can also choose the active track by using cursor keys up/down.
+<ALT>-click on a not existing (grey) track to create a new one (or menu "Track/Add") or <ALT>-click on an existing track to duplicate it (without sequences). Delete the active track with menu item "Track/Delete". Drag and drop tracks on the left column to change the order.
+
+1.2. Mute, Solo
+The green box is the mute button, which (de)activates mute on the particular track. <SHIFT>-click on mute mutes all other tracks (solo). <ALT>-click deactivates all mutes. See "Track" menu. [All mute functions can also be found in the Track menu]
+
+1.3. Name, Channel, Program, Time Shift
+All settings for the active track are shown in the info box ("Track" column) under the track area. Click on a value to change it. Don't select "Thru" in the channel requester. It's just for importing SMF files, but does not fit in the concept of Horny.
+For channel and program requesters, the project settings should be configured correctly (menu "Project/Settings") [on default]
+
+1.4. Midi Program Change
+Every track represents a midi program (sound) on a midi channel. If you want to change the program of a track inside your song, you will have to create two tracks with the same midi channel but different program values (info box). Don't play more than one sequence AT THE SAME TIME in these tracks! This would make problems.
+
+1.5. Change Width of the left Column
+It's possible to move the border between the left column and the sequence area with mouse.
+
+1.6. Automation
+It's possible to automate all mixer parameters inside the tracks. You can create volume fades for example. See "Track Automation" chapter.
+
+
+2. Sequences
+
+2.1. Create, Delete
+<ALT>-click on an existing track to create a new and empty sequence. New sequences are created automaticly on the active track while recording, as soon as midi data is received. Press <DEL> or select the menu point "Sequence(s)/Delete" to delete all marked sequences.
+
+2.2. Mark
+A simple click on a sequence selects it and deselects all other. If you hold <SHIFT>, all old selections will remain unaffected and the selection of the current sequence will toggle. If you click in an empty area (or with pressed <CTRL>), a lasso selection will appear, which also works with <SHIFT>.
+A <SHIFT> click on the left column of a track selects all sequences on this track (menu item "Sequence(s)/mark/all in track").
+All sequence functions refer to the selected sequence(s).
+
+2.3. Move, Change Lengths
+Sequences can be moved by drag and drop. To change the length, the start or end borders must be moved, but this will not work, if the zoom is too low. Arrows at the borders mean, that there are MIDI events out of the sequence area. They will be played anyway as long as they don’t overlap with Midi-events in other sequences.
+
+2.4. Copy, Aliases
+If you hold <ALT> while moving, the selected sequences will be copied and you merely move the copies. If you DON'T hold <SHIFT> additionally, the copies are aliases, which are links to the originals. They will also change, if you change the original sequences. Names of original sequences are bold, aliases thin.
+
+2.5. Name, Transposing
+You can see all settings of selected sequences in the info box ("Sequence" column). Names and transpose values can be changed by clicking on them.
+
+2.6. Editing
+Double click on a sequence to show the edit window, in which you can create and edit notes and controller events.
+Some functions can be executed from arranger window directly. You can find them in the "Sequence(s)" menu. "Subdivide" and "Split" refer to the actual edit position (subdivided vertical line).
+
+
+3. Marker, Tempo and Signature Change
+
+3.1. Create, Move, Delete
+Text, tempo and signature markers are located in the three colored lines above the time line. With an <ALT> click into one of the lines, a new marker will be set. Except for the markers at the beginning you can move them by drag and drop. If a marker is moved over the top border, it will be deleted.
+The selectable area of a marker is as wide as a quarter-note, starting at the position line.
+
+3.2. Change
+Active markers are displayed white and depend on the edit position. Their settings are shown in the info box ("Edit Position" column) and can be changed by clicking on them.
+
+3.3. Jump to Text Markers
+You can jump to song positions quickly with text markers. The first 20 text markers are listed in the pop up gadget in the top left edge, and can so be jumped to. The first nine can be reached by pressing <1> to <9>. With <+> and <-> (<PageUp> and <PageDown> with PC keyboard setting) the next or previous text marker is jumped to.
+
+
+4. Timeline
+
+4.1. Player Position
+The player position (continuous vertical line) can be set by clicking into the time line.
+
+4.2. Loop
+Click into the time line, hold down the mouse button and move it to the right to create a loop range. The start and end points as well as the whole range can be moved later. Switch loop on/off with the round arrow button at the bottom.
+
+
+5. Project Overview
+
+In the bottom right of the arranger window is located a rough overview of the whole project. The highlighted area is the actually visible section.You can navigate by clicking into this area.
+
+
+6. Transport Functions
+
+<ENTER>: Start playback
+<0>: Stop playback, jump to start of loop, jump to start of song
+<SPACE>: Start playback, stop playback
+<*>: Start recording (<-> with PC keyboard setting)
+<[>: while stop: rewind (</> with PC keyboard setting)
+<]>: while stop: fast forward (<*> with PC keyboard setting)
+More transport functions are available with text markers (see there).
+
+7. Other Functions
+
+Metronome for recording
+Metronome for playback
+Loop
+Follow
+Midi-Thru (for Midi port “of the active track)

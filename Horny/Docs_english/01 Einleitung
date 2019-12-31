@@ -1,0 +1,40 @@
+EINLEITUNG
+
+1. Systemvoraussetzungen
+
+Ohne geht's nicht:
+· AmigaOS 3.5 oder höher
+· PNG Datatype
+· CAMD Library (im Aminet verfügbar)
+
+Ohne bringt's nichts:
+· MIDI Interface
+· MIDI Klangerzeuger (Keyboard, Synthesizer, Sampler,...)
+
+
+2. Was ist Horny und was ist MIDI?
+
+Horny ist ein MIDI-Sequencer oder einfach gesagt ein Musikprogramm. Wer mit dem Thema MIDI bisher nicht in Berührung gekommen ist, mag sich beim ersten Experimentieren mit Horny wundern, warum man nicht einen einzigen Ton hört...
+Was also ist MIDI? Das Wort ist eine Abkürzung von "Musical Instrument Digital Interface" und dient demnach zur Kommunikation zwischen verschiedenen (elektronischen) Musikinstrumenten. Ein MIDI-fähiges Keyboard enthält üblicherweise drei MIDI-Buchsen: IN, OUT und THRU. Alles, was dort durch fließt, sind Steuerbefehle ("Events") aber kein Klang!
+Drückt man auf einem Keyboard eine Taste, so kommt aus der OUT-Buchse ein "Note On"-Befehl mit Angabe der Tonhöhe und der Anschlagstärke. Lässt man die Taste los, folgt ein "Note Off"-Befehl. Der andere Weg ist, dass ein "Note On"-Befehl an die IN-Buchse geschickt wird, und das Keyboard den dazugehörigen Ton spielt. Und zwar so lange, bis ein "Note Off" folgt. Es gibt noch weitere Befehle, die den Klang beeinflussen können, jedoch soll hier noch nicht darauf eingegangen werden.
+Damit man mit Horny Musik machen will, braucht man also ein Keyboard. Um dieses vom Computer aus steuern zu können, wird außerdem ein MIDI-Interface benötigt, welches dem Computer  mindestens eine IN- und eine OUT-Buchse verleiht.
+Mit Horny kann man Steuerbefehle (z.B. Noten) von einem Keyboard empfangen, aufnehmen und komfortabel bearbeiten. Sequenzen können vervielfältigt und arrangiert werden. Beim Abspielen wird wieder alles in Form von MIDI-Befehlen an das Keyboard geschickt, welches schließlich die Musik erklingen lässt.
+
+
+3. Vorbereitung/Installation
+
+Folgende Grafik zeigt die minimale Ausstattung zum Musikmachen, und wie sie verkabelt werden muss. Weitere Informationen finden sich üblicherweise im Handbuch jedes Keyboards.
+
+XXXXXXX
+
+Einfache MIDI-Interfaces für klassische Amigas werden an den seriellen Port angeschlossen. Es gibt auch Varianten für den parallelen Port oder für modernere Schnittstellen (z.B. USB).
+Horny benutzt für die MIDI-Kommunikation die CAMD-Library. Diese bietet einen eingebauten Treiber für MIDI-Interfaces am seriellen Port. Für alle anderen Varianten müssen spezielle CAMD-Treiber existieren, sonst sind sie nicht zu gebrauchen.
+Bevor die MIDI-Ports eines Interfaces über CAMD zur Verfügung stehen, müssen sie über das Prefs-Programm "midiports" ausgewählt werden. Erst dann können sie in Horny benutzt werden.
+Horny muss nicht speziell installiert, sondern lediglich die Programm-Schublade an einen beliebigen Ort kopiert werden.
+
+
+4. Struktur eines Liedes in Horny
+
+Die kleinste Einheit eines Musikstücks ist die Note. Wenn mehrere Noten zu einer kleinen Melodie (oder ähnlichem) zusammengefasst werden, spricht man von einer Sequenz. Legt man nun verschiedene Sequenzen aneinander oder wiederholt auch mal welche, und das ganze dann noch für verschiedene Instrumente gleichzeitig, so hat man ein Musikstück. Genau das ist das Prinzip, mit dem in Horny gearbeitet wird.
+Das Hauptfenster von Horny nennt sich Arrangierfenster. Dies besitzt eine Zeitleiste von links nach rechts, sowie (fast) beliebig viele Spuren untereinander. Sequenzen werden als Blöcke in den Spuren dargestellt. Deren Breite und Position spiegeln die zeitliche Länge, sowie die zeitliche Position wider. Sequenzen können verschoben, kopiert, geteilt und verbunden, und deren Inhalt (Noten) bearbeitet werden.
+Jede Spur kann auf einen eigenen MIDI-Kanal gesendet werden (für verschiedene Sounds). Liegen Sequenzen direkt untereinander, so werden sie zeitgleich gespielt. Die vertikale, durchgezogene Linie gibt die aktuelle Abspielposition an.

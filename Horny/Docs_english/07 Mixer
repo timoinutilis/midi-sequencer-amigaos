@@ -1,0 +1,34 @@
+MIXER
+
+1. Structure
+
+Each vertical strip of the mixer controls a MIDI channel and not track sequences. If several tracks use the same MIDI channel, only one channel strip is shown in the mixer and any track using that midi channel will be adjusted by the channel strip controls.
+
+2. Controller
+
+Up to six midi controllers can be selected for use with each channel strip.
+
+2.1. Select
+
+To select or change a controller, click on one of the six buttons in the upper section of the channel strip.
+A selection requester will appear, which depends on the instrument associated with the midi channel (see "Project Settings").
+
+2.2. Adjustments
+
+Next to every button associated with a controller, there is a rotary pot, It can be adjusted by selecting the pot with a mouse click and moving the mouse up and down while holding the left mouse button down.  An <ALT> mouse click on the pot will set the pot to zero.
+
+3. Pan
+
+The pan pots (stereo position) can be adjusted by mouse clicking and dragging. If the <ALT> key is pressed, a mouse click will center the pan pot.
+
+4. Volume
+
+If <SHIFT> is pressed when any fader is released, all channel faders will be set to this volume.
+
+5. Mute
+
+Each channel can be muted by clicking on the Mute gadget. Holding the <SHIFT> key down while clicking "Mute" will unmute that channel and mute all the rest (channel solo) and click/<ALT> will release all the mutes.
+
+6. Automation
+
+All parameters of the mixer (including the six channel controllers per strip) can be automated. The mixer settings are recorded and edited in the automation tracks in the Arrangement Window.  See "Track Automation" chapter.

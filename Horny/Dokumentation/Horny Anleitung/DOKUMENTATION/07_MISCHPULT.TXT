@@ -1,0 +1,36 @@
+MISCHPULT
+
+1. Aufbau
+
+Die Kanäle des Mischpults repräsentieren nicht die Spuren des Arrangierfensters, sondern deren Midi-Kanäle. Wenn also mehrere Spuren den selben Kanal benutzen, so existiert dafür im Mischpult auch nur ein einzelner Kanalzug.
+
+
+2. Controller
+
+Es können pro Kanal bis zu sechs beliebige Midi-Controller über Potis gesteuert werden.
+
+2.1. Auswählen
+Ein Controller wird gewählt bzw. geändert, indem man auf einen der sechs Knöpfe in der oberen Kanalzugsektion klickt. Daraufhin erscheint eine Auswahlliste, die vom gewählten Instrument des Midi-Kanals abhängig ist (siehe "Projekteinstellungen").
+
+2.2. Regeln
+Neben jedem benutzten Controller-Knopf befindet sich ein Poti, der durch Hoch- oder Runterschieben mit der Maus geregelt werden kann. Ein <ALT>-Mausklick auf einen Poti setzt ihn auf Null.
+
+
+3. Panorama
+
+Das Panorama kann durch einfaches Verschieben geregelt werden. Ist beim Mausklick <ALT> gedrückt, so gelangt der Regler in die Zentralposition.
+
+
+4. Lautstärke
+
+Durch <SHIFT>-Drücken beim Loslassen eines Faders werden alle Kanäle auf diese Lautstärke gesetzt.
+
+
+5. Mute
+
+Jeder Kanal kann stummgeschaltet werden. Während des Anklickens kann <SHIFT> (Kanal auf Solo) oder <ALT> (alle Mutes aufheben) gedrückt werden.
+
+
+6. Automation
+
+Alle Parameter des Mischpults (also auch die sechs beliebigen Controller) können automatisiert werden. Dies geschieht im Arrangierfenster direkt in den Spuren. Siehe Kapitel "Spurautomation"

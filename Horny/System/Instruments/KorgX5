@@ -1,0 +1,400 @@
+HORNY INSTRUMENT
+#$VER: KorgX5 1.1
+
+* ==Timbre Off==
+#BANK0 58
+#BANK32 0
+Timbre Off
+
+* ==Drum Kits==
+#BANK0 62
+#BANK32 0
+#PROG 0
+GM Kit
+#PROG 16
+Power Kit
+#PROG 25
+Analog Kit
+#PROG 32
+Jazz Kit
+#PROG 40
+Brush Kit
+#PROG 64
+Perc Kit
+#PROG 24
+Dance Kit
+#PROG 48
+Orch Kit
+
+* Bank A
+#BANK0 0
+#BANK32 0
+#PROG 0
+A00 Pipe Dreams
+A01 X Piano
+A02 Big Strings
+A03 Asian Jung
+A04 Rock On!!!
+A05 Glock Bells
+A06 FatRezBass
+A07 Breathy Vox
+A08 Xanalog
+A09 [ KrazyKit ]
+A10 Transforms
+A11 Killer B
+A12 Pop Brass
+A13 Harp Gliss
+A14 Brite Steel
+A15 Ping Mallet
+A16 Upright
+A17 Velo Flute
+A18 LA Synth
+A19 [ Combo Kit ]
+A20 Wave Sweep
+A21 Funky Roads
+A22 Ana Strings
+A23 Euro Pipe
+A24 Stratified
+A25 Crystal Ice
+A26 Dance Bass
+A27 Ghost Vox
+A28 Fat Filterz
+A29 [ Down Low ]
+A30 Sputnik
+A31 Super Perc
+A32 Brass Swell
+A33 Lore
+A34 Follow Me
+A35 Logs & Bells
+A36 90's Bass
+A37 Fresh Waves
+A38 MIDI Grand
+A39 [Mr. Gong]
+A40 Landing Pad
+A41 M1 Piano
+A42 Dyno String
+A43 Tamboura
+A44 Chruncher
+A45 Star Fire
+A46 Synth Bass 3
+A47 Woodwinds
+A48 Reso Waves
+A49 [ Manimals ]
+A50 Vortex
+A51 Click Organ
+A52 Stereo Horn
+A53 Mallet Loop
+A54 Flamenco
+A55 Metal Ghost
+A56 Velo Pick
+A57 ooooooooze
+A58 Dr. Tapp
+A59 [ Loop SFX ]
+A60 Time Clocks
+A61 Classic EP
+A62 Cello Ens.
+A63 Godfather
+A64 Funk Guitr
+A65 Real Gamlon
+A66 Chrome Bass
+A67 Real Shaku
+A68 Split Sync
+A69 [ Nature ]
+A70 Syn Tronic
+A71 Super BX-3
+A72 Trump Ens.
+A73 Jaw Harp
+A74 Rock Chuga
+A75 The Ice Man
+A76 Velo Slap
+A77 Flutter
+A78 Swell Pad
+A79 [ Natives! ]
+A80 Quarks
+A81 Dyno Tines
+A82 Velo Flugel
+A83 Polka Box
+A84 Feedback Gt
+A85 Swiss Box
+A86 Big Mini
+A87 Arabesque
+A88 Syn Brass
+A89 [ Drill Me! ]
+A90 Universe X
+A91 Big Organ
+A92 Ethno Violn
+A93 Real Sitar
+A94 Greek Gtr.
+A95 Midi Bells
+A96 Stick Bass
+A97 Soprano Vox
+A98 Solo Synth
+A99 [ Jet Star ]
+
+* Bank B
+#BANK0 0
+#BANK32 0
+#PROG 0
+A00 Sunrise
+A01 Piano 16'
+A02 Alto Breath
+A03 Tiny Dancer
+A04 Spruce Gtr
+A05 Vibra Bell
+A06 XFade Bass
+A07 The Strings
+A08 Power Synth
+A09 Total Kit
+A10 Machine Age
+A11 Hot Keys
+A12 Brass Band
+A13 Maxi Tine
+A14 Power Rock
+A15 Tabla Talk
+A16 Finger Bass
+A17 Lite Voices
+A18 Color Pad
+A19 Festival!
+A20 Glide Sweep
+A21 Last Tango
+A22 Magic Flute
+A23 Operators
+A24 E. Guitars
+A25 Gamelan
+A26 Zap Bass
+A27 Digital Air
+A28 Analogist
+A29 Mando Trem
+A30 Space Wing
+A31 Gospel Org
+A32 Trumpets
+A33 Fresh Air
+A34 Rock Mutes
+A35 Dustette
+A36 Picked Bass
+A37 Chamber Ens
+A38 Wire Pad
+A39 Industrial
+A40 Neutron
+A41 Piano Haven
+A42 Shaku Bend
+A43 Bowen Wave
+A44 Clean Funk
+A45 Split Bell
+A46 Slap It
+A47 Analog Pad
+A48 Residue
+A49 Orch Perc
+A50 Dream World
+A51 Harpsi Funk
+A52 Flugel Horn
+A53 Elec. Tap
+A54 Harmonics
+A55 Africana
+A56 Techno Bass
+A57 Airways
+A58 Busy Boy
+A59 Heartbeat
+A60 Spectrum
+A61 Full Pipes
+A62 Woodwinds
+A63 Whirly
+A64 Lead Guitar
+A65 Isabelle
+A66 Fat Fretty
+A67 Poppin Pad
+A68 Soft Horns
+A69 Producr Kit
+A70 In The Trees
+A71 Santa Clav
+A72 Sfz< Brass
+A73 Tine Pad
+A74 Pedal Steel
+A75 Log Drums
+A76 House Bass 1
+A77 Ambi. Voice
+A78 Mono Lead
+A79 Hackbrett
+A80 Halifax NS
+A81 Drawbars
+A82 Fanfare
+A83 Hard Tines
+A84 Dr. Guitar
+A85 Ether Bells
+A86 Bass / Harm
+A87 Air Vox
+A88 Drum Hit
+A89 50' s SciFi
+A90 Steam Cloud
+A91 Bouzouki
+A92 Brite Brass
+A93 DWGS EP
+A94 JoyStick Up
+A95 Wave Cycles
+A96 Rap Bass
+A97 Oooooh Pad
+A98 Bright Pad
+A99 Harp Pluck
+
+* Piano
+#BANK0 56
+#BANK32 0
+#PROG 0
+Piano
+Brite Piano
+Hammer Piano
+Honkey Tonk
+New Tines
+Digi Piano
+Harpischord
+Clav
+
+* Percussion
+Celesta
+Glocken
+Music Box
+Vibes
+Marimba
+Xylophone
+Tubular
+Santur
+
+* Organ
+Full Organ
+Perc Organ
+BX-3 Organ
+Church Pipe
+Positive
+Musette
+Harmonica
+Tango
+
+* Guitar
+Classic Guitar
+A. Guitar
+Jazz Guitar
+Clean Guitar
+Mute Guitar
+Over Drive
+Dist Guitar
+Rock Monics
+
+* Bass
+Jazz Bass
+Deep Bass
+Pick Bass
+Fretless
+Slap Bass 1
+Slap Bass 2
+Synth Bass 1
+Synth Bass 2
+
+* Strings
+Violin
+Viola
+Cello
+Contrabass
+Tremolo Strings
+Pizzicato
+Harp
+Timpani
+
+* Ensemble
+Marcato
+Slow String
+Analog Pad
+String Pad
+Choir
+Doo Voice
+Voices
+Orch Hit
+
+* Brass
+Trumpet
+Trombone
+Tuba
+Muted Trumpet
+French Horn
+Brass
+Synth Brass 1
+Synth Brass 2
+
+* Reed
+Soprano Sax
+Alto Sax
+Tenor Sax
+Baritone Sax
+Sweet Oboe
+English Horn
+Bassoon Oboe
+Clarinet
+
+* Pipe
+Piccolo
+Flute
+Recorder
+Pan Flute
+Bottle
+Shakuhachi
+Whistle
+Ocarina
+
+* Synth Lead
+Square Wave
+Saw Wave
+Syn Caliope
+Syn Chiff
+Charang
+Air Chorus
+Rezzo 4th
+Bass & Lead
+
+* Synth Pad
+Fantasia
+Warm Pad
+Poly Pad
+Ghost Pad
+Bowed Glass
+Metal Pad
+Halo Pad
+Sweep
+
+* Synth Effects
+Ice Rain
+Sound Track
+Crystal
+Atmosphere
+Brightness
+Goblin
+Echo Drops
+Star Theme
+
+* Ethnics
+Sitar
+Banjo
+Shamisen
+Koto
+Kalimba
+Scotland
+Fiddle
+Shanai
+
+* Percussive
+Metal Bell
+Agogo
+Steel Drums
+Woodblock
+Taiko
+Tom
+Synth Tom
+Reverse Cymbal
+
+* Sound Effects
+Fret Noise
+Noise Chiff
+Seashore
+Birds
+Telephone
+Helicopter
+Stadium!!
+Gunshot

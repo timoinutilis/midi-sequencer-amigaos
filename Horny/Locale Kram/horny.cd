@@ -1,0 +1,920 @@
+; Horny 1.2 Catalog Descriptor
+;
+; Highest Number: 289
+;
+;==Automation.c==================================
+;
+MSG_0000 (0//)
+There were no fitting controller events in marked sequences
+;
+MSG_0001 (1//)
+The automation you want to convert to must be selected
+;
+;==CtrlWandler.c=================================
+;
+MSG_0005 (2//)
+Name
+;
+MSG_0005A (3//)
+Original
+;
+MSG_0005B (4//)
+Destination
+;
+MSG_0005C (5//)
+Controller Transformer
+;
+MSG_0005D (6//)
+New
+;
+MSG_0005E (7//)
+Delete
+;
+MSG_0005F (8//)
+Adjust Transformer
+;
+MSG_0005G (9//)
+Set Original
+;
+MSG_0005H (10//)
+Set Destination
+;
+;==Mischpult.c===================================
+;
+MSG_0006 (11//)
+Mixer
+;
+;==Spuren.c======================================
+;
+MSG_0007 (12//)
+Track %d
+;
+MSG_0009 (13//)
+In Lite version, it's not possible\nto create more than 16 tracks
+;
+MSG_0010 (14//)
+It's not possible to create more tracks
+;
+MSG_0011 (15//)
+Track contains original sequence(s) of aliases
+;
+;==Einstellungen.c===============================
+;
+MSG_0016 (272//)
+<no ports available>
+;
+MSG_0017 (16//)
+%s: Channel %d
+;
+MSG_0018 (17//)
+Outputs
+;
+MSG_0019 (18//)
+Change Active
+;
+MSG_0020 (19//)
+Add
+;
+MSG_0021 (20//)
+Remove
+;
+MSG_0022 (21//)
+Output Instruments
+;
+MSG_0023 (22//)
+Inputs
+;
+MSG_0026 (23//)
+1/8 Notes
+;
+MSG_0027 (24//)
+1/4 Notes
+;
+MSG_0028 (25//)
+1/2 Notes
+;
+MSG_0029 (26//)
+Bars
+;
+MSG_0030 (27//)
+Channel
+;
+MSG_0031 (28//)
+Grid
+;
+MSG_0032 (29//)
+Main Beat
+;
+MSG_0033 (30//)
+Key
+;
+MSG_0034 (31//)
+Velocity
+;
+MSG_0035 (32//)
+Side Beat
+;
+MSG_0041 (33//)
+Start Time   HH:MM:SS:FF
+;
+MSG_0042 (34//)
+Delete
+;
+MSG_0043 (35//)
+Accept
+;
+MSG_0044 (36//)
+Midi Ports
+;
+MSG_0045 (37//)
+Metronome
+;
+MSG_0046 (38//)
+SMPTE
+;
+MSG_0047 (39//)
+Project Settings
+;
+;==Marker.c======================================
+;
+MSG_0048 (40//)
+Not enough memory for marker\n<Marker.c>
+;
+MSG_0049 (41//)
+Beginning
+;
+;==Umgebung.c====================================
+;
+MSG_0053 (42//)
+Use Workbench
+;
+MSG_0054 (43//)
+Mode
+;
+MSG_0055 (44//)
+Main Window as Background
+;
+MSG_0057 (45//)
+Horny Projects
+;
+MSG_0058 (46//)
+Midi Files (SMF)
+;
+MSG_0058A (273//)
+SysEx Files
+;
+MSG_0059 (47//)
+Start Project
+;
+MSG_0060 (48//)
+Use for New Projects
+;
+MSG_0062 (49//)
+File
+;
+MSG_0062A (259//)
+Transport Functions (Numpad)
+;
+MSG_0062B (260//)
+Amiga Keyboard (Rec: <*> Fast: <[> <]> Marker: <+> <->)
+;
+MSG_0062C (261//)
+PC Keyboard (Rec: <-> Fast: </> <*> Marker: <PgUp> <PgDn>)
+;
+MSG_0062I (287//)
+Mouse Wheels
+;
+MSG_0062J (288//)
+Swap Horizontal/Vertical
+;
+MSG_0062D (274//)
+System settings take affect after application restart
+;
+MSG_0062E (275//)
+Multitasking Priorities
+;
+MSG_0062F (276//)
+Player Process
+;
+MSG_0062G (277//)
+Thru Process
+;
+MSG_0062H (278//)
+SysEx Receive Buffer Size (kB)
+;
+MSG_0063 (50//)
+Screen
+;
+MSG_0064 (51//)
+Paths
+;
+MSG_0064A (258//)
+Control
+;
+MSG_0064B (279//)
+System
+;
+MSG_0065 (52//)
+Environment Settings
+;
+MSG_0066 (53//)
+Save
+;
+MSG_0067 (54//)
+Use
+;
+MSG_0068 (55//)
+Cancel
+;
+;==Gui.c=========================================
+;
+MSG_0138 (56//)
+Horny's Screen
+;
+MSG_0140 (57//)
+Could not open screen
+;
+MSG_0141 (58//)
+There are open windows.\nCannot close screen.
+;
+;==Midi.c========================================
+;
+MSG_0158 (59//)
+Not enough memory for sequence/event block\n<Midi.c>
+;
+;==Main.c========================================
+;
+MSG_0159A (265//)
+Cannot change sync status while playback
+;
+MSG_0159 (60//)
+Unnamed
+;
+MSG_0160 (61//)
+Really delete track?
+;
+MSG_0161 (62//)
+Yes|No
+;
+MSG_0162 (63//)
+Really open project?
+;
+MSG_0163 (64//)
+Could not create player process
+;
+MSG_0163A (266//)
+Could not create thru process
+;
+MSG_0164 (65//)
+Really quit program?
+;
+;==Fenster.c=====================================
+;
+MSG_0194 (66//)
+Cancel
+;
+MSG_0195 (67//)
+Okay
+;
+MSG_0197 (68//)
+Threshold
+;
+MSG_0198 (69//)
+Compression
+;
+MSG_0199 (70//)
+Gain
+;
+;==MidiEdit.c====================================
+;
+MSG_0206 (71//)
+Corrections were done
+;
+MSG_0207 (72//)
+All notes are okay
+;
+MSG_0208 (73//)
+Notes are lying on split point
+;
+MSG_0209 (74//)
+Split|Shorten
+;
+;==Projekt.c=====================================
+;
+MSG_0210 (75//)
+Unnamed
+;
+MSG_0211 (76//)
+Standard
+;
+MSG_0212 (77//)
+Really quit program?
+;
+MSG_0213 (78//)
+Yes|No
+;
+MSG_0214 (79//)
+Really start new project?
+;
+MSG_0216 (80//)
+Should really all SysEx messages\n(except locked ones) be sent?
+;
+MSG_0217 (267//)
+Save as '
+;
+;==Gui2.c========================================
+;
+MSG_0218 (81//)
+Volume
+;
+MSG_0219 (82//)
+Panorama
+;
+MSG_0224 (83//)
+Title:
+;
+MSG_0225 (84//)
+Length:
+;
+MSG_0226 (85//)
+Edit Position
+;
+MSG_0227 (86//)
+Tempo:
+;
+MSG_0228 (87//)
+Signature:
+;
+MSG_0229 (88//)
+Text:
+;
+MSG_0230 (89//)
+Track:
+;
+MSG_0231 (90//)
+Channel:
+;
+MSG_0232 (91//)
+Thru
+;
+MSG_0233 (92//)
+Program:
+;
+MSG_0236 (93//)
+not chosen
+;
+MSG_0237 (94//)
+Shift:
+;
+MSG_0238 (95//)
+Sequence:
+;
+MSG_0240 (96//)
+Transpose:
+;
+MSG_0241 (281//)
+Mute:
+;
+MSG_0241A (282//)
+ON
+;
+MSG_0241B (283//)
+OFF
+;
+MSG_0242 (97//)
+Aliases:
+;
+;==Menu.c========================================
+;
+MSG_0247 (98//)
+Program
+;
+MSG_0248 (99//)
+About...
+;
+MSG_0249 (100//)
+Environment...
+;
+MSG_0251 (101//)
+Snapshot All Windows
+;
+MSG_0252 (102//)
+Quit
+;
+MSG_0254 (103//)
+Project
+;
+MSG_0255 (104//)
+New
+;
+MSG_0257 (105//)
+Load...
+;
+MSG_0259 (106//)
+Import SMF...
+;
+MSG_0260 (107//)
+Save
+;
+MSG_0261 (284//)
+Save as Start Project
+;
+MSG_0262 (108//)
+Save as...
+;
+MSG_0263 (109//)
+Export SMF...
+;
+MSG_0264 (110//)
+Settings...
+;
+MSG_0266 (111//)
+SysEx Manager...
+;
+MSG_0268 (112//)
+Mixer...
+;
+MSG_0269 (113//)
+Controller Transformer...
+;
+MSG_0270 (114//)
+Send Programs
+;
+MSG_0271 (115//)
+Send All SysEx
+;
+MSG_0272 (116//)
+Send Mix
+;
+MSG_0273 (117//)
+Send All Notes Off
+;
+MSG_0275 (118//)
+Track
+;
+MSG_0276 (119//)
+Add
+;
+MSG_0278 (120//)
+Duplicate
+;
+MSG_0280 (121//)
+Delete
+;
+MSG_0282 (122//)
+Mute On/Off
+;
+MSG_0284 (123//)
+Solo
+;
+MSG_0286 (124//)
+All Mutes Off
+;
+MSG_0288 (125//)
+Track Automation
+;
+MSG_0289 (126//)
+Volume
+;
+MSG_0290 (127//)
+Panorama
+;
+MSG_0291 (128//)
+Controller 1
+;
+MSG_0292 (129//)
+Controller 2
+;
+MSG_0293 (130//)
+Controller 3
+;
+MSG_0294 (131//)
+Controller 4
+;
+MSG_0295 (132//)
+Controller 5
+;
+MSG_0296 (133//)
+Controller 6
+;
+MSG_0297 (134//)
+Hide Automation
+;
+MSG_0298A (135//)
+Convert to Sequence
+;
+MSG_0298B (136//)
+Get from Sequences
+;
+MSG_0299 (137//)
+Sequence(s)
+;
+MSG_0300 (138//)
+Mark
+;
+MSG_0301 (139//)
+All in Active Track
+;
+MSG_0302 (140//)
+All in Song
+;
+MSG_0303 (141//)
+All From Edit Position
+;
+MSG_0303A (262//)
+Set Loop around Sequence(s)
+;
+MSG_0304 (142//)
+Copy
+;
+MSG_0306 (143//)
+Paste
+;
+MSG_0308 (144//)
+Delete
+;
+MSG_0310 (145//)
+Quantize...
+;
+MSG_0312 (146//)
+Split
+;
+MSG_0314 (147//)
+Subdivide
+;
+MSG_0316 (148//)
+Merge
+;
+MSG_0318 (149//)
+Alias to Real
+;
+MSG_0376 (150//)
+Edit
+;
+MSG_0377 (151//)
+Undo
+;
+MSG_0379 (152//)
+Redo
+;
+MSG_0380 (153//)
+Note(s)
+;
+MSG_0381 (154//)
+Mark
+;
+MSG_0382 (155//)
+All
+;
+MSG_0383 (156//)
+Higher and same Notes
+;
+MSG_0384 (257//)
+Lower and same Notes
+;
+MSG_0385 (157//)
+Quieter Notes
+;
+MSG_0386 (158//)
+All with same Channel
+;
+MSG_0387 (159//)
+Delete
+;
+MSG_0389 (160//)
+Quantize
+;
+MSG_0390 (161//)
+Starts
+;
+MSG_0392 (162//)
+Ends
+;
+MSG_0393 (163//)
+Starts Nearer
+;
+MSG_0395 (164//)
+Velocity Compressor...
+;
+MSG_0397 (165//)
+Repair Notes
+;
+MSG_0399 (166//)
+Controller
+;
+MSG_0400 (167//)
+Nothing Marked
+;
+MSG_0402 (168//)
+Add...
+;
+MSG_0404 (169//)
+Delete
+;
+MSG_0406 (170//)
+Reduce...
+;
+MSG_0408 (171//)
+Compressor...
+;
+MSG_0410 (172//)
+Smooth
+;
+;==Sequenzen.c===================================
+;
+MSG_0412 (173//)
+Not enough memory for event block\n<Sequenzen.c>
+;
+MSG_0413 (174//)
+Not enough memory for sequence\n<Sequenzen.c>
+;
+MSG_0414 (175//)
+Sequences with aliases (possibly in clipboard)\ncannot be deleted
+;
+MSG_0415 (176//)
+Not enough memory for alias\n<Sequenzen.c>
+;
+MSG_0421 (177//)
+Aliases cannot be splitted
+;
+MSG_0422 (178//)
+Original sequences can be merged only
+;
+;==DiskSMF.c=====================================
+;
+MSG_0437 (179//)
+Error while importing
+;
+MSG_0438 (180//)
+Not enough memory for SMF chunk\n<DiskSMF.c>
+;
+MSG_0438A (280//)
+SysEx data was found and copied to SysEx Manager
+;
+MSG_0439 (181//)
+Not a SMF file
+;
+MSG_0440 (182//)
+Could not save file
+;
+MSG_0441 (183//)
+Not enough memory for write buffer\n<DiskSMF.c>
+;
+;==Requester.c===================================
+;
+MSG_0444 (184//)
+Message
+;
+MSG_0446 (185//)
+Okay
+;
+MSG_0449 (186//)
+Load Horny Project
+;
+MSG_0450 (187//)
+Save Horny Project
+;
+MSG_0452 (188//)
+File with this name already exists
+;
+MSG_0453 (189//)
+Overwrite|Cancel
+;
+MSG_0454 (190//)
+Load MIDI Project
+;
+MSG_0455 (191//)
+Save MIDI Project
+;
+MSG_0456 (285//)
+Load SysEx File
+;
+MSG_0457 (286//)
+Save SysEx File
+;
+;==Instrumente.c=================================
+;
+MSG_0470 (192//)
+Standard
+;
+MSG_0471 (193//)
+Program %d
+;
+MSG_0472 (194//)
+Following instrument files\nare missing for this project:\n
+;
+MSG_0474 (195//)
+Program Choice(%s)
+;
+MSG_0477 (196//)
+Cancel
+;
+MSG_0478 (197//)
+Nothing
+;
+MSG_0479 (198//)
+Accept
+;
+MSG_0483 (199//)
+Controller Choice (%s)
+;
+MSG_0485 (200//)
+Okay
+;
+MSG_0486 (201//)
+Show All
+;
+;==EditorNotenGui.c==============================
+;
+MSG_0505 (202//5)
+free
+;
+MSG_0506 (263//)
+Grid
+;
+MSG_0507 (264//)
+Length
+;
+MSG_0508 (289//)
+Triplet
+;
+MSG_0512 (203//)
+Piano Editor <-> Controller Editor
+;
+MSG_0513 (204//)
+xxx
+;
+MSG_0514 (205//)
+Editor [ %s: %s ]     UNDO: %s, REDO: %s
+;
+MSG_0518 (206//)
+Rel Pos:
+; "Relative Position"
+;
+MSG_0520 (207//)
+Note:
+;
+MSG_0521 (208//)
+Velocity:
+;
+MSG_0522 (209//)
+Channel:
+;
+;==SysEx.c===================================
+;
+MSG_0525A (268//)
+Error in SysEx file
+;
+MSG_0525B (269//)
+At least one SysEx message must be selected for saving
+;
+MSG_0525 (210//)
+Incorrect SysEx message received
+;
+MSG_0526 (211//)
+Not enough memory for SysEx\n<SysEx.c>
+;
+MSG_0527 (212//)
+SysEx Manager
+;
+MSG_0528 (213//)
+Groups
+;
+MSG_0529 (214//)
+New
+;
+MSG_0530 (215//)
+Delete
+;
+MSG_0531 (216//)
+Send Group
+;
+MSG_0532 (217//)
+Send All Groups
+;
+MSG_0533 (218//)
+SysEx Messages
+;
+MSG_0535 (219//)
+Send
+;
+MSG_0535A (270//)
+Load...
+;
+MSG_0535B (271//)
+Save...
+;
+MSG_0536 (220//)
+Record SysEx
+;
+MSG_0538 (221//)
+Standard
+;
+;==EditorContrGui.c==============================
+;
+MSG_0545 (222//)
+Rel Pos:
+; "Relative Position"
+;
+MSG_0546 (223//)
+Control.:
+; "Controller:"
+;
+MSG_0547 (224//)
+Value:
+;
+MSG_0548 (225//)
+Channel:
+;
+;==DiskHornyLaden.c==============================
+;
+MSG_0549 (226//)
+This project was created in another midi configuration.\nPlease adjust port settings.
+;
+MSG_0550 (227//)
+Not enough memory for SysEx data\n<DiskHornyLaden.c>
+;
+MSG_0551 (228//)
+Not enough memory for event block\n<DiskHornyLaden.c>
+;
+MSG_0552 (229//)
+Incorrect file
+;
+MSG_0553 (230//)
+Not enough memory for area\n<DiskHornyLaden.c>
+;
+MSG_0554 (231//)
+Obsolete Horny file format\nis not supported anymore
+;
+MSG_0555 (232//)
+Not a Horny file
+;
+MSG_0556 (233//)
+Could not load project
+;
+;==DiskHornySpeichern.c==========================
+;
+MSG_0592 (234//)
+Buffer too small
+;
+MSG_0593 (235//)
+Could not save project
+;
+MSG_0594 (236//)
+Not enough memory for area buffer\n<DiskHornySpeichern.c>
+;
+;==EditorNoten.c=================================
+;
+MSG_0595 (237//)
+Aliases cannot be edited. Do you want to...\n...edit the original, or...\n...change alias to real sequence?
+;
+MSG_0596 (238//)
+Original|Alias to real|Cancel
+;
+MSG_0598 (239//)
+Edit Dynamics
+;
+MSG_0599 (240//)
+Move Notes
+;
+MSG_0600 (241//)
+Create Note
+;
+MSG_0601 (242//)
+Create Controller
+;
+MSG_0602 (243//)
+Move Controller
+;
+MSG_0603 (244//)
+Delete
+;
+MSG_0606 (247//)
+A reference note must be marked
+;
+MSG_0609 (248//)
+Edit Dynamics
+;
+MSG_0610 (249//)
+Quantize
+;
+MSG_0611 (250//)
+Quantizing on free grid is useless
+;
+MSG_0612 (251//)
+Quantize (Ends)
+;
+MSG_0614 (252//)
+Quantize (Near)
+;
+MSG_0616 (253//)
+Repair
+;
+MSG_0617 (254//)
+Reduce
+;
+MSG_0618 (255//)
+Smooth
+;
+MSG_0619 (256//)
+Delete

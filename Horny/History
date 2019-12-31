@@ -1,0 +1,69 @@
+INUTILIS HORNY MIDI SEQUENCER
+
+KNOWN BUGS
+
+- Mixer: visible fader values are inverted (bug in slider.gadget)
+  >> fixed in os4 update #4
+- SysEx recording and sending doesn't work correctly with new camd v40/50 (bug in library)
+  >> fixed in camd version 50.3
+- Horny becomes unstable, if more projects are opened consecutively (sorry!)
+
+HISTORY
+
+1.3 (02.11.2007)
+  - starts Phonolith and opens projects optionally (see Environment/Paths/Phonolith and Settings/Phonolith) (OS4 only)
+  - AmiUpdate support (OS4 only)
+  - application.library support (OS4 only)
+  - hold ALT while using mouse wheel to swap axis (OS4 only)
+  - mouse wheel works in edit window now (OS3/newmouse)
+  - latency setting for every port for automatic compensation (Phonolith has ca. 60 ms)
+  - some bugfixes...
+
+1.2 (07.12.2006)
+  - added triplet quantizing
+  - mouse wheel support: horizontal and vertical, swapable in environment settings
+  - changed Lite version restriction: 16 instead of 8 tracks possible
+  - recorded or loaded SysEx messages are numbered now
+  - wb icons can be dropped into main window, even if Horny has it's own screen (for OS4 screen dragging)
+  - bugfix: removed Grim Reaper when start playing (with loop)
+  - bugfix: alias copies of alias sequences might work reliabler now
+  - bugfix: Instrument selector window used 100% CPU
+
+1.1 (30.07.2005)
+  - added eXtreamSync support for synchronizing with AudioEvolution 4 and other software (OS4 only)
+  - muting individual sequences is possible now (see info box in arranger window)
+  - "Running Status" compression for SMF export implemented
+  - SysEx import/export with SMF (exports only activated SysEx groups)
+  - SysEx loading/saving from SysEx Manager (saves all selected SysEx messages to one file)
+  - SysEx Manager: Number of Messages are shown in the group list
+  - player/thru process priority setting added in environment window
+  - CAMD SysEx receive buffer size setting added in environment window
+  - "Set Loop around Sequence(s)" function added to "Sequence(s)" menu
+  - "Save as Start Project" function added to "Project" menu (mind "Paths" tab in environment window)
+  - edit window: "Grid" and "Length" texts added
+  - controller edit window: values are also shown as numbers inside tracks
+  - automatic counter for naming new tracks, if last track name ends with number
+  - sequences cannot be shorter than a quarter note after splitting and SMF import anymore
+  - bugfix: requester windows sometimes appeared on WB screen, although an own screen was used
+  - bugfix: midi thru did not work sometimes
+  - bugfix: SysEx Manager Grim Reapers removed (used exec lists the wrong way...)
+  - bugfix: snapshot of arranger window did not work sometimes
+  - bugfix: size remembering of windows works correctly now
+  - some chapters of manual translated to English (incomplete and old, sorry, but better than nothing??)
+  - added some instrument files (thanks to Daniel Jedlicka)
+
+1.01 (12.03.2005)
+  - OS3 and new OS4 native version
+  - no special full version anymore, just enhance lite version with a keyfile
+  - enhanced OS4 look
+  - bugfix: GUI of Piano/Controller Editor crashed on OS4
+  - bugfix: timer variable overflow (crashed on OS4)
+  - compressor GUI refreshes graphic while setting parameters
+  - SMPTE settings: time gadgets support tab cycling
+  - midi thru functionality has it's own process
+  - SMF export includes mixer volume/pan and provisional program changes
+  - environment setting for Amiga/PC-keyboard (transport functions)
+  
+
+1.0 (26.01.2005)
+  first non beta release

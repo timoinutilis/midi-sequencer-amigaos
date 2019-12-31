@@ -1,0 +1,45 @@
+PIANO EDITOR
+
+1. Time Line
+
+1.1. Play Position
+
+You can set the start of play position (the continuous vertical cursor line) by clicking on the time line.
+
+1.2. Sequence Borders
+
+The white area in the time line shows the size of the sequence. However, notes outside of the white area are also played.
+
+2. Keyboard
+
+A virtual piano keyboard is displayed vertically down the left of the editor window.
+
+2.1. Play
+
+Clicking the keys on the keyboard will play the appropriate note using the MIDI channel of the sequence being edited.
+
+3. Notes
+
+3.1. Mark
+
+Individual notes in the sequence can be marked (selected) by clicking on them. Notes on black keys can only be selected by clicking in the bottom half of the note. Multiple selection is possible with <SHIFT> and/or lasso selection. A <SHIFT> click next to a piano key on the blue border to the right of the keyboard will select all notes in the sequence having the note value of the key. More selection functions can be found in the "Note(s)/Mark/" menu. These functions apply to the last selected note, except for the menu item, "All".
+
+All edit functions affect all marked notes.
+
+3.2. Create, Delete
+
+A new note with the same length (duration) as the last marked note (1/1 - 1/32) can be created on the grid (1/4 - free) by <ALT> clicking into the notes area. If you hold the mouse button down, you can adjust the pitch and length after creating the note. 
+
+If you press <DEL> or select the menu item "Note(s)/Delete", all marked notes will be deleted.
+
+3.3. Move, Change Length
+
+Notes can be moved with drag&drop on the Piano Editor sequence grid (1/4 - free). If you select the last third of the note and move the mouse, only the note length will be changed.
+
+3.4. Copy
+
+If you try to move notes with <ALT> key pressed, copies of the notes will be created.
+
+3.5. Change Velocity
+
+To change the note velocity, click on a note with the <CTRL> key pressed and hold down the mouse button. Then move the mouse up or down to change the velocity of the note. With the <CTRL> key pressed and the left mouse button clicked, a velocity indicator is shown to the left of each displayed note. With the velocity compressor ("Note(s)" menu) dynamics can be adjusted more flexibly.

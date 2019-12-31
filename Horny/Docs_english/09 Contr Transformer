@@ -1,0 +1,9 @@
+CONTROLLER TRANSFORMER
+
+The Controller Transformer can transform incoming midi controller events into another controller event type. For instance, you could control volume with the external keyboard modulation wheel, for example.
+
+Each line in the list corresponds to an original controller which is transformed to a new controller. For each transformation,  create a new list entry and give it a suitable name in the field at the bottom of the window (e.g. "Mod->Vol"), Select the original controller (e.g. 1 = modulation) with the Set Original gadget and select a destination controller (e.g. 7 = volume) with the Set Destination gadget.
+
+Controller select requesters depends on the instrument of the selected track.
+
+Only the transformations with a tick in the check box will be active.

@@ -1,0 +1,46 @@
+DAS ERSTE PROJEKT
+
+1. Voraussetzung
+
+Hier folgt eine Anleitung für ein kleines Musikstück. Dabei wird davon ausgegangen, dass ein General-MIDI-Keyboard am MIDI-Interface angeschlossen ist, und dass die MIDI-Ports korrekt in CAMD ("midiports"-Prefs) ausgewählt sind.
+"General Midi" ist ein Standard für MIDI-Instrumente, der einige Eigenschaften des Klangerzeugers festlegt. Die wichtigsten sind:
+· Es müssen 16 verschiedene Sounds gleichzeitig benutztbar sein (16 Kanäle).
+· Jeder Kanal muss polyphon sein, also mehrere Töne (mit dem selben Sound) gleichzeitig spielen können.
+· Es müssen 128 festgelegte Sounds (z.B. Piano, Gitarre,...) vorhanden sein.
+· Auf Kanal 10 muss ein Schlagzeug mit bestimmter Tastenbelegung sein.
+Diese Voraussetzungen ermöglichen, dass ein Stück, welches auf einem GM-Instrument erstellt wurde, auf jedem anderen GM-Gerät zumindest ähnlich klingt. Die Qualität wird natürlich unterschiedlich ausfallen.
+
+
+2. Musik!
+
+2.1. Aufnahme!
+Starte Horny! Es erscheint nach kurzer Zeit das Arrangierfenster mit seinen noch leeren Spuren. Zu Beginn existiert nur eine benutzbare davon ("Spur 1"). Darauf soll nun etwas aufgenommen werden.
+Klicke auf den Aufnahmeknopf am unteren Fensterrand! Nun sollte sich eine vertikale Linie über die Spuren bewegen. Diese gibt die aktuelle Position an. Sofern das Keyboard richtig angeschlossen ist, wird nun auch ein Metronom ertönen. Wenn das nicht so ist, dann ist irgendetwas falsch angeschlossen, oder CAMD nicht richtig konfiguriert. Die sollte behoben werden.
+Nun spiele eine einfache Bassmelodie ein! Spiele einfach so lange, bis dir etwas Hübsches gelingt, das vier Takte lang ist. Wenn das irgendwann gelungen ist, klicke auf Stopp oder drücke die Leertaste. Daraufhin sollte ein Balken in der ersten Spur erscheinen. Dies ist die aufgenommene Sequenz.
+Ein weiterer Klick auf Stopp bewegt die Abspielposition wieder an den Anfang. Zum Anhören der Aufnahme drücke noch einmal die Leertaste. Um die Abspielposition beliebig zu setzen, kann man auf die Taktleiste klicken (nur wenn gestoppt ist).
+Vermutlich ist die Aufnahme noch nicht richtig im Takt. Stelle sicher, dass die Sequenz markiert (eingedrückt) ist und wähle den Menüpunkt "Sequenz(en)/Quantisieren...". Daraufhin erscheint ein kleines Requester, in dem nach dem niedrigsten gewollten Notenwert fragt. Meistens ist das 1/4, 1/8 oder 1/16. Danach werden alle Noten in der Sequenz dem gewählten Raster angepasst.
+Spiele noch einmal deine favorisierte Stelle ab! Wenn sie genauer klingt, dann ist das schon mal gut. Es könnte aber sein, dass sie noch viel schlimmer klingt. Dann wurde wirklich nicht gut aufgenommen. Empfohlen wird hier löschen (markieren und <DEL> drücken) und neu aufnehmen!
+Wenn dann doch mal etwas gelungen ist (soll passieren...), dann wollen wir jetzt die beste Stelle ausschneiden. Suche durch Abspielen den Anfang einer gelungenen Stelle, klicke auf ihn (sodass die gestrichelte Linie dort ist) und wähle den Menüpunkt "Sequenz(en)/Zerschneiden"! Ebenfalls muss am Ende der Passage ein Schnitt gemacht werden, sodass wir eine Sequenz mit dem gelungenen Basslauf (vier Takte?) haben. Die linke und rechte Sequenz kann gelöscht werden: Klicke einmal ins Leere, sodass nichts mehr markiert ist, klicke auf die linke Sequenz, und dann mit gehaltener <SHIFT>-Taste auf die rechte. Nun <DEL> gedrückt, und beide Sequenzen verschwinden. Prima!
+
+2.2. Arrangieren!
+...oder so. Schiebe die Bass-Sequenz ganz nach links an den Anfang! Und jetzt halte <ALT> gedrückt und schiebe sie wieder vier Takte nach rechts. Aha, eine Kopie. Damit das noch schneller geht, kann man nun beide Sequenzen markieren (z.B. mit der Lassoauswahl, wie bei Workbench-Piktogrammen) und wie eben beschrieben, per Drag&Drop kopieren. Das macht man so oft, bis die gewünschte Liedlänge erreicht ist.
+Wer Adlersaugen hat (vielleicht im Kühlschrank?), wird bemerken, dass die Bezeichnung der ersten Sequenz fett geschrieben ist, und die der kopierten dünn. Das bedeutet, dass die Kopien nur so genannte Aliase sind. Diese sind mit dem Original verknüpft, sodass alle Änderungen auf die Kopien übertragen werden. Das ist oft sinnvoll, aber nicht immer. In dem Fall kann man beim Kopieren zusätzlich <SHIFT> halten. Dann ist die Kopie ein neues Original und kann unabhängig bearbeitet werden.
+
+2.3. Anderer Sound
+Vermutlich soll die Basslinie nicht mit einem Piano gespielt werden. Klicke in der Infobox (der dunkle Kasten unten über den Transportknöpfen) auf "Program.:"! Als Programm bezeichnet man übrigens bei MIDI einen Sound (z.B. Piano). Eine lange Liste von Programmen erscheint, die uns aber nicht viel Auskunft gibt. Das geht auch aussagekräftiger. Klicke auf Abbruch!
+Wie bereits erwähnt, sind bei General MIDI 128 Programme festgelegt. Horny muss nur noch erfahren, dass auch ein GM-Keyboard benutzt wird. Wähle den Menüpunkt "Projekt/Einstellungen..."!
+Ein Fenster erscheint, in dem sich unter anderem auch eine Liste der verfügbaren Ausgänge (MIDI-Ports) befindet. Klicke auf den ersten bzw. einzigen Eintrag (üblicherweise "out.0")!
+Anschließend wähle unter "Ausgang Instrumente" im ersten Gadget "GM" aus! Damit weiß Horny Bescheid und das Fenster kann wieder geschlossen werden.
+Nun kann das Programm wesentlich komfortabler ausgewählt werden. Am besten ist es, die Basslinie laufen zu lassen. Aktiviere die Schleifenfunktion, indem du am unteren Fensterrand auf den Kreispfeil klickst. Drücke dann auf Abspielen!
+So, und nun wieder auf "Program.:" in der Infobox klicken und aus der Gruppe "Bass" irgend etwas Schönes selektieren! "Übernehmen" bewirkt das, was es soll. Klingt doch schon besser...
+
+2.4. Rhythmus!
+Jetzt soll dem Ganzen ein Schlagzeug zugefügt werden. Dafür benötigt man eine zweite Spur.
+Klicke mit gehaltener <ALT>-Taste auf ein graues Feld unter "Spur 1", sodass eine neue entsteht. Hinweis am Rande: <ALT> ist für viele Bereiche die Kopier- und Erzeug-Taste.
+Der Infobox ist zu entnehmen, dass Spur 2 auf Kanal 2 gesendet wird. Schlagzeug ist bei GM aber immer auf Kanal 10, also klicke darauf und wähle "10" aus! Wird nun auf dem Keyboard gespielt, sollten Percussion-Sounds ertönen.
+Wiederhole die Anweisungen für die Aufnahme, nur spiele diesmal einen Rhythmus ein! Dieser sollte wieder quantisiert, zurechtgeschnitten und kopiert werden. Um ein Geheimnis zu verraten: Richtig bearbeiten kann man eine Sequenz im so genannten Piano-Editor. Klicke doppelt auf eine Sequenz und das Editorfenster öffnet sich. Dies soll hier aber nicht weiter erklärt werden.
+
+2.5. Der Rest
+Naja, auf diese Weise kann man also Musikstücke entstehen lassen. Vielleicht noch ein paar Spuren und Instrumente mehr, oder im zeitlichen Verlauf mal andere Melodien oder Pausen. Selbst Tempo- und Taktartwechsel mitten im Stück sind möglich! Nicht zu vergessen die Spurautomation, mit der sich z.B. Lautstärkenverläufe realisieren lassen.
+Für all diese weiteren Fähigkeiten von Horny sollten die entsprechenden Kapitel der Anleitung gelesen werden.
+Viel Spaß!

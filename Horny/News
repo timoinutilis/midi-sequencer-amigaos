@@ -1,0 +1,35 @@
+Neue Alphaversion (0.4) vom HORNY Midi-Sequencer
+
+Horny ist ein Midi-Sequencer im Stil von z.B. "Logic" oder "Cubase",
+dessen einfache und unkomplizierte Bedienung im Vordergrund steht.
+Anders als seine Vorbilder wird Horny jedoch vorerst ein reines
+Midi-Programm bleiben und nicht Audio unterstützen.
+
+Die aktuelle Version hat alles, was zum Erstellen von Midi-Liedern
+notwendig ist, weshalb es sich bei dem Download nur noch um die
+Lite-Version handelt.
+
+Ich bitte alle, die Horny ausprobieren, mir eine kleine eMail
+zu schicken, damit ich das Interesse einschätzen kann. Danke!
+
+Download und weitere Infos auf:
+http://www.inutilis.de/horny/index.html
+
+
+Aktuelle Eigenschaften:
+
+· Ansteuerung von bis zu 16 Midi-Ports über CAMD (Lite: 1 Port)
+· Bis zu 128 Spuren (Lite: 8 Spuren)
+· Takt- und Tempo-Wechsel im Lied möglich
+· Piano-Editor: Quantisieren, Velocity-Kompressor,...
+· Controller-Editor: Kompressor, Reduzieren, Glätten,...
+· SysEx-Verwaltung mit beliebig vielen Sortierungsgruppen
+· Anspringbare Positionsmarkierungen im Arrangierfenster
+· Sound-Auswahl über Namen (nicht nur GeneralMidi, sondern für
+  beliebige Synthesizer erweiterbar)
+· Controller sind ebenfalls für beliebige (erweiterbar) Synthsizer benannt
+· SMF Import und Export
+· Horny-Dateiformat ist auf- und abwärtskompatibel
+· ReAction-Oberfläche bei Einstellungsfenstern
+· Auf Workbench oder eigenem Bildschirm
+· Arrangierfenster kann als Hintergrund benutzt werden (Backdrop)

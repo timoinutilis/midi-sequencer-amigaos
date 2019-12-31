@@ -1,0 +1,16 @@
+; project configuration (do not delete)
+
+(compiler
+
+    (alias "gcc/amigaos4/latest")
+
+    (makefile "makefile")
+
+    (make "make -f %makefile %target")
+
+    (target "")
+
+    (executable "Eigenes:Horny/HornyOS4")
+
+    (arguments "")
+)

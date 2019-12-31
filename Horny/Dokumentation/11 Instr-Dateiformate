@@ -1,0 +1,93 @@
+INSTRUMENTEN DATEIFORMATE
+
+Es können für jeden beliebigen Synthesizer Instrumenten-Dateien erstellt werden, wodurch Sounds des Geräts direkt in Horny über deren Namen ausgewählt werden können. Des Weiteren können durch .controller-Dateien auch alle unterstützten Controller benannt und mit einigen Eigenschaften beschrieben werden. Existiert für ein Instrument keine .controller-Datei, so wird der General-Midi-Standard verwendet (GM.controller).
+
+	Die Dateien befinden sich in System/Instruments/ des Horny-Verzeichnisses und können mit einfachen Texteditoren bearbeitet und erstellt werden.
+
+
+1. Aufbau „Horny Instrument“
+
+Die erste Zeile enthält die Kennung HORNY INSTRUMENT. Für alle folgenden Zeilen gilt:
+
+1.1. Version
+In der zweiten Zeile sollte ein Versionsstring angegeben sein:
+
+#$VER: ...[Instrumentenname] [Version]
+
+1.2. Kommentare
+Beliebige Kommentare können folgendermaßen eingebracht werden:
+
+# [Kommentar]
+
+Zu beachten ist das Leerzeichen hinter dem Doppelkreuz.
+
+1.3. Leerzeile
+Leerzeilen werden einfach ignoriert und können zur Übersichtlichkeit benutzt werden.
+
+1.4. Gruppe
+Alle Sounds müssen in Gruppen geordnet sein. Es muss mindestens eine im Instrument vorhanden sein. Um eine neue Gruppe zu definieren, wird folgende Zeile verwendet:
+
+* [n]
+
+[n] steht dabei für den Namen der Gruppe (Leerzeichen nach dem Stern beachten)
+
+1.5. Programm
+Die Programmnummern werden für Sounds automatisch durchgezählt. Mit folgender Zeile lässt sich ein neuer Startwert definieren:
+
+#PROG [p]
+
+[p] steht für die Programmnummer (0-127)
+
+1.6. Bank
+Standardmäßig sind Bank-Controller auf nicht senden“(-1) gesetzt. Mit folgenden Zeilen lassen sich die Controller #0 und #32 definieren:
+
+#BANK0 [b] (alternativ: #BANK [b])
+
+#BANK32 [b]
+
+[b] steht für die Banknummern (0-127, -1 = nicht senden)
+
+1.7. Soundname
+Ist eine Zeile nicht leer und beginnt weder mit # noch mit *, so wird sie als Sound-Name gewertet. Dieser wird der letzten definierten Gruppe zugeordnet. Die Programmnummer wird automatisch um eins erhöht.
+
+1.8. Aufzählung
+Es können einfache durchnummerierte Sound-Listen mit folgender Zeile erstellt werden:
+
+#NUM [n] [s] [e]
+
+[n] ist ein Name (kann keine Leerzeichen enthalten)
+[s] ist die Startzahl
+[e] ist die Endzahl (muss größer als [s] sein)
+
+Beispiel:
+
+#NUM Sound 5 8
+
+...erzeugt das identische Ergebnis wie folgende Zeilen:
+
+Sound 5
+Sound 6
+Sound 7
+Sound 8
+
+1.9. Kanalbegrenzung
+Für Synthesizer, die auf unterschiedlichen Kanälen auch unterschiedliche Sounds haben, lassen sich Gruppen dafür anpassen. Folgende Zeile bewirkt, dass danach kommende Gruppen nur für angegebene Kanäle gelten:
+
+#CHAN [s] [e]
+
+[s] ist der Startkanal des Bereichs (1-16)
+[e] ist der Endkanal des Bereichs (1-16)
+
+
+2. Aufbau Horny Instrument Controller
+
+Die Controller-Datei muss den gleichen Namen wie die Instrumentendatei haben, mit angehängter Endung .controller.
+
+	Die erste Zeile enthält die Kennung HORNY INSTRUMENT CONTROLLER.  Alle weiteren Zeilen haben folgenden Aufbau:
+
+[c] [Name]
+
+[c] ist die Nummer des Controllers (0-127). Wird daran ein + gehängt, so bedeutet dies, dass der Controller eine Mitte hat, wie es z.B. bei Panorama der Fall ist. Ein - hinter der Nummer heißt, dass der Controller ein Schalter ist, der nur zwischen 0 und 127 hin und her geschaltet werden kann. + und - wirken sich im Controller-Editor aus.
+[Name] ist die Bezeichnung des Controllers, die auch Leerzeichen enthalten kann.
+
+	Leerzeilen werden ignoriert und können zur Übersichtlichkeit gebraucht werden.

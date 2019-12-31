@@ -19,7 +19,7 @@ Defines (End)
 1 1 1
 0 0
 C/C++ Options
-0 0 0 2 1 0 0 0 1 0 0 1 0 0 0
+0 0 0 2 1 1 0 0 1 0 0 1 0 0 0
 0 0 0
 0
 0 1 0
@@ -27,22 +27,22 @@ C/C++ Optimizer
 9
 C/C++ Warnings
 1 1 1 1 1 1 0 1
-0 0
+0 1
 GCC Options (1)
 0 "NDEBUG" ""
 0
 Defines (End)
 1 0 0 1 0
 1 0 0 0 0 1 0
-0 2 1 0 0
+0 2 1 1 0
 0 0 1 0 1 0 0
-0 0 0 0
+6 0 0 0
 0 ""
-2 0 0 0
-1 0 0 1 0 1 0 1 0 1
-1 1 0 1 0 1
-0 1 1 1 1 0 0
-1 0 0 0 0
+3 0 0 0
+0 0 0 0 0 0 0 0 0 1
+0 0 0 0 0 0
+0 0 0 0 0 0 0
+0 0 0 0 0
 Assembler
 0 ""
 0 "CON://640/200/Storm Assembler/AUTO/WAIT/SCREEN StormScreen"
@@ -73,6 +73,261 @@ Section
 0 1 1 0
 4
 File
+1 "AppWindow.c"
+"AppWindow.c"
+Storm Shell Project (Dependencies)
+"objects_debug/AppWindow.o" "objects_debug/AppWindow.debug"
+""
+1 1
+File
+1 "Automation.c"
+"Automation.c"
+"Strukturen.h"
+"Versionen.h"
+"Midi.h"
+"Sequenzen.h"
+"Requester.h"
+"locale.h"
+"catalogids.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Automation.o" "objects_debug/Automation.debug"
+""
+1 1
+File
+1 "Clipboard.c"
+"Clipboard.c"
+"Strukturen.h"
+"Versionen.h"
+"Sequenzen.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Clipboard.o" "objects_debug/Clipboard.debug"
+""
+1 1
+File
+1 "CtrlWandler.c"
+"CtrlWandler.c"
+"Strukturen.h"
+"Gui.h"
+"GuiFenster.h"
+"Menu.h"
+"Projekt.h"
+"Requester.h"
+"Instrumente.h"
+"CtrlWandler.h"
+"locale.h"
+"catalogids.h"
+Storm Shell Project (Dependencies)
+"objects_debug/CtrlWandler.o" "objects_debug/CtrlWandler.debug"
+""
+1 1
+File
+1 "DiskHornyLaden.c"
+"DiskHornyLaden.c"
+"Strukturen.h"
+"Projekt.h"
+"Requester.h"
+"Marker.h"
+"dateiformat.h"
+"Sequenzen.h"
+"Midi.h"
+"SysEx.h"
+"Versionen.h"
+"Automation.h"
+"locale.h"
+"catalogids.h"
+"CtrlWandler.h"
+Storm Shell Project (Dependencies)
+"objects_debug/DiskHornyLaden.o" "objects_debug/DiskHornyLaden.debug"
+""
+1 1
+File
+1 "DiskHornySpeichern.c"
+"Strukturen.h"
+"Requester.h"
+"dateiformat.h"
+"DiskHornySpeichern.c"
+"Versionen.h"
+"locale.h"
+"catalogids.h"
+"CtrlWandler.h"
+"Midi.h"
+Storm Shell Project (Dependencies)
+"objects_debug/DiskHornySpeichern.o" "objects_debug/DiskHornySpeichern.debug"
+""
+1 1
+File
+1 "DiskSMF.c"
+"Strukturen.h"
+"Midi.h"
+"Sequenzen.h"
+"Requester.h"
+"Marker.h"
+"Projekt.h"
+"SysEx.h"
+"Versionen.h"
+"DiskSMF.c"
+"locale.h"
+"catalogids.h"
+"Smpte.h"
+Storm Shell Project (Dependencies)
+"objects_debug/DiskSMF.o" "objects_debug/DiskSMF.debug"
+""
+1 1
+File
+1 "DTGrafik.c"
+"DTGrafik.c"
+"DTGrafik.h"
+"Gui.h"
+"Versionen.h"
+Storm Shell Project (Dependencies)
+"objects_debug/DTGrafik.o" "objects_debug/DTGrafik.debug"
+""
+1 1
+File
+1 "Dynamic_Strings.c"
+"Dynamic_Strings.c"
+Storm Shell Project (Dependencies)
+"objects_debug/Dynamic_Strings.o" "objects_debug/Dynamic_Strings.debug"
+""
+1 1
+File
+1 "EditorContrGui.c"
+"EditorContrGui.c"
+"Strukturen.h"
+"Gui.h"
+"Instrumente.h"
+"Gui2.h"
+"locale.h"
+"catalogids.h"
+Storm Shell Project (Dependencies)
+"objects_debug/EditorContrGui.o" "objects_debug/EditorContrGui.debug"
+""
+1 1
+File
+1 "EditorNoten.c"
+"EditorNoten.c"
+"Strukturen.h"
+"EditorNotenGui.h"
+"Gui.h"
+"Gui2.h"
+"Sequenzen.h"
+"Requester.h"
+"MidiEdit.h"
+"Menu.h"
+"Midi.h"
+"Projekt.h"
+"Fenster.h"
+"EditorContrGui.h"
+"Instrumente.h"
+"Marker.h"
+"Undo.h"
+"locale.h"
+"catalogids.h"
+"newmouse.h"
+Storm Shell Project (Dependencies)
+"objects_debug/EditorNoten.o" "objects_debug/EditorNoten.debug"
+""
+1 1
+File
+1 "EditorNotenGui.c"
+"EditorNotenGui.c"
+"Strukturen.h"
+"Gui.h"
+"Marker.h"
+"Menu.h"
+"Gui2.h"
+"DTGrafik.h"
+"Undo.h"
+"locale.h"
+"catalogids.h"
+"GuiFenster.h"
+Storm Shell Project (Dependencies)
+"objects_debug/EditorNotenGui.o" "objects_debug/EditorNotenGui.debug"
+""
+1 1
+File
+1 "Einstellungen.c"
+"Einstellungen.c"
+"Strukturen.h"
+"Midi.h"
+"Fenster.h"
+"Gui.h"
+"Menu.h"
+"Projekt.h"
+"SysEx.h"
+"Instrumente.h"
+"Versionen.h"
+"Gui2.h"
+"Smpte.h"
+"Marker.h"
+"Requester.h"
+"locale.h"
+"catalogids.h"
+"GuiFenster.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Einstellungen.o" "objects_debug/Einstellungen.debug"
+""
+1 1
+File
+1 "Fenster.c"
+"Fenster.c"
+"Strukturen.h"
+"Gui.h"
+"Versionen.h"
+"locale.h"
+"catalogids.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Fenster.o" "objects_debug/Fenster.debug"
+""
+1 1
+File
+1 "Gui.c"
+"Gui.c"
+"Strukturen.h"
+"Requester.h"
+"Images.h"
+"Gui.h"
+"Marker.h"
+"DTGrafik.h"
+"catalogids.h"
+"GuiFenster.h"
+"Versionen.h"
+"Midi.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Gui.o" "objects_debug/Gui.debug"
+""
+1 1
+File
+1 "Gui2.c"
+"Gui2.c"
+"Strukturen.h"
+"Gui.h"
+"Marker.h"
+"Smpte.h"
+"Versionen.h"
+"Instrumente.h"
+"DTGrafik.h"
+"locale.h"
+"catalogids.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Gui2.o" "objects_debug/Gui2.debug"
+""
+1 1
+File
+1 "Instrumente.c"
+"Instrumente.c"
+"Strukturen.h"
+"Midi.h"
+"locale.h"
+"catalogids.h"
+"Versionen.h"
+"Dynamic_Strings.h"
+"Requester.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Instrumente.o" "objects_debug/Instrumente.debug"
+""
+1 1
+File
 1 "Main.c"
 "Main.c"
 "Midi.h"
@@ -83,30 +338,48 @@ File
 "Gui2.h"
 "Menu.h"
 "Sequenzen.h"
-"Disk.h"
 "Requester.h"
+"Marker.h"
+"Einstellungen.h"
+"Spuren.h"
+"EditorNoten.h"
+"Projekt.h"
+"Umgebung.h"
+"SysEx.h"
+"Instrumente.h"
+"Clipboard.h"
+"Mischpult.h"
+"DTGrafik.h"
+"Automation.h"
+"locale.h"
+"catalogids.h"
+"AppWindow.h"
+"CtrlWandler.h"
+"Versionen.h"
+"newmouse.h"
 Storm Shell Project (Dependencies)
 "objects_debug/Main.o" "objects_debug/Main.debug"
 ""
 1 1
 File
-1 "Start.c"
-"Start.c"
+1 "Marker.c"
+"Marker.c"
+"Strukturen.h"
+"Requester.h"
+"locale.h"
+"catalogids.h"
 Storm Shell Project (Dependencies)
-"objects_debug/Start.o" "objects_debug/Start.debug"
-""
-1 1
-File
-1 "Requester.c"
-"Requester.c"
-Storm Shell Project (Dependencies)
-"objects_debug/Requester.o" "objects_debug/Requester.debug"
+"objects_debug/Marker.o" "objects_debug/Marker.debug"
 ""
 1 1
 File
 1 "Menu.c"
 "Menu.c"
 "Menu.h"
+"Requester.h"
+"locale.h"
+"catalogids.h"
+"Versionen.h"
 Storm Shell Project (Dependencies)
 "objects_debug/Menu.o" "objects_debug/Menu.debug"
 ""
@@ -116,8 +389,97 @@ File
 "Midi.c"
 "Strukturen.h"
 "Requester.h"
+"Marker.h"
+"Spuren.h"
+"Sequenzen.h"
+"SysEx.h"
+"Versionen.h"
+"Mischpult.h"
+"Automation.h"
+"Gui.h"
+"locale.h"
+"catalogids.h"
+"CtrlWandler.h"
+"Projekt.h"
+"Midi.h"
 Storm Shell Project (Dependencies)
 "objects_debug/Midi.o" "objects_debug/Midi.debug"
+""
+1 1
+File
+1 "MidiEdit.c"
+"MidiEdit.c"
+"Strukturen.h"
+"Sequenzen.h"
+"Requester.h"
+"Undo.h"
+"locale.h"
+"catalogids.h"
+Storm Shell Project (Dependencies)
+"objects_debug/MidiEdit.o" "objects_debug/MidiEdit.debug"
+""
+1 1
+File
+1 "Mischpult.c"
+"Mischpult.c"
+"Strukturen.h"
+"Gui.h"
+"Menu.h"
+"Dynamic_Strings.h"
+"Versionen.h"
+"Midi.h"
+"Projekt.h"
+"Instrumente.h"
+"DTGrafik.h"
+"locale.h"
+"catalogids.h"
+"GuiFenster.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Mischpult.o" "objects_debug/Mischpult.debug"
+""
+1 1
+File
+1 "Projekt.c"
+"Projekt.c"
+"Strukturen.h"
+"Midi.h"
+"Spuren.h"
+"Sequenzen.h"
+"MidiEdit.h"
+"Marker.h"
+"Gui.h"
+"Gui2.h"
+"Menu.h"
+"Fenster.h"
+"Requester.h"
+"Einstellungen.h"
+"EditorNoten.h"
+"Umgebung.h"
+"SysEx.h"
+"DiskHorny.h"
+"Versionen.h"
+"DiskSMF.h"
+"Clipboard.h"
+"Mischpult.h"
+"DTGrafik.h"
+"Automation.h"
+"locale.h"
+"catalogids.h"
+"CtrlWandler.h"
+"Instrumente.h"
+"Dynamic_Strings.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Projekt.o" "objects_debug/Projekt.debug"
+""
+1 1
+File
+1 "Requester.c"
+"Requester.c"
+"Strukturen.h"
+"locale.h"
+"catalogids.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Requester.o" "objects_debug/Requester.debug"
 ""
 1 1
 File
@@ -126,55 +488,99 @@ File
 "Strukturen.h"
 "Requester.h"
 "MidiEdit.h"
+"EditorNotenGui.h"
+"locale.h"
+"catalogids.h"
 Storm Shell Project (Dependencies)
 "objects_debug/Sequenzen.o" "objects_debug/Sequenzen.debug"
 ""
 1 1
 File
-1 "MidiEdit.c"
-"MidiEdit.c"
+1 "Smpte.c"
+"Smpte.c"
 "Strukturen.h"
 Storm Shell Project (Dependencies)
-"objects_debug/MidiEdit.o" "objects_debug/MidiEdit.debug"
+"objects_debug/Smpte.o" "objects_debug/Smpte.debug"
 ""
 1 1
 File
-1 "Gui.c"
-"Gui.c"
-"Strukturen.h"
-"Requester.h"
-"Images.h"
-Storm Shell Project (Dependencies)
-"objects_debug/Gui.o" "objects_debug/Gui.debug"
-""
-1 1
-File
-1 "Gui2.c"
-"Gui2.c"
-"Strukturen.h"
-"Gui.h"
-Storm Shell Project (Dependencies)
-"objects_debug/Gui2.o" "objects_debug/Gui2.debug"
-""
-1 1
-File
-1 "Fenster.c"
-"Fenster.c"
-"Strukturen.h"
-"Gui.h"
-Storm Shell Project (Dependencies)
-"objects_debug/Fenster.o" "objects_debug/Fenster.debug"
-""
-1 1
-File
-1 "Disk.c"
-"Disk.c"
+1 "Spuren.c"
+"Spuren.c"
 "Strukturen.h"
 "Midi.h"
 "Sequenzen.h"
+"Gui.h"
+"Gui2.h"
 "Requester.h"
+"Versionen.h"
+"locale.h"
+"catalogids.h"
 Storm Shell Project (Dependencies)
-"objects_debug/Disk.o" "objects_debug/Disk.debug"
+"objects_debug/Spuren.o" "objects_debug/Spuren.debug"
+""
+1 1
+File
+1 "Start.c"
+"Start.c"
+"Versionen.h"
+"Dynamic_Strings.h"
+"Strukturen.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Start.o" "objects_debug/Start.debug"
+""
+1 1
+File
+1 "SysEx.c"
+"SysEx.c"
+"Strukturen.h"
+"Midi.h"
+"Fenster.h"
+"Gui.h"
+"Menu.h"
+"Projekt.h"
+"Requester.h"
+"Versionen.h"
+"locale.h"
+"catalogids.h"
+"GuiFenster.h"
+Storm Shell Project (Dependencies)
+"objects_debug/SysEx.o" "objects_debug/SysEx.debug"
+""
+1 1
+File
+1 "Umgebung.c"
+"Umgebung.c"
+"Strukturen.h"
+"Gui.h"
+"Menu.h"
+"Projekt.h"
+"Requester.h"
+"Dynamic_Strings.h"
+"locale.h"
+"catalogids.h"
+"GuiFenster.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Umgebung.o" "objects_debug/Umgebung.debug"
+""
+1 1
+File
+1 "Undo.c"
+"Undo.c"
+"Undo.h"
+"MidiEdit.h"
+"Strukturen.h"
+"Sequenzen.h"
+"EditorNotenGui.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Undo.o" "objects_debug/Undo.debug"
+""
+1 1
+File
+1 "Versionen.c"
+"Versionen.c"
+"Versionen.h"
+Storm Shell Project (Dependencies)
+"objects_debug/Versionen.o" "objects_debug/Versionen.debug"
 ""
 1 1
 Section
@@ -182,29 +588,107 @@ Section
 0 1 1 0
 2
 File
-2 "Strukturen.h"
-"Strukturen.h"
+2 "AppWindow.h"
+"AppWindow.h"
 Storm Shell Project (Dependencies)
 "" ""
 ""
 0 0
 File
-2 "Midi.h"
-"Midi.h"
+2 "Automation.h"
+"Automation.h"
 Storm Shell Project (Dependencies)
 "" ""
 ""
 0 0
 File
-2 "Sequenzen.h"
-"Sequenzen.h"
+2 "catalogids.h"
+"catalogids.h"
 Storm Shell Project (Dependencies)
 "" ""
 ""
 0 0
 File
-2 "MidiEdit.h"
-"MidiEdit.h"
+2 "Clipboard.h"
+"Clipboard.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "CtrlWandler.h"
+"CtrlWandler.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "dateiformat.h"
+"dateiformat.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "DiskHorny.h"
+"DiskHorny.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "DiskSMF.h"
+"Disk.h"
+"DiskSMF.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "DTGrafik.h"
+"DTGrafik.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Dynamic_Strings.h"
+"Dynamic_Strings.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "EditorContrGui.h"
+"EditorContrGui.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "EditorNoten.h"
+"EditorNoten.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "EditorNotenGui.h"
+"EditorNotenGui.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Einstellungen.h"
+"Einstellungen.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Fenster.h"
+"Fenster.h"
 Storm Shell Project (Dependencies)
 "" ""
 ""
@@ -224,8 +708,36 @@ Storm Shell Project (Dependencies)
 ""
 0 0
 File
-2 "Fenster.h"
-"Fenster.h"
+2 "GuiFenster.h"
+"GuiFenster.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Images.h"
+"Images.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Instrumente.h"
+"Instrumente.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "locale.h"
+"locale.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Marker.h"
+"Marker.h"
 Storm Shell Project (Dependencies)
 "" ""
 ""
@@ -238,6 +750,34 @@ Storm Shell Project (Dependencies)
 ""
 0 0
 File
+2 "Midi.h"
+"Midi.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "MidiEdit.h"
+"MidiEdit.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Mischpult.h"
+"Mischpult.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Projekt.h"
+"Projekt.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
 2 "Requester.h"
 "Requester.h"
 Storm Shell Project (Dependencies)
@@ -245,15 +785,64 @@ Storm Shell Project (Dependencies)
 ""
 0 0
 File
-2 "Disk.h"
-"Disk.h"
+2 "Sequenzen.h"
+"Sequenzen.h"
 Storm Shell Project (Dependencies)
 "" ""
 ""
 0 0
 File
-2 "Images.h"
-"Images.h"
+2 "Smpte.h"
+"Smpte.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Spuren.h"
+"Spuren.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Strukturen.h"
+"Strukturen.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "SysEx.h"
+"SysEx.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Umgebung.h"
+"Umgebung.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Undo.h"
+"Undo.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "Versionen.h"
+"Versionen.h"
+Storm Shell Project (Dependencies)
+"" ""
+""
+0 0
+File
+2 "newmouse.h"
+"newmouse.h"
 Storm Shell Project (Dependencies)
 "" ""
 ""
@@ -263,14 +852,14 @@ Section
 0 0 0 0
 7
 File
-10 "Horny"
-"Horny"
+10 "Eigenes:Horny/Horny"
+"Eigenes:Horny/Horny"
 Storm Shell Project (Dependencies)
 "" ""
 ""
 0 0
 Section
-5 1 -50
+5 0 -50
 0 0 0 0
 7
 File

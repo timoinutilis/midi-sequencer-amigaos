@@ -1,0 +1,4 @@
+SYSEX-VERWALTUNG
+
+SysEx-Nachrichten werden in Gruppen organisiert, die in der linken Liste des SysEx-Fensters bearbeitet werden können. Die rechte Liste beinhaltet immer den Inhalt der zur Zeit gewählten Gruppe.
+Das Fenster dürfte selbsterklärend sein, mit einer Ausnahme: In der Gruppenliste befinden sich Check-Boxen. Alle Gruppen, die damit deaktiviert werden, sind für "Alle Gruppen senden" und die Menüaktion "Projekt/Alle SysEx senden" gesperrt, d.h. sie werden nicht gesendet.

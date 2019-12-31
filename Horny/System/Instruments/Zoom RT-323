@@ -1,0 +1,207 @@
+HORNY INSTRUMENT
+#$VER: Zoom RhythmTrak RT-323 1.01
+
+# The RT-323 features two "drum tracks" (by default assigned
+# to MIDI channels 10 and 11) and one "bass track" (channel 9).
+#
+# You can use different kits on Drum Track A and Drum Track B.
+# Bass programs can be played on the bass track only, ie. you
+# cannot use drums and bass programs on the same MIDI channel.
+
+#CHAN 9 9
+
+* Bass Programs
+#BANK0 -1
+#BANK32 -1
+#PROG 0
+Live Bass
+Studio Bass
+Epic Bass
+Funk Bass
+Ballad Bass
+Acoustic Bass
+Modern Bass
+Synth Bass
+Techno Bass
+Big Bottom Bass
+Sub Slap Bass
+Digital Acoustic
+Bass Harmonics
+No Frets
+Acoustic Jazz
+Digital Pick
+Techno Analog
+Tabla Bass Tones
+Tight Analog
+Analog Fifths
+Temple Tones
+Quadra Bass
+Analog Touch
+Picked Acoustic
+Bass Dive
+Analog Octaves
+Synth Tom Bass
+Lo Sine
+Digi Slap Bass
+Tumba Tones
+Conga Keys
+Power Tom Bass
+#PROG 40
+Becoming Bass
+Harmonics Bass
+Bass with Harmonics
+Picked Funk
+Picked Jazz
+Picked Techno
+Acoustic Techno
+Power Funk
+Pops/Pull Split
+Epic Bass Jam
+Tribal Bass Jam
+Wooden Bass
+Jazz Bass
+Funk Pops
+Funk Pulls
+Picked Bass
+Analog Bass
+Digi Bass
+Saw Wave
+Square Wave
+Hi Sine
+Drive Bass
+Fuzz Bass
+
+
+#CHAN 10 11
+
+* Basic Kits
+#BANK0 -1
+#BANK32 -1
+#PROG 2
+Live Rock
+Studio Drums
+Standard Kit
+Funk Trap
+Epic Rock
+Ballad Set
+#PROG 9
+Dance Kit
+Rap/Hiphop
+Techno Beat
+#PROG 0
+Drum #9
+#PROG 12
+General Percussion
+Enhanced Power
+Distortion
+
+* Live Rock
+Live Rock 1
+#PROG 17
+Live Rock 2
+Live Rock 3
+
+* Studio Drums
+Studio Drums 1
+Studio Drums 2
+Studio Drums 3
+
+* Standard Kit
+Standard Kit 1
+Standard Kit 2
+#PROG 26
+Standard Kit 3
+
+* Funk Trap
+Funk Trap 1
+Funk Trap 2
+Funk Trap 3
+
+* Epic Rock
+Epic Rock 1
+Epic Rock 2
+#PROG 33
+Epic Rock 3
+
+* Ballad Set
+Ballad Set 1
+Ballad Set 2
+Ballad Set 3
+
+* Dance Kit
+Dance Kit 1
+Dance Kit 2
+Dance Kit 3
+
+* Rap/Hiphop
+#PROG 41
+Rap/Hiphop 1
+Rap/Hiphop 2
+Rap/Hiphop 3
+
+* Techno Beat
+Techno Beat 1
+Techno Beat 2
+Techno Beat 3
+
+* General Drums
+#PROG 8
+General Kit 1
+#PROG 32
+General Kit 2
+#PROG 1
+General Kit 3
+#PROG 47
+General Kit 4
+#PROG 16
+General Kit 5
+#PROG 40
+General Kit 6
+#PROG 49
+General Kit 7
+#PROG 25
+General Kit 8
+#PROG 24
+General Kit 9
+
+* Percussion/SFX
+#PROG 50
+Drum Skins
+Indian Percussion
+Agogo Gamelan
+Clicks and Sticks
+Single Percussion
+#PROG 48
+Orchestral Set
+#PROG 55
+Cymbal Set
+#PROG 63
+Lo Percussion
+#PROG 57
+Hi Percussion
+Various Percussion 1
+Various Percussion 2
+Various Percussion 3
+Various Percussion 4
+Various Percussion 5
+#PROG 56
+SFX Kit
+
+* PS-02 Compatible
+#PROG 116
+PS-02 Standard
+PS-02 Rock
+PS-02 Jazz
+PS-02 Analog 1
+PS-02 Power
+PS-02 Funk 1
+PS-02 Scratch
+PS-02 Analog 2
+PS-02 Distortion
+PS-02 Electronic
+PS-02 Brush
+PS-02 Funk 2
+
+* User Kits
+#PROG 64
+#NUM User 64 115

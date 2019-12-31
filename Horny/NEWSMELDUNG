@@ -1,0 +1,50 @@
+Der Midi-Sequencer "Horny" von Inutilis Software ist in der Version 1.0 veröffentlicht worden. Mittels eines Midi-Interfaces und eines Keyboards lassen sich damit auf komfortable Art Musikstücke produzieren. Eine einfache und schnelle Bedienweise steht dabei im Vordergrund, ohne auf mächtige Funktionen wie z.B. Automation zu verzichten.
+
+Neben der kommerziellen Vollversion für 39 Euro gibt es eine freie Lite-Version mit einigen Einschränkungen, die für Einsteiger jedoch wenig relevant sind.
+
+Bisher existiert nur eine deutsche Anleitung zum Programm, eine englische ist in Vorbereitung.
+
+Screenshots und weitere Informationen gibt es auf der Homepage.
+http://www.inutilis.de/horny/index.html
+
+
+Des Weiteren sind auf Inutilis Records bisher unveröffentlichte "projektfreie" Musikstücke von Timo Kloss als MP3 zu finden, welche fast alle mit InutilisHorny produziert wurden.
+http://www.inutilis.de/timomusik/index.html
+
+
+
+Eigenschaften von InutilisHorny:
+
+Midi
+
+  o Ansteuerung von bis zu 16 Midi-Ports über CAMD (Lite: 1 Port) 
+  o Bis zu 128 Spuren (Lite: 8 Spuren) 
+  o Taktart- und Tempo-Wechsel im Lied möglich 
+  o Midi-"Mischpult": VU-Meter, Volume, Pan, 6 weitere (Lite: 3) beliebige Controller-Regler 
+  o Automation aller Mischpult-Parameter direkt in den Spuren 
+  o SysEx-Verwaltung mit beliebig vielen Sortierungsgruppen 
+  o Controller-Transformator z.B. zum Steuern von Lautstärke per Modulationsrad 
+
+Editoren
+
+  o Piano-Editor: Quantisieren, Velocity-Kompressor,... 
+  o Controller-Editor: Kompressor, Reduzieren, Glätten,... 
+  o Mehrfaches Undo/Redo im Piano-/Controller-Editor 
+  o Anspringbare Positionsmarken im Arrangierfenster 
+  o Komplettübersicht des Projekts im Arrangierfenster 
+  o Sound-Auswahl über Namen (nicht nur GeneralMidi, sondern für beliebige Synthesizer erweiterbar) 
+  o Controller sind ebenfalls für beliebige (erweiterbar) Synthesizer benannt 
+
+Datei
+
+  o SMF Import und Export 
+  o Horny-Dateiformat ist auf- und abwärtskompatibel 
+  o Autoload-Projekt für selbstentworfene Vorlagen 
+
+Benutzeroberfläche
+
+  o ReAction-Oberfläche bei Einstellungsfenstern 
+  o Auf Workbench oder eigenem Bildschirm 
+  o Arrangierfenster kann als Hintergrund benutzt werden (Backdrop) 
+  o Mehrsprachig (locale.library): Bisher Deutsch und Englisch 
+  o Einige GUI-Elemente sind 24-Bit-Grafiken (PNG-Dateien)

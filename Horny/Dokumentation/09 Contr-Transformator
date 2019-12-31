@@ -1,0 +1,7 @@
+CONTROLLER-TRANSFORMATOR
+
+Mit dem Transformator lassen sich eingehende Midi-Controller-Events umwandeln. Somit lässt sich z.B. die Lautstärke über ein Modulationsrad steuern.
+
+	Dafür muss man einen neuen Listeneintrag erzeugen, den Original-Controller (z.B. 1 = Modulation) und den Ziel-Controller (z.B. 7 = Volume) setzen, und dem ganzen einen sinnvollen Namen geben (z.B. Mod->Vol). Die Controller-Auswahllisten beziehen sich dabei immer auf das Instrument der aktiven Spur.
+
+	Durch die Check-Boxen in der Liste lassen sich einzelne Umwandlungen aktivieren und deaktivieren.
