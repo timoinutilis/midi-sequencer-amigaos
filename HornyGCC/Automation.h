@@ -1,17 +1,17 @@
 #include <exec/types.h>
 
 void InitAutokanaele(void);
-void KanalSpurenBearbeitet(BYTE p, BYTE c);
-void AutomationKopieren(BYTE p, BYTE c, BYTE num);
-void AutomationEinfuegen(BYTE p, BYTE c, BYTE num);
+void KanalSpurenBearbeitet(int8 p, int8 c);
+void AutomationKopieren(int8 p, int8 c, int8 num);
+void AutomationEinfuegen(int8 p, int8 c, int8 num);
 void EntferneAutomationsKopie(void);
-struct AUTOPUNKT *NeuerAutoPunkt(BYTE p, BYTE c, BYTE num, LONG t, BYTE wert);
-void EntferneAutoPunkt(BYTE p, BYTE c, BYTE num, struct AUTOPUNKT *punkt);
-void EntferneAlleAutoPunkte(BYTE p, BYTE c, BYTE num);
-struct AUTOPUNKT *TaktAutoPunkt(BYTE p, BYTE c, BYTE num, LONG t);
-void AutomationVorbereiten(BYTE p, BYTE c, LONG t);
-void LoopAutomationVorbereiten(BYTE p, BYTE c, LONG t);
-void LoopAutomationResetten(BYTE p, BYTE c);
-void SpieleAutomation(BYTE p, BYTE c, LONG t);
-void KonvertiereContrZuAuto(WORD s);
-void KonvertiereAutoZuContr(WORD s);
+struct AUTOPUNKT *NeuerAutoPunkt(int8 p, int8 c, int8 num, int32 t, int8 wert);
+void EntferneAutoPunkt(int8 p, int8 c, int8 num, struct AUTOPUNKT *punkt);
+void EntferneAlleAutoPunkte(int8 p, int8 c, int8 num);
+struct AUTOPUNKT *TaktAutoPunkt(int8 p, int8 c, int8 num, int32 t);
+void AutomationVorbereiten(int8 p, int8 c, int32 t);
+void LoopAutomationVorbereiten(int8 p, int8 c, int32 t);
+void LoopAutomationResetten(int8 p, int8 c);
+void SpieleAutomation(int8 p, int8 c, int32 t);
+void KonvertiereContrZuAuto(int16 s);
+void KonvertiereAutoZuContr(int16 s);

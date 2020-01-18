@@ -17,7 +17,7 @@
 #include "dateiformat.h"
 
 extern struct LIED lied;
-extern WORD snum;
+extern int16 snum;
 extern struct GUI gui;
 extern struct EDGUI edgui;
 extern struct LOOP loop;
@@ -38,24 +38,24 @@ extern struct CTRLCHANGE *rootctrlchange;
 #define AREAPUFFER 300000
 
 
-UWORD *AddTagWord(UWORD *adr, UWORD tag, WORD wert) {
+uint16 *AddTagWord(uint16 *adr, uint16 tag, int16 wert) {
 	*adr++ = tag;
 	*adr++ = wert;
 	return(adr);
 }
 
-UWORD *AddTagLong(UWORD *adr, UWORD tag, LONG wert) {
-	LONG *l;
+uint16 *AddTagLong(uint16 *adr, uint16 tag, int32 wert) {
+	int32 *l;
 	
 	*adr++ = tag;
-	l = (LONG *)adr;
+	l = (int32 *)adr;
 	*l++ = wert;
-	return((UWORD *)l);
+	return((uint16 *)l);
 }
 
-UWORD *AddTagString(UWORD *adr, UWORD tag, STRPTR str) {
+uint16 *AddTagString(uint16 *adr, uint16 tag, STRPTR str) {
 	char *s;
-	WORD len, n;
+	int16 len, n;
 	
 	len = strlen(str) + 1;
 	*adr++ = tag;
@@ -64,42 +64,42 @@ UWORD *AddTagString(UWORD *adr, UWORD tag, STRPTR str) {
 	for (n = 0; n < len; n++) {
 		*s = str[n]; s++;
 	}
-	return((UWORD *)s);
+	return((uint16 *)s);
 }
 
-UWORD *AddTagData(UWORD *adr, UWORD tag, ULONG len, BYTE *data) {
-	ULONG *l;
-	BYTE *b;
-	ULONG n;
+uint16 *AddTagData(uint16 *adr, uint16 tag, uint32 len, int8 *data) {
+	uint32 *l;
+	int8 *b;
+	uint32 n;
 	
 	*adr++ = tag;
-	l = (ULONG *)adr;
+	l = (uint32 *)adr;
 	*l++ = len;
-	b = (BYTE *)l;
+	b = (int8 *)l;
 	for (n = 0; n < len; n++) {
 		*b = data[n]; b++;
 	}
-	return((UWORD *)b);
+	return((uint16 *)b);
 }
 
-void SchreibeArea(BPTR file, ULONG id, APTR area, UWORD *adr) {
+void SchreibeArea(BPTR file, uint32 id, APTR area, uint16 *adr) {
 	struct AREA head;
 	
 	head.id = id;
-	head.len = (LONG)adr - (LONG)area;
-	Write(file, &head, sizeof(struct AREA));
-	Write(file, area, head.len);
+	head.len = (int32)adr - (int32)area;
+	IDOS->Write(file, &head, sizeof(struct AREA));
+	IDOS->Write(file, area, head.len);
 }
 
-UWORD *AddSequenzEventsTag(struct SEQUENZ *seq, UWORD *adr, APTR *area) {
+uint16 *AddSequenzEventsTag(struct SEQUENZ *seq, uint16 *adr, APTR *area) {
 	struct EVENTBLOCK *evbl;
-	UWORD evnum;
+	uint16 evnum;
 	struct EVENT *ev;
 	struct FEVENT *fevent;
-	ULONG *l;
+	uint32 *l;
 	
 	*adr = TAG_MIDITRACK_SEQ_EVENTS; adr++;
-	l = (ULONG *)adr;
+	l = (uint32 *)adr;
 	adr++; adr++; // Platz halten für Längenangabe
 	
 	fevent = (struct FEVENT *)adr;
@@ -114,15 +114,15 @@ UWORD *AddSequenzEventsTag(struct SEQUENZ *seq, UWORD *adr, APTR *area) {
 		fevent->data2 = ev->data2;
 		
 		fevent++;
-		if ((ULONG)fevent + sizeof(struct FEVENT) > (ULONG)area + AREAPUFFER) {
+		if ((uint32)fevent + sizeof(struct FEVENT) > (uint32)area + AREAPUFFER) {
 			Meldung(CAT(MSG_0592, "Buffer too small"));
 			break;
 		}
 		
 		evnum++; if (evnum == EVENTS) {evbl = evbl->next; evnum = 0;}
 	}
-	*l = (ULONG)fevent - (ULONG)l - 4; // Tag Länge
-	return((UWORD *)fevent);
+	*l = (uint32)fevent - (uint32)l - 4; // Tag Länge
+	return((uint16 *)fevent);
 }
 
 
@@ -130,9 +130,9 @@ void SpeichernHorny(STRPTR datei) {
 	BPTR file;
 	struct HEAD head = {HORNYID, VERSION};
 	APTR area;
-	UWORD *adr;
-	WORD n, nn;
-	BYTE p, c;
+	uint16 *adr;
+	int16 n, nn;
+	int8 p, c;
 	char meldung[120];
 	
 	struct MARKER *marker;
@@ -142,16 +142,16 @@ void SpeichernHorny(STRPTR datei) {
 	struct AUTOPUNKT *punkt;
 	struct SEQUENZ *seq;
 
-	area = AllocVec(AREAPUFFER, 0);
+	area = IExec->AllocVecTags(AREAPUFFER, TAG_END);
 	if (area) {
-		file = Open(datei, MODE_NEWFILE);
+		file = IDOS->Open(datei, MODE_NEWFILE);
 		if (file) {
-			Write(file, &head.hornyid, sizeof(head.hornyid));
-			Write(file, &head.version, sizeof(head.version));
+			IDOS->Write(file, &head.hornyid, sizeof(head.hornyid));
+			IDOS->Write(file, &head.version, sizeof(head.version));
 
 
 			// FAREA_INFO
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			adr = AddTagString(adr, TAG_INFO_NAME, lied.name);
 			adr = AddTagWord(adr, TAG_INFO_SPURANZ, lied.spuranz);
 			adr = AddTagWord(adr, TAG_INFO_TAKTANZ, lied.taktanz);
@@ -159,7 +159,7 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_INFO, area, adr);
 			
 			// FAREA_MAINGUI
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			adr = AddTagWord(adr, TAG_MAINGUI_SPUR, gui.spur);
 			adr = AddTagWord(adr, TAG_MAINGUI_SPURH, gui.sph);
 			adr = AddTagLong(adr, TAG_MAINGUI_TAKT, gui.takt);
@@ -169,7 +169,7 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_MAINGUI, area, adr);
 			
 			// FAREA_EDGUI
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			adr = AddTagWord(adr, TAG_EDGUI_MODUS, edgui.modus);
 			adr = AddTagWord(adr, TAG_EDGUI_TASTE, edgui.taste);
 			adr = AddTagWord(adr, TAG_EDGUI_TASTEH, edgui.tasth);
@@ -182,14 +182,14 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_EDGUI, area, adr);
 			
 			// FAREA_LOOP
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			adr = AddTagLong(adr, TAG_LOOP_START, loop.start);
 			adr = AddTagLong(adr, TAG_LOOP_ENDE, loop.ende);
 			adr = AddTagWord(adr, TAG_LOOP_AKTIV, loop.aktiv);
 			SchreibeArea(file, FAREA_LOOP, area, adr);
 			
 			// FAREA_METRONOM
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			adr = AddTagWord(adr, TAG_METRONOM_PORT, metro.port);
 			adr = AddTagWord(adr, TAG_METRONOM_CHANNEL, metro.channel);
 			adr = AddTagWord(adr, TAG_METRONOM_TASTE1, metro.taste1);
@@ -202,14 +202,14 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_METRONOM, area, adr);
 			
 			// FAREA_SMPTE
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			adr = AddTagLong(adr, TAG_SMPTE_STARTTICKS, smpte.startticks);
 			adr = AddTagWord(adr, TAG_SMPTE_FORMAT, smpte.format);
 			adr = AddTagWord(adr, TAG_SMPTE_SYNC, IstExtreamSyncAktiv());
 			SchreibeArea(file, FAREA_SMPTE, area, adr);
 
 			// FAREA_MARKER
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			marker = rootmark;
 			while (marker) {
 				adr = AddTagWord(adr, TAG_MARKER_NEUTYP, marker->typ);
@@ -222,14 +222,12 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_MARKER, area, adr);
 			
 			// FAREA_PHONOLITH
-			#ifdef __amigaos4__
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			adr = AddTagString(adr, TAG_PHONOLITH_PROJEKT, lied.phonolithprojekt);
 			SchreibeArea(file, FAREA_PHONOLITH, area, adr);
-			#endif
 
 			// FAREA_OUTPORTS
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			for (n = 0; n < verOUTPORTS; n++) {
 				if (!outport[n].name[0]) break;
 				adr = AddTagString(adr, TAG_OUTPORTS_NEUNAME, outport[n].name);
@@ -247,7 +245,7 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_OUTPORTS, area, adr);
 			
 			// FAREA_INPORTS
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			for (n = 0; n < verINPORTS; n++) {
 				if (!inport[n].name[0]) break;
 				adr = AddTagString(adr, TAG_INPORTS_NEUNAME, inport[n].name);
@@ -255,7 +253,7 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_INPORTS, area, adr);
 			
 			// FAREA_SYSEX
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			unit = rootsexunit;
 			while (unit) {
 				adr = AddTagString(adr, TAG_SYSEX_NEUNAME, unit->name);
@@ -264,7 +262,7 @@ void SpeichernHorny(STRPTR datei) {
 				msg = unit->sysex;
 				while (msg) {
 					adr = AddTagString(adr, TAG_SYSEX_MSG_NEUNAME, msg->name);
-					adr = AddTagData(adr, TAG_SYSEX_MSG_DATA, msg->len, msg->data);
+					adr = AddTagData(adr, TAG_SYSEX_MSG_DATA, msg->len, (int8 *)msg->data);
 					msg = msg->next;
 				}
 				unit = unit->next;
@@ -272,7 +270,7 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_SYSEX, area, adr);
 			
 			// FAREA_MIXER
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			for (n = 0; n < mpdata.kanalanz; n++) {
 				p = mpkanalnum[n].port;
 				c = mpkanalnum[n].channel;
@@ -292,7 +290,7 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_MIXER, area, adr);
 
 			// FAREA_CTRLCHANGE
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			cc = rootctrlchange;
 			while (cc) {
 				adr = AddTagString(adr, TAG_CTRLCHANGE_NEUNAME, cc->name);
@@ -304,7 +302,7 @@ void SpeichernHorny(STRPTR datei) {
 			SchreibeArea(file, FAREA_CTRLCHANGE, area, adr);
 						
 			// FAREA_AUTOMATION
-			adr = (UWORD *)area;
+			adr = (uint16 *)area;
 			for (p = 0; p < verOUTPORTS; p++) {
 				for (c = 0; c < 16; c++) {
 					for (n = 0; n < 8; n++) {
@@ -326,7 +324,7 @@ void SpeichernHorny(STRPTR datei) {
 			
 			for (n = 0; n < lied.spuranz; n++) {
 				// FAREA_MIDITRACK
-				adr = (UWORD *)area;
+				adr = (uint16 *)area;
 				adr = AddTagWord(adr, TAG_MIDITRACK_SPUR, n);
 				adr = AddTagString(adr, TAG_MIDITRACK_NAME, spur[n].name);
 				adr = AddTagWord(adr, TAG_MIDITRACK_PORT, spur[n].port);
@@ -344,10 +342,10 @@ void SpeichernHorny(STRPTR datei) {
 					adr = AddTagWord(adr, TAG_MIDITRACK_SEQ_TRANS, seq->trans);
 					adr = AddTagWord(adr, TAG_MIDITRACK_SEQ_MARKIERT, seq->markiert);
 					if (seq->aliasorig) { // Alias
-						adr = AddTagLong(adr, TAG_MIDITRACK_SEQ_ALIASORIG, (ULONG)seq->aliasorig);
+						adr = AddTagLong(adr, TAG_MIDITRACK_SEQ_ALIASORIG, (uint32)seq->aliasorig);
 					} else { // Original
 						adr = AddTagString(adr, TAG_MIDITRACK_SEQ_NAME, seq->name);
-						adr = AddTagLong(adr, TAG_MIDITRACK_SEQ_SPEICHERADR, (ULONG)seq);
+						adr = AddTagLong(adr, TAG_MIDITRACK_SEQ_SPEICHERADR, (uint32)seq);
 						adr = AddTagWord(adr, TAG_MIDITRACK_SEQ_ALIASANZ, seq->aliasanz);
 						adr = AddSequenzEventsTag(seq, adr, area);
 					}
@@ -356,13 +354,13 @@ void SpeichernHorny(STRPTR datei) {
 				SchreibeArea(file, FAREA_MIDITRACK, area, adr);
 			}
 
-			Close(file);
+			IDOS->Close(file);
 
 		} else {
-			Fault(IoErr(), CAT(MSG_0593, "Could not save project"), meldung, 120);
+			IDOS->Fault(IDOS->IoErr(), CAT(MSG_0593, "Could not save project"), meldung, 120);
 			Meldung(meldung);
 		}
 
-		FreeVec(area);
+		IExec->FreeVec(area);
 	} else Meldung(CAT(MSG_0594, "Not enough memory for area buffer\n<DiskHornySpeichern.c>"));
 }

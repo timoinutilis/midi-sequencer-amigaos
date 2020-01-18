@@ -1,7 +1,7 @@
-CC = gcc
-CFLAGS = -D __USE_INLINE__
+CC = ppc-amigaos-gcc
+CFLAGS = -Wall -Werror -Wwrite-strings -gstabs
 
-../Horny/HornyOS4: \
+HornyOS4: \
 		AppWindow.o \
 		Automation.o \
 		Clipboard.o \
@@ -25,6 +25,7 @@ CFLAGS = -D __USE_INLINE__
 		Midi.o \
 		MidiEdit.o \
 		Mischpult.o \
+		oca.o \
 		Projekt.o \
 		Requester.o \
 		Sequenzen.o \
@@ -35,7 +36,8 @@ CFLAGS = -D __USE_INLINE__
 		Umgebung.o \
 		Undo.o \
 		Versionen.o
-	$(CC) -o $@ $^ -lauto -lraauto -lm -lamiga
+	$(CC) -o $@.debug $^
+	strip $@.debug -o $@
 
 AppWindow.o: AppWindow.c
 	$(CC) $(CFLAGS) -c $<
@@ -302,6 +304,9 @@ Mischpult.o:	Mischpult.c \
 				locale.h \
 				catalogids.h \
 				GuiFenster.h
+	$(CC) $(CFLAGS) -c $<
+
+oca.o: oca.c
 	$(CC) $(CFLAGS) -c $<
 
 Projekt.o:		Projekt.c \

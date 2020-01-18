@@ -15,6 +15,7 @@
 #include "Versionen.h"
 #include "DTGrafik.h"
 #include "Gui.h"
+#include "oca.h"
 
 STRPTR RegisterName(void); // Versionen.c
 
@@ -33,34 +34,34 @@ Object *bmo[IMG_ANZ];
 
 void OeffneTitel(void) {
 	struct Screen *scr;
-	LONG breite, hoehe;
+	int32 breite, hoehe;
 	struct BitMap *bm = NULL;
 
 	if (hschirm) scr = hschirm;
-	else scr = LockPubScreen(NULL);
+	else scr = IIntuition->LockPubScreen(NULL);
 	
-	titeldto = NewDTObject("PROGDIR:System/Graphics/Titel",
+	titeldto = IDataTypes->NewDTObject("PROGDIR:System/Graphics/Titel",
 		PDTA_Screen, scr,
 		PDTA_DestMode, PMODE_V43,
 		TAG_DONE);
 	if (titeldto) {
 
-		DoDTMethod(titeldto, NULL, NULL, DTM_PROCLAYOUT, NULL, TRUE); 
+		IDataTypes->DoDTMethod(titeldto, NULL, NULL, DTM_PROCLAYOUT, NULL, TRUE); 
 
-		GetDTAttrs(titeldto,
+		IDataTypes->GetDTAttrs(titeldto,
 			DTA_NominalHoriz, &breite,
 			DTA_NominalVert, &hoehe,
 			PDTA_DestBitMap, &bm,
 			TAG_DONE);
 			
-		SetDTAttrs(titeldto, NULL, NULL,
+		IDataTypes->SetDTAttrs(titeldto, NULL, NULL,
 			GA_Left, 0,
 			GA_Top, 0,
 			GA_Width, breite,
 			GA_Height, hoehe,
 			TAG_DONE);
 	
-		titelfenster = OpenWindowTags(NULL,
+		titelfenster = IIntuition->OpenWindowTags(NULL,
 			WA_PubScreen, scr,
 			WA_Left, (scr->Width - breite) / 2,
 			WA_Top, (scr->Height - hoehe) / 2,
@@ -74,26 +75,26 @@ void OeffneTitel(void) {
 			TAG_DONE);
 		if (titelfenster) {
 			
-			BltBitMapRastPort (bm, 0, 0, titelfenster->RPort, 0, 0, breite, hoehe, 0xC0);
+			IGraphics->BltBitMapRastPort (bm, 0, 0, titelfenster->RPort, 0, 0, breite, hoehe, 0xC0);
 
 			aktfenster = titelfenster;
 			SetzeFont();
 			if (verLITE) {
-				SchreibeSys(0, 6, hoehe - 8, "LITE version");
+				SchreibeSys(0, 6, hoehe - 8, (STRPTR)"LITE version");
 			} else {
-				SchreibeSys(0, 6, hoehe - 20, "registered to:");
+				SchreibeSys(0, 6, hoehe - 20, (STRPTR)"registered to:");
 				SchreibeSys(0, 6, hoehe - 8, RegisterName());
 			}
 		}
-		DisposeDTObject(titeldto);
+		IDataTypes->DisposeDTObject(titeldto);
 		titeldto = NULL;
 	}
-	if (!hschirm) UnlockPubScreen(NULL, scr);
+	if (!hschirm) IIntuition->UnlockPubScreen(NULL, scr);
 }
 
 void SchliesseTitel() {
 	if (titelfenster) {
-		CloseWindow(titelfenster);
+		IIntuition->CloseWindow(titelfenster);
 		titelfenster = NULL;
 	}
 }
@@ -105,141 +106,140 @@ void AboutTitel(void) {
 		aktfenster = titelfenster;
 		Fett(TRUE);
 		if (verLITE)
-			Schreibe(1, 13, 20, "Horny Lite", 300);
+			Schreibe(1, 13, 20, (STRPTR)"Horny Lite", 300);
 		else
-			Schreibe(1, 13, 20, "Horny", 300);
+			Schreibe(1, 13, 20, (STRPTR)"Horny", 300);
 		Fett(FALSE);
-		Schreibe(1, 13, 32, "Midi Sequencer", 300);
-#ifdef __amigaos4__
-		Schreibe(1, 13, 44, "Version 1.3 (for OS4 PPC)", 300);
-#else
-		Schreibe(1, 13, 44, "Version 1.3 (for OS3 68k)", 300);
-#endif
-		Schreibe(1, 13, 68, "© 2003-07 Inutilis Software / TK", 300);
-		Schreibe(1, 13, 80, "Developed by Timo Kloss", 300);
-		Schreibe(1, 13, 104, "http://www.inutilis.de/horny/", 300);
-		Schreibe(1, 13, 116, "eMail: Timo@inutilis.de", 300);
+		Schreibe(1, 13, 32, (STRPTR)"Midi Sequencer", 300);
+		Schreibe(1, 13, 44, (STRPTR)"Version 1.4 (for OS4 PPC)", 300);
+		Schreibe(1, 13, 68, (STRPTR)"© 2003-07 Inutilis Software / TK", 300);
+		Schreibe(1, 13, 80, (STRPTR)"Developed by Timo Kloss", 300);
+		Schreibe(1, 13, 104, (STRPTR)"http://www.inutilis.de/horny/", 300);
+		Schreibe(1, 13, 116, (STRPTR)"eMail: Timo@inutilis.de", 300);
 		
-		WaitPort(titelfenster->UserPort);
-		while (msg = GetMsg(titelfenster->UserPort)) ReplyMsg(msg);
+		IExec->WaitPort(titelfenster->UserPort);
+		while ((msg = IExec->GetMsg(titelfenster->UserPort))) 
+		{
+			IExec->ReplyMsg(msg);
+		}
 	}
 }
 
-void OeffneBitMap(UWORD id, STRPTR datei) {
+void OeffneBitMap(uint16 id, STRPTR datei) {
 	struct Screen *scr;
 
 	if (hschirm) scr = hschirm;
-	else scr = LockPubScreen(NULL);
+	else scr = IIntuition->LockPubScreen(NULL);
 	
-	dto[id] = NewDTObject(datei,
+	dto[id] = IDataTypes->NewDTObject(datei,
 		PDTA_Screen, scr,
 		PDTA_DestMode, PMODE_V43,
 		TAG_DONE);
 	if (dto[id]) {
 
-		DoDTMethod(dto[id], NULL, NULL, DTM_PROCLAYOUT, NULL, TRUE); 
+		IDataTypes->DoDTMethod(dto[id], NULL, NULL, DTM_PROCLAYOUT, NULL, TRUE); 
 
-		GetDTAttrs(dto[id],
+		IDataTypes->GetDTAttrs(dto[id],
 			PDTA_DestBitMap, &bitmap[id],
 			TAG_DONE);
 	} else bitmap[id] = NULL;
 	
-	if (!hschirm) UnlockPubScreen(NULL, scr);
+	if (!hschirm) IIntuition->UnlockPubScreen(NULL, scr);
 }
 
-void SchliesseBitMap(UWORD id) {
+void SchliesseBitMap(uint16 id) {
 	if (dto[id]) {
-		DisposeDTObject(dto[id]);
+		IDataTypes->DisposeDTObject(dto[id]);
 		dto[id] = NULL;
 		bitmap[id] = NULL;
 	}
 }
 
-void BlitteBitMap(UWORD id, WORD qx, WORD qy, WORD zx, WORD zy, WORD b, WORD h) {
+void BlitteBitMap(uint16 id, int16 qx, int16 qy, int16 zx, int16 zy, int16 b, int16 h) {
 	if (bitmap[id]) {
-		BltBitMapRastPort(bitmap[id], qx, qy,
+		IGraphics->BltBitMapRastPort(bitmap[id], qx, qy,
 			aktfenster->RPort, zx + aktfenster->BorderLeft, zy + aktfenster->BorderTop,
 			b, h, 0xC0);
 	}
 }
 
-void OeffneImg(UWORD id, STRPTR datei) {
+void OeffneImg(uint16 id, STRPTR datei) {
 	struct Screen *scr;
 
 	if (hschirm) scr = hschirm;
-	else scr = LockPubScreen(NULL);
+	else scr = IIntuition->LockPubScreen(NULL);
 	
-	bmo[id] = NewObject(BITMAP_GetClass(), NULL,
+	bmo[id] = IIntuition->NewObject(BitmapClass, NULL,
 		BITMAP_SourceFile, datei,
 		BITMAP_Screen, scr,
 		TAG_DONE);
 	
-	if (!hschirm) UnlockPubScreen(NULL, scr);
+	if (!hschirm) IIntuition->UnlockPubScreen(NULL, scr);
 }
 
-void OeffneImg2(UWORD id, STRPTR datei) {
+void OeffneImg2(uint16 id, STRPTR datei) {
 	struct Screen *scr;
 	char seldatei[1024];
 
 	if (hschirm) scr = hschirm;
-	else scr = LockPubScreen(NULL);
+	else scr = IIntuition->LockPubScreen(NULL);
 	
 	strncpy(seldatei, datei, 1024);
 	strncat(seldatei, "_S", 1024);
-	bmo[id] = NewObject(BITMAP_GetClass(), NULL,
+	bmo[id] = IIntuition->NewObject(BitmapClass, NULL,
 		BITMAP_SourceFile, datei,
 		BITMAP_SelectSourceFile, seldatei,
 		BITMAP_Screen, scr,
 		TAG_DONE);
 	
-	if (!hschirm) UnlockPubScreen(NULL, scr);
+	if (!hschirm) IIntuition->UnlockPubScreen(NULL, scr);
 }
 
-void SchliesseImg(UWORD id) {
+void SchliesseImg(uint16 id) {
 	if (bmo[id]) {
-		DisposeObject(bmo[id]);
+		IIntuition->DisposeObject(bmo[id]);
 		bmo[id] = NULL;
 	}
 }
 
 void OeffneAlleGfx(void) {
-	WORD n;
+	int16 n;
 	
 	for (n = 0; n < IMG_ANZ; n++) bmo[n] = NULL;
 	for (n = 0; n < BMAP_ANZ; n++) {
 		dto[n] = NULL;
 		bitmap[n] = NULL;
 	}
-	OeffneImg2(IMG_PREV, "PROGDIR:System/Graphics/Button_Prev");
-	OeffneImg2(IMG_NEXT, "PROGDIR:System/Graphics/Button_Next");
-	OeffneImg2(IMG_STOP, "PROGDIR:System/Graphics/Button_Stop");
-	OeffneImg2(IMG_PLAY, "PROGDIR:System/Graphics/Button_Play");
-	OeffneImg(IMG_PLAY_A, "PROGDIR:System/Graphics/Button_Play_A");
-	OeffneImg2(IMG_REC, "PROGDIR:System/Graphics/Button_Rec");
-	OeffneImg(IMG_REC_A, "PROGDIR:System/Graphics/Button_Rec_A");
-	OeffneImg2(IMG_MREC, "PROGDIR:System/Graphics/Button_MRec");
-	OeffneImg2(IMG_MPLAY, "PROGDIR:System/Graphics/Button_MPlay");
-	OeffneImg2(IMG_LOOP, "PROGDIR:System/Graphics/Button_Loop");
-	OeffneImg2(IMG_FOLLOW, "PROGDIR:System/Graphics/Button_Follow");
-	OeffneImg2(IMG_THRU, "PROGDIR:System/Graphics/Button_Thru");
-	OeffneImg2(IMG_SYNC, "PROGDIR:System/Graphics/Button_Sync");
+	OeffneImg2(IMG_PREV, (STRPTR)"PROGDIR:System/Graphics/Button_Prev");
+	OeffneImg2(IMG_NEXT, (STRPTR)"PROGDIR:System/Graphics/Button_Next");
+	OeffneImg2(IMG_STOP, (STRPTR)"PROGDIR:System/Graphics/Button_Stop");
+	OeffneImg2(IMG_PLAY, (STRPTR)"PROGDIR:System/Graphics/Button_Play");
+	OeffneImg(IMG_PLAY_A, (STRPTR)"PROGDIR:System/Graphics/Button_Play_A");
+	OeffneImg2(IMG_REC, (STRPTR)"PROGDIR:System/Graphics/Button_Rec");
+	OeffneImg(IMG_REC_A, (STRPTR)"PROGDIR:System/Graphics/Button_Rec_A");
+	OeffneImg2(IMG_MREC, (STRPTR)"PROGDIR:System/Graphics/Button_MRec");
+	OeffneImg2(IMG_MPLAY, (STRPTR)"PROGDIR:System/Graphics/Button_MPlay");
+	OeffneImg2(IMG_LOOP, (STRPTR)"PROGDIR:System/Graphics/Button_Loop");
+	OeffneImg2(IMG_FOLLOW, (STRPTR)"PROGDIR:System/Graphics/Button_Follow");
+	OeffneImg2(IMG_THRU, (STRPTR)"PROGDIR:System/Graphics/Button_Thru");
+	OeffneImg2(IMG_SYNC, (STRPTR)"PROGDIR:System/Graphics/Button_Sync");
 	
-	OeffneBitMap(BMAP_METER_OFF, "PROGDIR:System/Graphics/Gui_Meter_off");
-	OeffneBitMap(BMAP_METER_ON, "PROGDIR:System/Graphics/Gui_Meter_on");
-	OeffneBitMap(BMAP_METER_INACTIVE, "PROGDIR:System/Graphics/Gui_Meter_inactive");
-	OeffneBitMap(BMAP_POTI, "PROGDIR:System/Graphics/Gui_Poti");
-	OeffneBitMap(BMAP_PAN_BG, "PROGDIR:System/Graphics/Gui_Pan_bg");
-	OeffneBitMap(BMAP_PAN_BG_ACTIVE, "PROGDIR:System/Graphics/Gui_Pan_bg_active");
-	OeffneBitMap(BMAP_PAN_POINTER, "PROGDIR:System/Graphics/Gui_Pan_pointer");
-	OeffneBitMap(BMAP_AUTO, "PROGDIR:System/Graphics/Gui_Automation");
-	OeffneBitMap(BMAP_KEY_WHITE, "PROGDIR:System/Graphics/Gui_Key_white");
-	OeffneBitMap(BMAP_KEY_BLACK, "PROGDIR:System/Graphics/Gui_Key_black");
-	OeffneBitMap(BMAP_MUTE_OFF, "PROGDIR:System/Graphics/Gui_Mute_off");
-	OeffneBitMap(BMAP_MUTE_ON, "PROGDIR:System/Graphics/Gui_Mute_on");
+	OeffneBitMap(BMAP_METER_OFF, (STRPTR)"PROGDIR:System/Graphics/Gui_Meter_off");
+	OeffneBitMap(BMAP_METER_ON, (STRPTR)"PROGDIR:System/Graphics/Gui_Meter_on");
+	OeffneBitMap(BMAP_METER_INACTIVE, (STRPTR)"PROGDIR:System/Graphics/Gui_Meter_inactive");
+	OeffneBitMap(BMAP_POTI, (STRPTR)"PROGDIR:System/Graphics/Gui_Poti");
+	OeffneBitMap(BMAP_PAN_BG, (STRPTR)"PROGDIR:System/Graphics/Gui_Pan_bg");
+	OeffneBitMap(BMAP_PAN_BG_ACTIVE, (STRPTR)"PROGDIR:System/Graphics/Gui_Pan_bg_active");
+	OeffneBitMap(BMAP_PAN_POINTER, (STRPTR)"PROGDIR:System/Graphics/Gui_Pan_pointer");
+	OeffneBitMap(BMAP_AUTO, (STRPTR)"PROGDIR:System/Graphics/Gui_Automation");
+	OeffneBitMap(BMAP_KEY_WHITE, (STRPTR)"PROGDIR:System/Graphics/Gui_Key_white");
+	OeffneBitMap(BMAP_KEY_BLACK, (STRPTR)"PROGDIR:System/Graphics/Gui_Key_black");
+	OeffneBitMap(BMAP_MUTE_OFF, (STRPTR)"PROGDIR:System/Graphics/Gui_Mute_off");
+	OeffneBitMap(BMAP_MUTE_ON, (STRPTR)"PROGDIR:System/Graphics/Gui_Mute_on");
 }
 
 void SchliesseAlleGfx(void) {
-	WORD n;
+	int16 n;
 	
 	for (n = 0; n < IMG_ANZ; n++) SchliesseImg(n);
 	for (n = 0; n < BMAP_ANZ; n++) SchliesseBitMap(n);

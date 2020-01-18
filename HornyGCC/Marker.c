@@ -18,16 +18,16 @@ extern struct SMPTE smpte;
 
 // Allgemeine Marker
 
-struct MARKER *NeuerMarker(BYTE typ, LONG t, WORD d1, WORD d2) {
+struct MARKER *NeuerMarker(int8 typ, int32 t, int16 d1, int16 d2) {
 	struct MARKER *akt;
 	struct MARKER *neu;
-	WORD gr;
+	int16 gr;
 	
 	gr = sizeof(struct MARKER);
 	if (typ == M_TEXT) gr += 128;
 	
 	
-	neu = AllocVec(gr, MEMF_ANY);
+	neu = IExec->AllocVecTags(gr, TAG_END);
 	if (neu) {
 		neu->takt = t;
 		neu->typ = typ;
@@ -62,7 +62,7 @@ void EntferneMarker(struct MARKER *mark) {
 		if (mark->next) mark->next->prev = NULL;
 		rootmark = mark->next;
 	}
-	FreeVec(mark);
+	IExec->FreeVec(mark);
 }
 
 void EntferneAlleMarker(void) {
@@ -72,13 +72,13 @@ void EntferneAlleMarker(void) {
 	akt = rootmark;
 	while (akt) {
 		next = akt->next;
-		FreeVec(akt);
+		IExec->FreeVec(akt);
 		akt = next;
 	}
 	rootmark = NULL;
 }
 
-struct MARKER *TaktDirektMarker(LONG t) {
+struct MARKER *TaktDirektMarker(int32 t) {
 	struct MARKER *akt;
 	
 	akt = rootmark;
@@ -89,7 +89,7 @@ struct MARKER *TaktDirektMarker(LONG t) {
 	return(NULL);
 }
 
-struct MARKER *TaktMarker(struct MARKER *start, BYTE typ, LONG t) {
+struct MARKER *TaktMarker(struct MARKER *start, int8 typ, int32 t) {
 	struct MARKER *akt;
 	struct MARKER *mark;
 	
@@ -109,7 +109,7 @@ struct MARKER *TaktMarker(struct MARKER *start, BYTE typ, LONG t) {
 }
 
 struct MARKER *NextMarker(struct MARKER *akt) {
-	BYTE typ;
+	int8 typ;
 	
 	typ = akt->typ;
 	akt = akt->next;
@@ -121,7 +121,7 @@ struct MARKER *NextMarker(struct MARKER *akt) {
 }
 
 struct MARKER *PrevMarker(struct MARKER *akt) {
-	BYTE typ;
+	int8 typ;
 	
 	typ = akt->typ;
 	akt = akt->prev;
@@ -174,7 +174,7 @@ void ErstelleGrundMarker(void) {
 	if (wahlmark[M_TEXT]) strncpy(&wahlmark[M_TEXT]->text, CAT(MSG_0049, "Beginning"), 128);
 }
 
-void TaktWahlMark(LONG t) {
+void TaktWahlMark(int32 t) {
 	wahlmark[M_TEMPO] = TaktMarker(NULL, M_TEMPO, t);
 	wahlmark[M_TAKT] = TaktMarker(NULL, M_TAKT, t);
 	wahlmark[M_TEXT] = TaktMarker(NULL, M_TEXT, t);
@@ -183,10 +183,10 @@ void TaktWahlMark(LONG t) {
 
 // Tempomarker
 
-LONG TaktZeit(LONG t) {
+int32 TaktZeit(int32 t) {
 	struct MARKER *akt;
-	LONG z;
-	LONG tr;
+	int32 z;
+	int32 tr;
 	
 	z = 0; tr = t;
 
@@ -212,8 +212,8 @@ LONG TaktZeit(LONG t) {
 	return(z);
 }
 
-LONG TaktSmpteTicks(LONG t) {
-	LONG ticks;
+int32 TaktSmpteTicks(int32 t) {
+	int32 ticks;
 	struct MARKER *akt;
 	struct MARKER *next;
 	
@@ -233,8 +233,8 @@ LONG TaktSmpteTicks(LONG t) {
 	} else return(0);
 }
 
-LONG SmpteTicksTakt(LONG ticks) {
-	LONG t;
+int32 SmpteTicksTakt(int32 ticks) {
+	int32 t;
 	struct MARKER *akt;
 	struct MARKER *next;
 	
@@ -281,9 +281,9 @@ void SmpteTicksAktualisieren(void) {
 
 void TakteAktualisieren(void) {
 	struct MARKER *akt;
-	WORD prevtaktnum;
-	WORD prevzaehler;
-	LONG prevtakt;
+	int16 prevtaktnum;
+	int16 prevzaehler;
+	int32 prevtakt;
 	
 	akt = rootmark;
 	if (akt) {
@@ -312,7 +312,7 @@ void TakteAktualisieren(void) {
 
 // Textmarker
 
-LONG NextXMarkerTakt(LONG t) {
+int32 NextXMarkerTakt(int32 t) {
 	struct MARKER *mark;
 
 	mark = TaktMarker(NULL, M_TEXT, t);
@@ -321,7 +321,7 @@ LONG NextXMarkerTakt(LONG t) {
 	else return(t);
 }
 
-LONG PrevXMarkerTakt(LONG t) {
+int32 PrevXMarkerTakt(int32 t) {
 	struct MARKER *mark;
 
 	mark = TaktMarker(NULL, M_TEXT, t);

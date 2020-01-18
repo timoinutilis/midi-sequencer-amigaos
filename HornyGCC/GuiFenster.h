@@ -7,8 +7,8 @@
 #define CC 6
 
 struct FENSTERPOS {
-	WORD x;
-	WORD y;
-	WORD b;
-	WORD h;
+	int16 x;
+	int16 y;
+	int16 b;
+	int16 h;
 };

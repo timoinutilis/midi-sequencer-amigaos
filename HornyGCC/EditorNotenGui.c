@@ -46,9 +46,9 @@ struct Gadget *edgad[EDGADANZ];
 extern char fenstertitel[300];
 char edtitel[300];
 
-WORD edlr;
-WORD edou;
-WORD edguibox = 20;
+int16 edlr;
+int16 edou;
+int16 edguibox = 20;
 
 extern struct GUI gui;
 extern struct SPUR spur[];
@@ -58,10 +58,10 @@ extern struct UMGEBUNG umgebung;
 extern struct SEQUENZ *edseq;
 extern struct EVENT *wahlnote;
 
-extern LONG takt;
-extern LONG edittakt;
-extern BYTE editnote;
-BYTE alteditnote = -1;
+extern int32 takt;
+extern int32 edittakt;
+extern int8 editnote;
+int8 alteditnote = -1;
 
 struct List edchlist;
 
@@ -83,21 +83,21 @@ struct EDGUI edgui = {
 };
 
 char oktnote[12][3] = {"C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "H "};
-extern BYTE ganz2halb[77];
-extern BYTE halb2ganz[132];
+extern int8 ganz2halb[77];
+extern int8 halb2ganz[132];
 
 struct EVENT *startev[128];
 
-struct TagItem mapscroller[] = {SCROLLER_Top, ICSPECIAL_CODE, TAG_DONE};
-struct TagItem mapslider[] = {SLIDER_Level, ICSPECIAL_CODE, TAG_DONE};
+struct TagItem mapscroller[] = {{SCROLLER_Top, ICSPECIAL_CODE}, {TAG_DONE}};
+struct TagItem mapslider[] = {{SLIDER_Level, ICSPECIAL_CODE}, {TAG_DONE}};
 
 
 void ErstelleEditorNotenFenster(void) {
 	struct TextAttr textattr = {"helvetica.font", 11, FS_NORMAL, 0};
-	WORD y;
-	BYTE n;
-	STRPTR rasttxt[6] = {"1/4", "1/8", "1/16", "1/32", "1/64", CAT(MSG_0505, "free")};
-	STRPTR nlentxt[6] = {"1/1", "1/2", "1/4", "1/8", "1/16", "1/32"};
+	int16 y;
+	int8 n;
+	STRPTR rasttxt[6] = {(STRPTR)"1/4", (STRPTR)"1/8", (STRPTR)"1/16", (STRPTR)"1/32", (STRPTR)"1/64", CAT(MSG_0505, "free")};
+	STRPTR nlentxt[6] = {(STRPTR)"1/1", (STRPTR)"1/2", (STRPTR)"1/4", (STRPTR)"1/8", (STRPTR)"1/16", (STRPTR)"1/32"};
 
 	if (fenp[ED].y == -1) {
 		fenp[ED].x = hfenster->LeftEdge + 80;
@@ -106,7 +106,7 @@ void ErstelleEditorNotenFenster(void) {
 		fenp[ED].h = hfenster->Height - 80; if (fenp[ED].h < 300) fenp[ED].h = 300;
 	}
 
-	edfenster = OpenWindowTags(NULL,
+	edfenster = IIntuition->OpenWindowTags(NULL,
 		WA_PubScreen, hschirm,
 		WA_Left, fenp[ED].x,
 		WA_Top, fenp[ED].y,
@@ -118,11 +118,7 @@ void ErstelleEditorNotenFenster(void) {
 		WA_MaxHeight, ~0,
 		WA_IDCMP, IDCMP_RAWKEY | IDCMP_MOUSEBUTTONS | IDCMP_MOUSEMOVE | IDCMP_NEWSIZE |
 					IDCMP_IDCMPUPDATE | IDCMP_VANILLAKEY | IDCMP_GADGETUP | IDCMP_GADGETDOWN |
-					IDCMP_MENUPICK | IDCMP_CLOSEWINDOW
-#ifdef __amigaos4__
-					| IDCMP_EXTENDEDMOUSE
-#endif
-					,
+					IDCMP_MENUPICK | IDCMP_CLOSEWINDOW | IDCMP_EXTENDEDMOUSE,
 		WA_SizeGadget, TRUE,
 		WA_DragBar, TRUE,
 		WA_DepthGadget, TRUE,
@@ -135,13 +131,13 @@ void ErstelleEditorNotenFenster(void) {
 		TAG_DONE);
 
 	if (edfenster) {
-		SetDrMd(edfenster->RPort, JAM1);
-		SetFont(edfenster->RPort, font);
+		IGraphics->SetDrMd(edfenster->RPort, JAM1);
+		IGraphics->SetFont(edfenster->RPort, font);
 		edlr = edfenster->BorderLeft + edfenster->BorderRight;
 		edou = edfenster->BorderTop + edfenster->BorderBottom;
 
 		//Gadgets
-		edgad[0] = (struct Gadget *)NewObject(BUTTON_GetClass(), NULL,
+		edgad[0] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 			GA_Top, edfenster->BorderTop + 2, GA_Left, edfenster->BorderLeft + 2,
 			GA_Height, 20, GA_Width, edfenster->Width - edlr - 4,
 			GA_RelVerify, TRUE, GA_ID, 0,
@@ -149,7 +145,7 @@ void ErstelleEditorNotenFenster(void) {
 			GA_Text, CAT(MSG_0512, "Piano Editor <-> Controller Editor"),
 			TAG_DONE);
 
-		edgad[1] = (struct Gadget *)NewObject(SCROLLER_GetClass(), NULL,
+		edgad[1] = (struct Gadget *)IIntuition->NewObject(ScrollerClass, NULL,
 			GA_Previous, edgad[0],
 			GA_Top, edfenster->Height - edfenster->BorderBottom - edguibox - 55, GA_Left, edfenster->BorderLeft + 62,
 			GA_Width, edfenster->Width - edlr - 64, GA_Height, 15,
@@ -162,7 +158,7 @@ void ErstelleEditorNotenFenster(void) {
 			ICA_MAP, mapscroller,
 			TAG_DONE);
 
-		edgad[2] = (struct Gadget *)NewObject(SCROLLER_GetClass(), NULL,
+		edgad[2] = (struct Gadget *)IIntuition->NewObject(ScrollerClass, NULL,
 			GA_Previous, edgad[1],
 			GA_Top, edfenster->BorderTop + 84, GA_Left, edfenster->Width - edfenster->BorderRight - 17,
 			GA_Width, 15, GA_Height, edfenster->Height - edou - edguibox - 141,
@@ -175,7 +171,7 @@ void ErstelleEditorNotenFenster(void) {
 			ICA_MAP, mapscroller,
 			TAG_DONE);
 
-		edgad[3] = (struct Gadget *)NewObject(SLIDER_GetClass(), NULL,
+		edgad[3] = (struct Gadget *)IIntuition->NewObject(SliderClass, NULL,
 			GA_BackFill, backfill,
 			GA_Previous, edgad[2],
 			GA_Top, edfenster->Height - edfenster->BorderBottom - edguibox - 55, GA_Left, edfenster->BorderLeft + 2,
@@ -188,7 +184,7 @@ void ErstelleEditorNotenFenster(void) {
 			ICA_MAP, mapslider,
 			TAG_DONE);
 
-		edgad[4] = (struct Gadget *)NewObject(SLIDER_GetClass(), NULL,
+		edgad[4] = (struct Gadget *)IIntuition->NewObject(SliderClass, NULL,
 			GA_BackFill, backfill,
 			GA_Previous, edgad[3],
 			GA_Top, edfenster->BorderTop + 24, GA_Left, edfenster->Width - edfenster->BorderRight - 17,
@@ -203,7 +199,7 @@ void ErstelleEditorNotenFenster(void) {
 
 		y = edfenster->Height - edfenster->BorderBottom - 35;
 		for (n = 0; n < 6; n++) {
-			edgad[5 + n] = (struct Gadget *)NewObject(BUTTON_GetClass(), NULL,
+			edgad[5 + n] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 				GA_Previous, edgad[4 + n],
 				GA_Top, y, GA_Left, edfenster->BorderLeft + 2 + (n * 35),
 				GA_Width, 35, GA_Height, 16, GA_RelVerify, TRUE, GA_TextAttr, &textattr,
@@ -212,7 +208,7 @@ void ErstelleEditorNotenFenster(void) {
 				TAG_DONE);
 		}
 
-		edgad[17] = (struct Gadget *)NewObject(BUTTON_GetClass(), NULL,
+		edgad[17] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 			GA_Previous, edgad[10],
 			GA_Top, y, GA_Left, edfenster->BorderLeft + 2 + (6 * 35) + 4,
 			GA_Width, 60, GA_Height, 16, GA_RelVerify, TRUE, GA_TextAttr, &textattr,
@@ -223,7 +219,7 @@ void ErstelleEditorNotenFenster(void) {
 
 		y = edfenster->Height - edfenster->BorderBottom - 18;
 		for (n = 0; n < 6; n++) {
-			edgad[11 + n] = (struct Gadget *)NewObject(BUTTON_GetClass(), NULL,
+			edgad[11 + n] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 				GA_Previous, edgad[10 + n],
 				GA_Top, y, GA_Left, edfenster->BorderLeft + 2 + (n * 35),
 				GA_Width, 35, GA_Height, 16, GA_RelVerify, TRUE, GA_TextAttr, &textattr,
@@ -232,9 +228,9 @@ void ErstelleEditorNotenFenster(void) {
 				TAG_DONE);
 		}
 
-		AddGList(edfenster, edgad[0], 0, EDGADANZ, NULL);
-		RefreshGList(edgad[0], edfenster, NULL, -1);
-		SetMenuStrip(edfenster, edmenu);
+		IIntuition->AddGList(edfenster, edgad[0], 0, EDGADANZ, NULL);
+		IIntuition->RefreshGList(edgad[0], edfenster, NULL, -1);
+		IIntuition->SetMenuStrip(edfenster, edmenu);
 		
 		aktfenster = edfenster;
 		Schreibe(1, 6 + 6 * 35 + 64, edfenster->Height - edou - 25, CAT(MSG_0506, "Grid"), 400);
@@ -243,63 +239,63 @@ void ErstelleEditorNotenFenster(void) {
 }
 
 void EntferneEditorNotenFenster(void) {
-	BYTE n;
+	int8 n;
 
 	if (edfenster) {
 		EntferneAlleEdUndo();
 
 		HoleFensterWinpos(edfenster, ED);
 
-		RemoveGList(edfenster, edgad[0], EDGADANZ);
+		IIntuition->RemoveGList(edfenster, edgad[0], EDGADANZ);
 		for(n = 0; n < EDGADANZ; n++) {
 			if (edgad[n]) {
-				DisposeObject(edgad[n]);
+				IIntuition->DisposeObject((Object *)edgad[n]);
 				edgad[n] = NULL;
 			}
 		}
-		ClearMenuStrip(edfenster); CloseWindow(edfenster); edfenster = NULL;
+		IIntuition->ClearMenuStrip(edfenster); IIntuition->CloseWindow(edfenster); edfenster = NULL;
 	}
 }
 
 void EdFensterTitel(void) {
 	sprintf(edtitel, CAT(MSG_0514, "Editor [ %s: %s ]     UNDO: %s, REDO: %s"), spur[edseq->spur].name, edseq->name, EdUndoAktion(), EdRedoAktion());
 	if (!(hschirm && umgebung.backdrop)) {
-		SetWindowTitles(edfenster, edtitel, "Inutilis Horny Midi-Sequencer");
+		IIntuition->SetWindowTitles(edfenster, edtitel, "Inutilis Horny Midi-Sequencer");
 	} else {
-		SetWindowTitles(edfenster, edtitel, fenstertitel);
+		IIntuition->SetWindowTitles(edfenster, edtitel, fenstertitel);
 	}
 }
 
 
 void PositioniereEdGadgets(void) {
-	BYTE n;
-	WORD ur;
+	int8 n;
+	int16 ur;
 
-	RemoveGList(edfenster, edgad[0], EDGADANZ);
-	RefreshWindowFrame(edfenster);
+	IIntuition->RemoveGList(edfenster, edgad[0], EDGADANZ);
+	IIntuition->RefreshWindowFrame(edfenster);
 
 	ur = edfenster->Height - edfenster->BorderBottom;
 
-	SetAttrs(edgad[0], GA_Width, edfenster->Width - edlr - 4, TAG_DONE);
-	SetAttrs(edgad[1],
+	IIntuition->SetAttrs(edgad[0], GA_Width, edfenster->Width - edlr - 4, TAG_DONE);
+	IIntuition->SetAttrs(edgad[1],
 		GA_Top, ur - edguibox - 55,
 		GA_Width, edfenster->Width - edlr - 64,
 		TAG_DONE);
-	SetAttrs(edgad[2],
+	IIntuition->SetAttrs(edgad[2],
 		GA_Left, edfenster->Width - edfenster->BorderRight - 17,
 		GA_Height, edfenster->Height - edou - edguibox - 141,
 		TAG_DONE);
-	SetAttrs(edgad[3], GA_Top, ur - edguibox - 55, TAG_DONE);
-	SetAttrs(edgad[4],
+	IIntuition->SetAttrs(edgad[3], GA_Top, ur - edguibox - 55, TAG_DONE);
+	IIntuition->SetAttrs(edgad[4],
 		GA_Left, edfenster->Width - edfenster->BorderRight - 17,
 		TAG_DONE);
 
-	for(n = 0; n < 6; n++) SetAttrs(edgad[5 + n], GA_Top, ur - 35, TAG_DONE);
-	SetAttrs(edgad[17], GA_Top, ur - 35, TAG_DONE);
-	for(n = 0; n < 6; n++) SetAttrs(edgad[11 + n], GA_Top, ur - 18, TAG_DONE);
+	for(n = 0; n < 6; n++) IIntuition->SetAttrs(edgad[5 + n], GA_Top, ur - 35, TAG_DONE);
+	IIntuition->SetAttrs(edgad[17], GA_Top, ur - 35, TAG_DONE);
+	for(n = 0; n < 6; n++) IIntuition->SetAttrs(edgad[11 + n], GA_Top, ur - 18, TAG_DONE);
 
-	AddGList(edfenster, edgad[0], 0, EDGADANZ, NULL);
-	RefreshGList(edgad[0], edfenster, NULL, -1);
+	IIntuition->AddGList(edfenster, edgad[0], 0, EDGADANZ, NULL);
+	IIntuition->RefreshGList(edgad[0], edfenster, NULL, -1);
 
 	aktfenster = edfenster;
 	Schreibe(1, 6 + 6 * 35 + 64, edfenster->Height - edou - 25, CAT(MSG_0506, "Grid"), 400);
@@ -307,53 +303,53 @@ void PositioniereEdGadgets(void) {
 }
 
 void AktualisiereEdGadgets(void) {
-	SetGadgetAttrs(edgad[1], edfenster, NULL,
+	IIntuition->SetGadgetAttrs(edgad[1], edfenster, NULL,
 		SCROLLER_Top, edgui.takt >> (VIERTEL - 2),
 		SCROLLER_Visible, edgui.taktsicht,
 		SCROLLER_Total, lied.taktanz << 2,
 		TAG_DONE);
 	if (edgui.modus == EDMODUS_NOTEN) {
-		SetGadgetAttrs(edgad[2], edfenster, NULL,
+		IIntuition->SetGadgetAttrs(edgad[2], edfenster, NULL,
 			SCROLLER_Top, 75 - edgui.taste - edgui.tastsicht,
 			SCROLLER_Visible, edgui.tastsicht,
 			SCROLLER_Total, 75,
 			TAG_DONE);
-		SetGadgetAttrs(edgad[4], edfenster, NULL,
+		IIntuition->SetGadgetAttrs(edgad[4], edfenster, NULL,
 			SLIDER_Min, 6, SLIDER_Max, 30,
 			SLIDER_Level, edgui.tasth,
 			TAG_DONE);
 	} else {
-		SetGadgetAttrs(edgad[2], edfenster, NULL,
+		IIntuition->SetGadgetAttrs(edgad[2], edfenster, NULL,
 			SCROLLER_Top, edgui.contr,
 			SCROLLER_Visible, edgui.contrsicht,
 			SCROLLER_Total, edgui.contranz + 1,
 			TAG_DONE);
-		SetGadgetAttrs(edgad[4], edfenster, NULL,
+		IIntuition->SetGadgetAttrs(edgad[4], edfenster, NULL,
 			SLIDER_Min, 20, SLIDER_Max, 160,
 			SLIDER_Level, edgui.contrh,
 			TAG_DONE);
 	}
-	SetGadgetAttrs(edgad[3], edfenster, NULL, SLIDER_Level, edgui.taktb, TAG_DONE);
+	IIntuition->SetGadgetAttrs(edgad[3], edfenster, NULL, SLIDER_Level, edgui.taktb, TAG_DONE);
 }
 
 void AktualisiereEdRasterGadgets(void) {
-	BYTE n;
+	int8 n;
 
 	for(n = 0; n < 5; n++) {
-		if (VIERTEL - edgui.raster == n) SetGadgetAttrs(edgad[5 + n], edfenster, NULL, GA_Selected, TRUE, TAG_DONE);
-		else SetGadgetAttrs(edgad[5 + n], edfenster, NULL, GA_Selected, FALSE, TAG_DONE);
+		if (VIERTEL - edgui.raster == n) IIntuition->SetGadgetAttrs(edgad[5 + n], edfenster, NULL, GA_Selected, TRUE, TAG_DONE);
+		else IIntuition->SetGadgetAttrs(edgad[5 + n], edfenster, NULL, GA_Selected, FALSE, TAG_DONE);
 	}
-	if (edgui.raster == 0) SetGadgetAttrs(edgad[10], edfenster, NULL, GA_Selected, TRUE, TAG_DONE);
-	else SetGadgetAttrs(edgad[10], edfenster, NULL, GA_Selected, FALSE, TAG_DONE);
-	SetGadgetAttrs(edgad[17], edfenster, NULL, GA_Selected, edgui.tripled, TAG_DONE);
+	if (edgui.raster == 0) IIntuition->SetGadgetAttrs(edgad[10], edfenster, NULL, GA_Selected, TRUE, TAG_DONE);
+	else IIntuition->SetGadgetAttrs(edgad[10], edfenster, NULL, GA_Selected, FALSE, TAG_DONE);
+	IIntuition->SetGadgetAttrs(edgad[17], edfenster, NULL, GA_Selected, edgui.tripled, TAG_DONE);
 }
 
 void AktualisiereEdNeuLenGadgets(void) {
-	BYTE n;
+	int8 n;
 
 	for(n = 0; n < 6; n++) {
-		if (edgui.neulen == n) SetGadgetAttrs(edgad[11 + n], edfenster, NULL, GA_Selected, TRUE, TAG_DONE);
-		else SetGadgetAttrs(edgad[11 + n], edfenster, NULL, GA_Selected, FALSE, TAG_DONE);
+		if (edgui.neulen == n) IIntuition->SetGadgetAttrs(edgad[11 + n], edfenster, NULL, GA_Selected, TRUE, TAG_DONE);
+		else IIntuition->SetGadgetAttrs(edgad[11 + n], edfenster, NULL, GA_Selected, FALSE, TAG_DONE);
 	}
 }
 
@@ -372,12 +368,12 @@ void AktualisiereEdModus(void) {
 //============
 
 void ZeichneTastatur(void) {
-	BYTE oktave;
-	BYTE ton;
-	WORD ntaste;
-	WORD y, oy;
-	WORD schwarz;
-	WORD max;
+	int8 oktave;
+	int8 ton;
+	int16 ntaste;
+	int16 y, oy;
+	int16 schwarz;
+	int16 max;
 
 	aktfenster = edfenster;
 	oy = 43;
@@ -416,10 +412,10 @@ void ZeichneTastatur(void) {
 }
 
 void ZeichneEdZeitleiste(void) {
-	WORD lr, rr;
-	WORD x, xe;
-	LONG t;
-	WORD sechsz;
+	int16 lr, rr;
+	int16 x, xe;
+	int32 t;
+	int16 sechsz;
 	struct MARKER *akt;
 
 	aktfenster = edfenster;
@@ -465,11 +461,11 @@ void ZeichneEdZeitleiste(void) {
 }
 
 void ZeichneNote(struct EVENT *sevent, struct EVENT *eevent, BOOL vorschau) {
-	WORD xs, xe;
-	WORD lr, rr;
-	WORD y;
-	WORD ta;
-	BYTE k;
+	int16 xs, xe;
+	int16 lr, rr;
+	int16 y;
+	int16 ta;
+	int8 k;
 
 	lr = 72; rr = edfenster->Width - edlr - 22;
 
@@ -495,9 +491,9 @@ void ZeichneNote(struct EVENT *sevent, struct EVENT *eevent, BOOL vorschau) {
 					RahmenAus((8 * k) + 1, STIL_HD, xs, y - edgui.tasth, xe, y - 1);
 				}
 			} else {
-				SetDrMd(edfenster->RPort, COMPLEMENT);
+				IGraphics->SetDrMd(edfenster->RPort, COMPLEMENT);
 				Balken(9, xs, y - edgui.tasth, xe, y - 1);
-				SetDrMd(edfenster->RPort, JAM1);
+				IGraphics->SetDrMd(edfenster->RPort, JAM1);
 			}
 		}
 	}
@@ -505,11 +501,11 @@ void ZeichneNote(struct EVENT *sevent, struct EVENT *eevent, BOOL vorschau) {
 }
 
 void ZeichneNotenfeld(BOOL hg, BOOL vorschau, BOOL anders) {
-	WORD uy;
-	WORD p;
-	WORD n;
+	int16 uy;
+	int16 p;
+	int16 n;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 
 	aktfenster = edfenster;
 
@@ -574,12 +570,12 @@ void ZeichneNotenfeld(BOOL hg, BOOL vorschau, BOOL anders) {
 
 void ZeichneNotenVelos(void) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
-	WORD lr, rr;
-	WORD x, y, nx;
-	WORD ta;
-	BYTE v;
+	int16 lr, rr;
+	int16 x, y, nx;
+	int16 ta;
+	int8 v;
 
 	lr = 72; rr = edfenster->Width - edlr - 25;
 	x = 69;
@@ -610,8 +606,8 @@ void ZeichneNotenVelos(void) {
 	}
 }
 
-void Tastendruck(BYTE n, BOOL d) {
-	WORD tg, y;
+void Tastendruck(int8 n, BOOL d) {
+	int16 tg, y;
 
 	tg = (halb2ganz[n] - edgui.taste);
 	if ((tg >= 0) && (tg < edgui.tastsicht)) {
@@ -628,7 +624,7 @@ void Tastendruck(BYTE n, BOOL d) {
 
 void ZeichneNotenanzeige(void) {
 	char puf[8];
-	WORD ton, okt;
+	int16 ton, okt;
 
 	aktfenster = edfenster;
 	ton = editnote % 12; okt = editnote / 12 - 2;
@@ -640,17 +636,13 @@ void ZeichneNotenanzeige(void) {
 }
 
 void ZeichneEdInfobox(void) {
-	WORD y;
+	int16 y;
 	char puf[30];
-	LONG z;
+	int32 z;
 
 	aktfenster = edfenster;
 	y = edfenster->Height - edou - 37 - edguibox;
-#ifdef __amigaos4__
 	Gradient(4, STIL_DN, 0, y - 1, edfenster->Width - edlr - 1, y + edguibox - 1);
-#else
-	Balken(4, 0, y - 1, edfenster->Width - edlr - 1, y + edguibox - 1);
-#endif
 	Linie(1, 0, y, edfenster->Width - edlr - 1, y);
 	Linie(2, 0, y + edguibox - 2, edfenster->Width - edlr - 1, y + edguibox - 2);
 	Linie(8, 0, y + edguibox - 1, edfenster->Width - edlr - 1, y + edguibox - 1);
@@ -666,9 +658,9 @@ void ZeichneEdInfobox(void) {
 	}
 }
 
-BYTE PunktTaste(WORD y) {
-	WORD tg, th;
-	WORD by;
+int8 PunktTaste(int16 y) {
+	int16 tg, th;
+	int16 by;
 
 	by = (edfenster->Height - edou - edguibox - 58) - (y - edfenster->BorderTop);
 	tg = by / (edgui.tasth + 1);
@@ -680,11 +672,11 @@ BYTE PunktTaste(WORD y) {
 			if (by > (tg * (edgui.tasth + 1)) + (edgui.tasth / 2)) th++;
 		}
 	}
-	return((BYTE)th);
+	return((int8)th);
 }
 
-LONG EdPunktPosition(WORD x) {
-	LONG p;
+int32 EdPunktPosition(int16 x) {
+	int32 p;
 
 	x = x - edfenster->BorderLeft - 72;
 	if (x >= 0) {
@@ -695,9 +687,9 @@ LONG EdPunktPosition(WORD x) {
 	return(p);
 }
 
-BYTE TesteEdPunktBereich(WORD x, WORD y) {
-	UBYTE b = 0;
-	WORD uy, rx;
+int8 TesteEdPunktBereich(int16 x, int16 y) {
+	uint8 b = 0;
+	int16 uy, rx;
 
 	x = x-edfenster->BorderLeft;
 	y = y-edfenster->BorderTop;

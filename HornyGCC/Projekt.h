@@ -7,12 +7,12 @@ void NeuesLied(void);
 void StartProjekt(STRPTR startdatei);
 
 void ProjektLadenKomplett(void);
-void MinMenuKontrolle(ULONG item);
+void MinMenuKontrolle(uint32 item);
 void Stoppen(void);
 void StoppenZero(void);
 void WiedergabeStarten(BOOL remote);
 void AufnahmeStarten(void);
-void SpringeTakt(LONG t);
-void Springe(BYTE n);
-void TransportKontrolle(UBYTE taste);
-void TransportKontrolleRaw(UBYTE taste);
+void SpringeTakt(int32 t);
+void Springe(int8 n);
+void TransportKontrolle(uint8 taste);
+void TransportKontrolleRaw(uint8 taste);

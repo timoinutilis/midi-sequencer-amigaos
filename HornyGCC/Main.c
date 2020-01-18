@@ -8,10 +8,8 @@
 #include <intuition/gadgetclass.h>
 #include <dos/dostags.h>
 
-#ifdef __amigaos4__
 #include <proto/application.h>
 #include <libraries/application.h>
-#endif
 
 #include "locale.h"
 
@@ -39,35 +37,29 @@
 #include "AppWindow.h"
 #include "CtrlWandler.h"
 #include "Versionen.h"
-
-#ifndef __amigaos4__
-#include "newmouse.h"
-#endif
+//#include "newmouse.h"
 
 void TesteKey(void); // Versionen.c
-#ifdef __amigaos4__
 void checkPhonolithProject(); //Start.c
-#endif
 
 
 #define QUALIFIER_SHIFT 0x03
 #define QUALIFIER_ALT 0x30
 #define QUALIFIER_CTRL 0x08
 
-#ifdef __amigaos4__
 extern unsigned long start_appID;
 extern struct MsgPort *start_appPort;
 extern unsigned long start_appSigMask;
-#endif
 
 
-WORD snum = 0;
-LONG edittakt = 0;
-BYTE mtyp = 0;
+int16 snum = 0;
+int32 edittakt = 0;
+int8 mtyp = 0;
 
 struct SEQUENZ *wahlseq = NULL;
 struct MARKER *wahlmark[3] = {NULL, NULL, NULL};
-struct LIED lied = {"", 0, 0, FALSE, NULL};
+//struct LIED lied = {"", 0, 0, FALSE, NULL};
+struct LIED lied = {"", 0, 0, ""};
 struct LOOP loop = {0, 4096, FALSE};
 
 struct Process *playproc = NULL;
@@ -76,9 +68,9 @@ extern struct Window *hfenster;
 extern struct Screen *hschirm;
 extern struct Window *aktfenster;
 extern struct Gadget *gadget[];
-extern BYTE playsig;
-extern BYTE playerprocsig;
-extern BYTE thruprocsig;
+extern int8 playsig;
+extern int8 playerprocsig;
+extern int8 thruprocsig;
 extern struct MsgPort *syncport;
 
 extern struct Window *setfenster;
@@ -88,9 +80,9 @@ extern struct Window *edfenster;
 extern struct Window *mpfenster;
 extern struct Window *ccfenster;
 
-extern LONG takt;
-extern LONG tick;
-extern BYTE hornystatus;
+extern int32 takt;
+extern int32 tick;
+extern int8 hornystatus;
 extern BOOL tmarkwechsel;
 extern struct OUTPORT outport[];
 extern struct SPUR spur[];
@@ -99,12 +91,12 @@ extern struct METRONOM metro;
 extern struct MARKER *rootmark;
 extern struct MARKER *ltmark;
 extern struct SEQUENZINFO seqinfo;
-extern UBYTE playsigaktion;
+extern uint8 playsigaktion;
 extern struct UMGEBUNG umgebung;
 
 
 extern struct GUI gui;
-extern WORD guileiste;
+extern int16 guileiste;
 
 extern char projdatei[];
 extern char smfdatei[];
@@ -136,8 +128,8 @@ void GgfFolgenAbschalten(void) {
 
 //Funktionen der Hauptschleife
 
-void SchleifeGadgets(struct Gadget *g, UWORD code) {
-	ULONG var;
+void SchleifeGadgets(struct Gadget *g, uint16 code) {
+	uint32 var;
 	
 	switch (g->GadgetID) {
 		case GAD_T_PREV: SpringeTakt(PrevXMarkerTakt(takt)); break;
@@ -163,17 +155,17 @@ void SchleifeGadgets(struct Gadget *g, UWORD code) {
 		
 		case GAD_Z_H: gui.tab = code; AktualisiereEditFeld(FALSE, TRUE); break;
 		case GAD_Z_V: gui.sph = code; SpurenEinpassen(); AktualisiereEditFeld(TRUE, FALSE); break;
-		case GAD_F_MREC: GetAttr(GA_Selected, g, &var); metro.rec = (BOOL)var; break;
-		case GAD_F_MPLAY: GetAttr(GA_Selected, g, &var); metro.play = (BOOL)var; break;
-		case GAD_F_LOOP: GetAttr(GA_Selected, g, &var); loop.aktiv = (BOOL)var; break;
-		case GAD_F_FOLLOW: GetAttr(GA_Selected, g, &var); gui.folgen = (BOOL)var; break;
-		case GAD_F_THRU: GetAttr(GA_Selected, g, &var); outport[spur[snum].port].thru = (BOOL)var; break;
+		case GAD_F_MREC: IIntuition->GetAttr(GA_Selected, (Object *)g, &var); metro.rec = (BOOL)var; break;
+		case GAD_F_MPLAY: IIntuition->GetAttr(GA_Selected, (Object *)g, &var); metro.play = (BOOL)var; break;
+		case GAD_F_LOOP: IIntuition->GetAttr(GA_Selected, (Object *)g, &var); loop.aktiv = (BOOL)var; break;
+		case GAD_F_FOLLOW: IIntuition->GetAttr(GA_Selected, (Object *)g, &var); gui.folgen = (BOOL)var; break;
+		case GAD_F_THRU: IIntuition->GetAttr(GA_Selected, (Object *)g, &var); outport[spur[snum].port].thru = (BOOL)var; break;
 		case GAD_F_SYNC:
 			if (hornystatus != STATUS_STOP) {
 				Meldung(CAT(MSG_0159A, "Cannot change sync status while playback"));
 				AktualisiereFunctGadgets();
 			} else {
-				GetAttr(GA_Selected, g, &var);
+				IIntuition->GetAttr(GA_Selected, (Object *)g, &var);
 				if (var == TRUE) {
 					AktiviereExtreamSync();
 					if (!IstExtreamSyncAktiv()) {
@@ -187,7 +179,7 @@ void SchleifeGadgets(struct Gadget *g, UWORD code) {
 	}
 }
 
-void UpdateAusfuehren(WORD id, WORD code) {
+void UpdateAusfuehren(int16 id, int16 code) {
 	if (id != -1) {
 		switch (id) {
 			case GAD_S_H:
@@ -230,8 +222,8 @@ void SchleifeGuispalte(void) {
 
 	KeinePosition();
 	do {
-		WaitPort(hfenster->UserPort);
-		while (mes = (struct IntuiMessage *)GetMsg(hfenster->UserPort)) {
+		IExec->WaitPort(hfenster->UserPort);
+		while ((mes = (struct IntuiMessage *)IExec->GetMsg(hfenster->UserPort))) {
 			switch (mes->Class) {
 				case IDCMP_MOUSEMOVE:
 				gui.spalte = mes->MouseX - hfenster->BorderLeft;
@@ -242,7 +234,7 @@ void SchleifeGuispalte(void) {
 				
 				case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 			}
-			ReplyMsg((struct Message *)mes);
+			IExec->ReplyMsg((struct Message *)mes);
 		}
 	} while (!verlassen);
 	LoescheLinksOben();
@@ -254,15 +246,15 @@ void SchleifeGuispalte(void) {
 	ZeichnePosition(TRUE);
 }
 
-void SchleifeMarker(WORD mousex, UWORD qualifier) {
+void SchleifeMarker(int16 mousex, uint16 qualifier) {
 	BOOL schieben;
 	BOOL verlassen = FALSE;
 	BOOL kill = FALSE;
 	struct IntuiMessage *mes;
-	LONG neutakt;
+	int32 neutakt;
 	struct MARKER *erstmark;
 	struct MARKER *aktmark;
-	LONG d;
+	int32 d;
 	BOOL taktanders = FALSE;
 	BOOL tempanders = FALSE;
 
@@ -280,8 +272,8 @@ void SchleifeMarker(WORD mousex, UWORD qualifier) {
 			if (wahlmark[mtyp]->takt != 0) {
 				erstmark = TaktDirektMarker(edittakt); // nur für Multiverschiebung
 				do {
-					WaitPort(hfenster->UserPort);
-					while (mes = (struct IntuiMessage *)GetMsg(hfenster->UserPort)) {
+					IExec->WaitPort(hfenster->UserPort);
+					while ((mes = (struct IntuiMessage *)IExec->GetMsg(hfenster->UserPort))) {
 						switch (mes->Class) {
 							case IDCMP_MOUSEMOVE:
 							neutakt = PunktPosition(mes->MouseX);
@@ -320,7 +312,7 @@ void SchleifeMarker(WORD mousex, UWORD qualifier) {
 								
 							case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 						}
-						ReplyMsg((struct Message *)mes);
+						IExec->ReplyMsg((struct Message *)mes);
 					}
 				} while (!verlassen);
 				if (kill) {
@@ -370,11 +362,11 @@ void SchleifeMarker(WORD mousex, UWORD qualifier) {
 	}
 }
 
-void SchleifeZeit(WORD mousex, UWORD qualifier) {
+void SchleifeZeit(int16 mousex, uint16 qualifier) {
 	BOOL verlassen = FALSE;
-	LONG alttakt;
-	LONG neutakt;
-	BYTE greifp = 0;
+	int32 alttakt;
+	int32 neutakt;
+	int8 greifp = 0;
 	struct IntuiMessage *mes;
 
 	if (qualifier & QUALIFIER_ALT) {
@@ -394,8 +386,8 @@ void SchleifeZeit(WORD mousex, UWORD qualifier) {
 			if ((takt > loop.start) && (takt < loop.ende - VIERTELWERT)) greifp = 3; // Mitte
 		}
 		do {
-			WaitPort(hfenster->UserPort);
-			while (mes = (struct IntuiMessage *)GetMsg(hfenster->UserPort)) {
+			IExec->WaitPort(hfenster->UserPort);
+			while ((mes = (struct IntuiMessage *)IExec->GetMsg(hfenster->UserPort))) {
 				switch (mes->Class) {
 					case IDCMP_MOUSEMOVE:
 					neutakt = PunktPosition(mes->MouseX);
@@ -440,7 +432,7 @@ void SchleifeZeit(WORD mousex, UWORD qualifier) {
 					
 					case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 				}
-				ReplyMsg((struct Message *)mes);
+				IExec->ReplyMsg((struct Message *)mes);
 			}
 		} while (!verlassen);
 		AktualisiereFunctGadgets();
@@ -452,9 +444,9 @@ void SchleifeZeit(WORD mousex, UWORD qualifier) {
 	}
 }
 
-void SchleifeSpuren(WORD mousex, WORD mousey, UWORD qualifier) {
+void SchleifeSpuren(int16 mousex, int16 mousey, uint16 qualifier) {
 	BOOL verlassen = FALSE;
-	WORD s;
+	int16 s;
 	struct IntuiMessage *mes;
 
 	s = PunktSpur(mousey);
@@ -484,8 +476,8 @@ void SchleifeSpuren(WORD mousex, WORD mousey, UWORD qualifier) {
 	
 				if (hornystatus == STATUS_STOP) { // Drag & Drop
 					do {
-						WaitPort(hfenster->UserPort);
-						while (mes = (struct IntuiMessage *)GetMsg(hfenster->UserPort)) {
+						IExec->WaitPort(hfenster->UserPort);
+						while ((mes = (struct IntuiMessage *)IExec->GetMsg(hfenster->UserPort))) {
 							switch (mes->Class) {
 								case IDCMP_MOUSEMOVE:
 								snum = PunktSpur(mes->MouseY); if (snum >= lied.spuranz) snum = lied.spuranz-1;
@@ -497,7 +489,7 @@ void SchleifeSpuren(WORD mousex, WORD mousey, UWORD qualifier) {
 								
 								case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 							}
-							ReplyMsg((struct Message *)mes);
+							IExec->ReplyMsg((struct Message *)mes);
 						}
 					} while (!verlassen);
 				}
@@ -506,21 +498,21 @@ void SchleifeSpuren(WORD mousex, WORD mousey, UWORD qualifier) {
 	}
 }
 
-void SchleifeSequenzen(WORD mousex, WORD mousey, UWORD qualifier, BOOL doubleclick) {
-	WORD s;
-	WORD neus;
-	BYTE greifp;
+void SchleifeSequenzen(int16 mousex, int16 mousey, uint16 qualifier, BOOL doubleclick) {
+	int16 s;
+	int16 neus;
+	int8 greifp;
 	BOOL verlassen = FALSE;
-	LONG alttakt;
-	LONG neutakt;
+	int32 alttakt;
+	int32 neutakt;
 	struct IntuiMessage *mes;
-	WORD mx2, my2;
-	WORD n;
+	int16 mx2, my2;
+	int16 n;
 	struct SEQUENZ *altseq;
-	WORD difspur;
-	LONG diftakt;
-	LONG altguitakt;
-	BYTE p, c, num;
+	int16 difspur;
+	int32 diftakt;
+	int32 altguitakt;
+	int8 p, c, num;
 	struct AUTOPUNKT *autopunkt = NULL;
 	BOOL autoanders = FALSE;
 
@@ -557,8 +549,8 @@ void SchleifeSequenzen(WORD mousex, WORD mousey, UWORD qualifier, BOOL doublecli
 				if (hornystatus == STATUS_STOP) {
 					alttakt = PunktPosition(mousex);
 					do {
-						WaitPort(hfenster->UserPort);
-						while (mes = (struct IntuiMessage *)GetMsg(hfenster->UserPort)) {
+						IExec->WaitPort(hfenster->UserPort);
+						while ((mes = (struct IntuiMessage *)IExec->GetMsg(hfenster->UserPort))) {
 							switch (mes->Class) {
 								case IDCMP_MOUSEMOVE:
 								neutakt = PunktPosition(mes->MouseX);
@@ -603,7 +595,7 @@ void SchleifeSequenzen(WORD mousex, WORD mousey, UWORD qualifier, BOOL doublecli
 								
 								case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 							}
-							ReplyMsg((struct Message *)mes);
+							IExec->ReplyMsg((struct Message *)mes);
 						}
 					} while (!verlassen);
 					KeineProjektion();
@@ -652,8 +644,8 @@ void SchleifeSequenzen(WORD mousex, WORD mousey, UWORD qualifier, BOOL doublecli
 		KeinePosition(); ZeichneSequenzen(s, FALSE); ZeichnePosition(TRUE);
 		if (autopunkt) {
 			do {
-				WaitPort(hfenster->UserPort);
-				while (mes = (struct IntuiMessage *)GetMsg(hfenster->UserPort)) {
+				IExec->WaitPort(hfenster->UserPort);
+				while ((mes = (struct IntuiMessage *)IExec->GetMsg(hfenster->UserPort))) {
 					switch (mes->Class) {
 						case IDCMP_MOUSEMOVE:
 						autopunkt->takt = PunktPosition(mes->MouseX);
@@ -667,7 +659,7 @@ void SchleifeSequenzen(WORD mousex, WORD mousey, UWORD qualifier, BOOL doublecli
 						
 						case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 					}
-					ReplyMsg((struct Message *)mes);
+					IExec->ReplyMsg((struct Message *)mes);
 				}
 			} while (!verlassen);
 			if (!autoanders) EntferneAutoPunkt(p, c, num, autopunkt);
@@ -677,8 +669,8 @@ void SchleifeSequenzen(WORD mousex, WORD mousey, UWORD qualifier, BOOL doublecli
 	}
 }
 
-void SchleifeInfobox(WORD mousex, WORD mousey) {
-	BYTE n;
+void SchleifeInfobox(int16 mousex, int16 mousey) {
+	int8 n;
 	
 	n = TestePunktInfo(mousex, mousey);
 	// Lied
@@ -758,7 +750,7 @@ void SchleifeInfobox(WORD mousex, WORD mousey) {
 	}
 }
 
-void SchleifeRawKey(UWORD code, UWORD qualifier) {
+void SchleifeRawKey(uint16 code, uint16 qualifier) {
 	switch (code) {
 		case 76:
 		if (qualifier & QUALIFIER_SHIFT) {
@@ -810,10 +802,10 @@ void SchleifeRawKey(UWORD code, UWORD qualifier) {
 	}
 }
 
-void SchleifeMenuPick(UWORD code, UWORD qualifier) {
+void SchleifeMenuPick(uint16 code, uint16 qualifier) {
 	BOOL kill;
-	WORD n;
-	LONG start, ende;
+	int16 n;
+	int32 start, ende;
 	
 	//printf("%X\n", code);
 	MinMenuKontrolle(MenuPunkt(code));
@@ -1025,12 +1017,12 @@ void HFensterWeg(void) {
 
 void haupt(STRPTR startdatei) {
 	struct IntuiMessage *mes;
-	ULONG signals;
-	ULONG waitsigs;
-	ULONG altsec = 0, altmic = 0;
+	uint32 signals;
+	uint32 waitsigs;
+	uint32 altsec = 0, altmic = 0;
 	BOOL doubleclick;
-	WORD updateid, updatecode;
-	WORD vscroll, hscroll;
+	int16 updateid, updatecode;
+	int16 vscroll, hscroll;
 
 	TesteKey();
 	OeffneFont();
@@ -1040,7 +1032,7 @@ void haupt(STRPTR startdatei) {
 	LadeUmgebung();
 	LadeFensterPos();
 
-	playproc = (struct Process *)CreateNewProcTags(
+	playproc = (struct Process *)IDOS->CreateNewProcTags(
 		NP_Entry, &PlayerProcess,
 		NP_StackSize, 1024,
 		NP_Name, "HornyPlayer",
@@ -1048,13 +1040,13 @@ void haupt(STRPTR startdatei) {
 		TAG_DONE);
 	if (!playproc) Meldung(CAT(MSG_0163, "Could not create player process"));
 	
-	thruproc = (struct Process *)CreateNewProcTags(
+	thruproc = (struct Process *)IDOS->CreateNewProcTags(
 		NP_Entry, &ThruProcess,
 		NP_StackSize, 1024,
 		NP_Name, "HornyThru",
 		NP_Priority, umgebung.thruPri,
 		TAG_DONE);
-	if (!thruproc) Meldung("Could not create thru process");
+	if (!thruproc) Meldung((STRPTR)"Could not create thru process");
 	
 
 	ErstelleCamd();
@@ -1080,7 +1072,7 @@ void haupt(STRPTR startdatei) {
 
 	SchliesseTitel();
 
-	if (verLITE) Meldung("This is the unregistered Lite version!\n\nThis means:\n- Only 16 tracks (full version: 128)\n- Only 1 midi port (full version: 16)\n- Only 3 controller in mixer unit (full version: 6)\n\nCheck www.inutilis.de/horny/ for registering!");
+	if (verLITE) Meldung((STRPTR)"This is the unregistered Lite version!\n\nThis means:\n- Only 16 tracks (full version: 128)\n- Only 1 midi port (full version: 16)\n- Only 3 controller in mixer unit (full version: 6)\n\nCheck www.inutilis.de/horny/ for registering!");
 	
 	do {
 		waitsigs = (1L << hfenster->UserPort->mp_SigBit) | (1L << playsig);
@@ -1091,16 +1083,13 @@ void haupt(STRPTR startdatei) {
 		if (mpfenster)  waitsigs |= (1L << mpfenster->UserPort->mp_SigBit);
 		if (ccfenster)  waitsigs |= (1L << ccfenster->UserPort->mp_SigBit);
 		if (syncport)   waitsigs |= (1L << syncport->mp_SigBit);
-		#ifdef __amigaos4__
 		waitsigs |= start_appSigMask;
-		#endif
-		signals = Wait(waitsigs);
+		signals = IExec->Wait(waitsigs);
 
-		#ifdef __amigaos4__
 		if (signals & start_appSigMask)
 		{
 			struct ApplicationMsg *msg;
-			while (msg = (struct ApplicationMsg *) GetMsg(start_appPort))
+			while ((msg = (struct ApplicationMsg *) IExec->GetMsg(start_appPort)))
 			{
 			    switch (msg->type)
 			    {
@@ -1115,14 +1104,14 @@ void haupt(STRPTR startdatei) {
 
 					case APPLIBMT_ToFront:
 						if (hschirm) {
-							ScreenToFront(hschirm);
+							IIntuition->ScreenToFront(hschirm);
 						} else {
 							if (hfenster) {
-								WindowToFront(hfenster);
-								ActivateWindow(hfenster);
+								IIntuition->WindowToFront(hfenster);
+								IIntuition->ActivateWindow(hfenster);
 							}
-							if (edfenster) WindowToFront(edfenster);
-							if (mpfenster) WindowToFront(mpfenster);
+							if (edfenster) IIntuition->WindowToFront(edfenster);
+							if (mpfenster) IIntuition->WindowToFront(mpfenster);
 						}
 					break;
 
@@ -1133,10 +1122,10 @@ void haupt(STRPTR startdatei) {
 					} break;
 
 					case APPLIBMT_AppRegister: {
-						ULONG id = msg->senderAppID;
+						uint32 id = msg->senderAppID;
 						STRPTR url = NULL;
 						STRPTR name = NULL;
-						if (GetApplicationAttrs(id,
+						if (IApplication->GetApplicationAttrs(id,
 								APPATTR_Name, &name,
 								APPATTR_URLIdentifier, &url,
 								TAG_DONE))
@@ -1149,10 +1138,9 @@ void haupt(STRPTR startdatei) {
 					} break;
 			    }
 
-				ReplyMsg((struct Message *)msg);
+				IExec->ReplyMsg((struct Message *)msg);
 			}
 		}
-		#endif
 
 		if (syncport) {
 			if (signals & (1L << syncport->mp_SigBit)) KontrolleExtreamSync();
@@ -1215,7 +1203,7 @@ void haupt(STRPTR startdatei) {
 
 		if (signals & (1L << hfenster->UserPort->mp_SigBit)) {
 			updateid = -1; updatecode = 0;
-			while (mes = (struct IntuiMessage *)GetMsg(hfenster->UserPort)) {
+			while ((mes = (struct IntuiMessage *)IExec->GetMsg(hfenster->UserPort))) {
 				switch (mes->Class) {
 					case IDCMP_CLOSEWINDOW:
 					aktfenster = hfenster;
@@ -1245,7 +1233,6 @@ void haupt(STRPTR startdatei) {
 					SchleifeUpdate((struct TagItem *)mes->IAddress, &updateid, &updatecode);
 					break;
 
-#ifdef __amigaos4__
 					case IDCMP_EXTENDEDMOUSE: {
 						if (mes->Code == IMSGCODE_INTUIWHEELDATA) {
 							struct IntuiWheelData *data = (struct IntuiWheelData *)mes->IAddress;
@@ -1271,11 +1258,10 @@ void haupt(STRPTR startdatei) {
 							}
 						}
 					} break;
-#endif
 
 					case IDCMP_MOUSEBUTTONS:
 					if (mes->Code == 104) {
-						doubleclick = DoubleClick(altsec, altmic, mes->Seconds, mes->Micros);
+						doubleclick = IIntuition->DoubleClick(altsec, altmic, mes->Seconds, mes->Micros);
 						if (doubleclick) altsec = 0;
 						else {
 							altsec = mes->Seconds; altmic = mes->Micros;
@@ -1377,15 +1363,15 @@ void haupt(STRPTR startdatei) {
 					}
 					break;
 				}
-				if (mes) ReplyMsg((struct Message *)mes);
+				if (mes) IExec->ReplyMsg((struct Message *)mes);
 			}
 			UpdateAusfuehren(updateid, updatecode);
 		}
 	} while (!beendet);
 	
 	hornystatus = STATUS_ENDE;
-	Signal(&playproc->pr_Task, 1L << playerprocsig);
-	Signal(&thruproc->pr_Task, 1L << thruprocsig);
+	IExec->Signal(&playproc->pr_Task, 1L << playerprocsig);
+	IExec->Signal(&thruproc->pr_Task, 1L << thruprocsig);
 	
 	ClipboardLoeschen();
 	EntferneLied();
