@@ -216,7 +216,7 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 	
 			IDOS->Close(file);
 			
-			strncat(datei, ".controller", 511);
+			strncat(datei, ".controller", 512);
 			neu->contr = LadeInstrContr(datei);
 			if (!neu->contr) neu->contr = LadeInstrContr((STRPTR)"PROGDIR:System/Instruments/GM.controller");
 
