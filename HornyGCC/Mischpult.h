@@ -6,10 +6,10 @@ void ErstelleMPFenster(void);
 void EntferneMPFenster(void);
 void KontrolleMischpultFenster(void);
 
-void SetzeMeter(UBYTE p, UBYTE c, BYTE velo);
-void ErniedrigeMeter(BYTE wert);
+void SetzeMeter(uint8 p, uint8 c, int8 velo);
+void ErniedrigeMeter(int8 wert);
 void ZeichneMeter(void);
 void SendeMischpult(void);
 void AktualisiereMischpult(void);
 void AutoUpdateMischpult(void);
-void ControllerAnpassen(BYTE p, BYTE c, BYTE data1, BYTE data2);
+void ControllerAnpassen(int8 p, int8 c, int8 data1, int8 data2);

@@ -2,9 +2,9 @@
 
 #ifndef _KEINEEXTERN_
 extern BOOL verLITE;
-extern BYTE verOUTPORTS;
-extern BYTE verINPORTS;
-extern WORD verSPUREN;
+extern int8 verOUTPORTS;
+extern int8 verINPORTS;
+extern int16 verSPUREN;
 #endif
 
 #define OUTPORTS 16

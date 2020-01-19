@@ -27,10 +27,10 @@ struct GUI gui = {
 	160, //spalte
 	FALSE //folgen
 };
-WORD guibox = 56;
-WORD guileiste = 58;
-extern WORD randlr;
-extern WORD randou;
+int16 guibox = 56;
+int16 guileiste = 58;
+extern int16 randlr;
+extern int16 randou;
 
 extern struct SPUR spur[];
 extern struct LIED lied;
@@ -39,10 +39,10 @@ extern struct LOOP loop;
 extern struct MARKER *rootmark;
 extern struct SEQUENZINFO seqinfo;
 
-extern WORD snum;
-extern LONG takt;
-extern LONG tick;
-extern BYTE mtyp;
+extern int16 snum;
+extern int32 takt;
+extern int32 tick;
+extern int8 mtyp;
 extern struct SEQUENZ *wahlseq;
 extern struct MARKER *wahlmark[];
 extern struct MARKER *ltmark;
@@ -68,12 +68,12 @@ void LoescheLinksOben(void) {
 }
 
 void ZeichneUebersicht(void) {
-	WORD x, y, xr, yu;
+	int16 x, y, xr, yu;
 	FLOAT faktbr, faktho;
 	struct SEQUENZ *seq;
-	WORD s;
-	WORD rxs, rxe;
-	WORD zxs, zxe, zy;
+	int16 s;
+	int16 rxs, rxe;
+	int16 zxs, zxe, zy;
 	
 	x = 418;
 	y = hfenster->Height - randou - 33;
@@ -87,26 +87,22 @@ void ZeichneUebersicht(void) {
 	aktfenster = hfenster;
 	RahmenEin(1, 0, x - 1, y - 1, xr + 1, yu + 1);
 	RahmenRundungEin(x - 2, y - 2, xr + 2, yu + 2);
-	rxs = (WORD)(x + (FLOAT)(gui.takt >> VIERTEL) * faktbr);
-	rxe = (WORD)(x + (FLOAT)((gui.takt >> VIERTEL) + gui.tasicht) * faktbr);
+	rxs = (int16)(x + (FLOAT)(gui.takt >> VIERTEL) * faktbr);
+	rxe = (int16)(x + (FLOAT)((gui.takt >> VIERTEL) + gui.tasicht) * faktbr);
 	if (rxs > xr) rxs = xr;
 	if (rxe > xr) rxe = xr;
-#ifdef __amigaos4__
 	Gradient(5, STIL_DN, rxs, y, rxe, yu);
-#else
-	Balken(5, rxs, y, rxe, yu);
-#endif
 	
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
 		while (seq) {
-			zxs = (WORD)(x + (FLOAT)(seq->start >> VIERTEL) * faktbr);
+			zxs = (int16)(x + (FLOAT)(seq->start >> VIERTEL) * faktbr);
 			while (seq->next) {
 				if (seq->ende < seq->next->start) break;
 				seq = seq->next;
 			}
-			zxe = (WORD)(x + (FLOAT)(seq->ende  >> VIERTEL) * faktbr);
-			zy = (WORD)(y + (FLOAT)s * faktho);
+			zxe = (int16)(x + (FLOAT)(seq->ende  >> VIERTEL) * faktbr);
+			zy = (int16)(y + (FLOAT)s * faktho);
 			if (zxs > xr) zxs = xr;
 			if (zxe > xr) zxe = xr;
 			Balken(2, zxs, zy, zxe, zy + 1);
@@ -117,25 +113,25 @@ void ZeichneUebersicht(void) {
 	Linie(6, rxe, y, rxe, yu);
 }
 
-LONG TestePunktUebersicht(WORD x) {
-	LONG ergtakt;
-	WORD br;
+int32 TestePunktUebersicht(int16 x) {
+	int32 ergtakt;
+	int16 br;
 	FLOAT faktbr;
 	
 	x = x - hfenster->BorderLeft - 418;
 	br = hfenster->Width - randlr - 418;
 	faktbr = (FLOAT)br / (FLOAT)lied.taktanz;
-	ergtakt = ((LONG)((FLOAT)x / faktbr) - (gui.tasicht / 2)) << VIERTEL;
+	ergtakt = ((int32)((FLOAT)x / faktbr) - (gui.tasicht / 2)) << VIERTEL;
 	if (ergtakt < 0) ergtakt = 0;
 	return(ergtakt);
 }
 
-void ZeichneSpurAutomation(WORD s) {
-	BYTE p, c;
-	WORD lr, rr;
-	WORD yu;
-	WORD x, y;
-	WORD altx, alty;
+void ZeichneSpurAutomation(int16 s) {
+	int8 p, c;
+	int16 lr, rr;
+	int16 yu;
+	int16 x, y;
+	int16 altx, alty;
 	struct AUTOPUNKT *akt;
 	
 	aktfenster = hfenster;
@@ -164,9 +160,9 @@ void ZeichneSpurAutomation(WORD s) {
 			p = spur[s].port;
 			c = spur[s].channel;
 			switch (spur[s].autostatus) {
-				case 1: y = yu - ((WORD)mpkanal[p][c].fader * (gui.sph - 1) / 128); break;
-				case 2: y = yu - ((WORD)mpkanal[p][c].pan * (gui.sph - 1) / 128); break;
-				default: y = yu - ((WORD)mpkanal[p][c].contrwert[spur[s].autostatus - 3] * (gui.sph - 1) / 128);
+				case 1: y = yu - ((int16)mpkanal[p][c].fader * (gui.sph - 1) / 128); break;
+				case 2: y = yu - ((int16)mpkanal[p][c].pan * (gui.sph - 1) / 128); break;
+				default: y = yu - ((int16)mpkanal[p][c].contrwert[spur[s].autostatus - 3] * (gui.sph - 1) / 128);
 			}
 			Linie(4, lr, y, x, y);
 		}
@@ -174,17 +170,17 @@ void ZeichneSpurAutomation(WORD s) {
 		// Automations-Linie
 		while (akt) {
 			x = lr + ((((akt->takt - gui.takt) >> (VIERTEL - 4)) * gui.tab) >> 6);
-			y = yu - ((WORD)akt->wert * (gui.sph - 1) / 128);
+			y = yu - ((int16)akt->wert * (gui.sph - 1) / 128);
 			
 			if (x >= lr) {
 				if (x <= rr) Balken(1, x - 2, y - 2, x + 2, y + 2);
 				if (altx != ~0) {
 					if (altx < lr) {
-						alty = (WORD)((((LONG)y * ((LONG)lr - (LONG)altx)) + ((LONG)alty * ((LONG)x - (LONG)lr))) / ((LONG)x - (LONG)altx));
+						alty = (int16)((((int32)y * ((int32)lr - (int32)altx)) + ((int32)alty * ((int32)x - (int32)lr))) / ((int32)x - (int32)altx));
 						altx = lr;
 					}
 					if (x > rr) {
-						y = (WORD)((((LONG)alty * ((LONG)x - (LONG)rr)) + ((LONG)y * ((LONG)rr - (LONG)altx))) / ((LONG)x - (LONG)altx));
+						y = (int16)((((int32)alty * ((int32)x - (int32)rr)) + ((int32)y * ((int32)rr - (int32)altx))) / ((int32)x - (int32)altx));
 						x = rr;
 					}
 					Linie(1, altx, alty, x, y);
@@ -204,23 +200,21 @@ void ZeichneSpurAutomation(WORD s) {
 	}
 }
 
-void ZeichneSequenzen(WORD s, BOOL events) {
+void ZeichneSequenzen(int16 s, BOOL events) {
 	struct SEQUENZ *seq;
-	WORD y, yn;
-	WORD xs, xe, xn, lx, altx;
-	WORD rr;
+	int16 y, yn;
+	int16 xs, xe, xn, lx, altx;
+	int16 rr;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	BOOL randl, randr;
-	UBYTE stat;
-	WORD lfarbe, hfarbe, tfarbe;
-	WORD seqfarbe;
+	uint8 stat;
+	int16 lfarbe, hfarbe, tfarbe;
+	int16 seqfarbe;
 	
 	aktfenster = hfenster;
 	if ((s >= gui.spur) && (s < gui.spur + gui.spsicht)) {
-#ifdef __amigaos4__
 		events = TRUE;
-#endif
 		rr = hfenster->Width - randlr - 21;
 		y = guileiste + 18 + ((s - gui.spur) * gui.sph);
 		altx = gui.spalte + 2;
@@ -280,14 +274,14 @@ void ZeichneSequenzen(WORD s, BOOL events) {
 							if (xn == xs) xn++;
 							stat = (evbl->event[evnum].status & MS_StatBits);
 							if (stat == MS_NoteOn) {
-								yn = y + gui.sph - 3 - (((WORD)evbl->event[evnum].data1 * (gui.sph-4 )) >> 7);
+								yn = y + gui.sph - 3 - (((int16)evbl->event[evnum].data1 * (gui.sph-4 )) >> 7);
 								if (gui.sph < 35) Punkt(xn, yn);
 								else Balken(2, xn, yn, xn + 1, yn + 1);
 							} else if (stat != MS_NoteOff) {
 								xn &= 0xFFFE;
 								if (xn != lx) {
 									if (xn == xs) xn++;
-									Linie(2, xn, y + gui.sph - 3 - (((WORD)evbl->event[evnum].data2 * (gui.sph - 4 )) >> 7), xn, y + gui.sph - 3);
+									Linie(2, xn, y + gui.sph - 3 - (((int16)evbl->event[evnum].data2 * (gui.sph - 4 )) >> 7), xn, y + gui.sph - 3);
 									lx = xn;
 								}
 							}
@@ -325,11 +319,11 @@ void ZeichneSequenzen(WORD s, BOOL events) {
 	Fett(FALSE);
 }
 
-void ZeichneSequenzRahmen(WORD s) {
+void ZeichneSequenzRahmen(int16 s) {
 	struct SEQUENZ *seq;
-	WORD y;
-	WORD xs, xe;
-	WORD rr;
+	int16 y;
+	int16 xs, xe;
+	int16 rr;
 
 	aktfenster = hfenster;
 	if ((s >= gui.spur) && (s < gui.spur + gui.spsicht)) {
@@ -355,12 +349,12 @@ void ZeichneSequenzRahmen(WORD s) {
 	}
 }
 
-void ZeichneSpurSpalte(WORD s, BOOL aktiv) {
-	WORD y;
-	WORD n;
-	BYTE contr;
-	BYTE p, c;
-	BYTE num;
+void ZeichneSpurSpalte(int16 s, BOOL aktiv) {
+	int16 y;
+	int16 n;
+	int8 contr;
+	int8 p, c;
+	int8 num;
 	BOOL autov = FALSE;
 	struct INSTRUMENT *instr;
 	
@@ -399,17 +393,17 @@ void ZeichneSpurSpalte(WORD s, BOOL aktiv) {
 				if (contr >= 0) {
 					instr = SucheChannelInstrument(p, c);
 					Schreibe(1, 50, y + 22, instr->contr->name[contr], gui.spalte);
-				} else Schreibe(1, 50, y + 22, "---", gui.spalte);
+				} else Schreibe(1, 50, y + 22, (STRPTR)"---", gui.spalte);
 			}
 		}
 	}
 }
 
 void ZeichneSpuren(BOOL spalte, BOOL events) {
-	WORD s;
-	WORD n;
-	WORD y;
-	UBYTE hfarbe;
+	int16 s;
+	int16 n;
+	int16 y;
+	uint8 hfarbe;
 
 	aktfenster = hfenster;
 	gui.spsicht = (hfenster->Height - randou - (74 + guileiste) - guibox) / gui.sph;
@@ -433,8 +427,8 @@ void ZeichneSpuren(BOOL spalte, BOOL events) {
 }
 
 void SpurenEinpassen(void) {
-	WORD sicht;
-	WORD pixel;
+	int16 sicht;
+	int16 pixel;
 	
 	pixel = hfenster->Height - randou - (74 + guileiste) - guibox;
 	if (pixel % gui.sph > gui.sph / 2) sicht = pixel / gui.sph + 1;
@@ -445,42 +439,42 @@ void SpurenEinpassen(void) {
 	if (gui.sph > 100) gui.sph = pixel / (sicht + 1);
 }
 
-WORD PunktSpur(WORD y) {
-	WORD s;
+int16 PunktSpur(int16 y) {
+	int16 s;
 
 	s = ((y - hfenster->BorderTop - (guileiste + 18)) / gui.sph) + gui.spur;
 	if (s < 0) s = 0;
 	return(s);
 }
 
-LONG PunktPosition(WORD x) {
-	LONG p;
+int32 PunktPosition(int16 x) {
+	int32 p;
 
 	x = x - hfenster->BorderLeft - gui.spalte - 2;
 	p = ((x * 4 / gui.tab) << VIERTEL) + gui.takt;
 	return(p);
 }
 
-BYTE PunktAutoWert(WORD spur, WORD y) {
-	WORD wert;
+int8 PunktAutoWert(int16 spur, int16 y) {
+	int16 wert;
 	
 	y = y - hfenster->BorderTop  - (guileiste + 18);
 	y = gui.sph - (y - ((spur - gui.spur) * gui.sph)) - 2;
 	wert = y * 127 / (gui.sph - 2);
 	if (wert < 0) wert = 0;
 	if (wert > 127) wert = 127;
-	return((BYTE)wert);
+	return((int8)wert);
 }
 
 void ZeichneZeitleiste(BOOL zahlen) {
-	WORD xs, xe;
-	WORD lr, rr;
-	WORD x;
-	LONG t;
-	BYTE a;
-	WORD viertel;
+	int16 xs, xe;
+	int16 lr, rr;
+	int16 x;
+	int32 t;
+	int8 a;
+	int16 viertel;
 	struct MARKER *akt;
-	BYTE farbe;
+	int8 farbe;
 
 	aktfenster = hfenster;
 	lr = gui.spalte + 2;
@@ -535,11 +529,11 @@ void ZeichneZeitleiste(BOOL zahlen) {
 }
 
 void ZeichneSmpteLeiste(void) {
-	WORD lr, rr;
-	WORD x;
+	int16 lr, rr;
+	int16 x;
 	char puf[12];
-	LONG t;
-	LONG ticks;
+	int32 t;
+	int32 ticks;
 
 	aktfenster = hfenster;
 	lr = gui.spalte + 2;
@@ -548,22 +542,22 @@ void ZeichneSmpteLeiste(void) {
 	Balken(2, lr, guileiste - 16, rr, guileiste - 2);
 	
 	for (x = lr; x < rr; x += 70) {
-		t = (((LONG)(x - gui.spalte - 2) * 4) << VIERTEL) / gui.tab + gui.takt; // PunktPosition
+		t = (((int32)(x - gui.spalte - 2) * 4) << VIERTEL) / gui.tab + gui.takt; // PunktPosition
 		ticks = TaktSmpteTicks(t);
-		sprintf(puf, "%d:%d:%d:%d", Ticks2hh(ticks), Ticks2mm(ticks), Ticks2ss(ticks), Ticks2ff(ticks));
+		sprintf(puf, "%ld:%ld:%ld:%ld", Ticks2hh(ticks), Ticks2mm(ticks), Ticks2ss(ticks), (int32)Ticks2ff(ticks));
 		Linie(1, x, guileiste - 14, x, guileiste - 2);
 		Schreibe(1, x + 2, guileiste - 8, puf, rr);
 	}
 }
 
-void ZeichneMarkerleiste(BYTE typ) {
-	WORD lr, rr;
-	WORD x, nx;
+void ZeichneMarkerleiste(int8 typ) {
+	int16 lr, rr;
+	int16 x, nx;
 	struct MARKER *akt;
 	struct MARKER *next;
 	char puf[128];
-	BYTE f;
-	WORD y;
+	int8 f;
+	int16 y;
 	
 	aktfenster = hfenster;
 	switch (typ) {
@@ -612,31 +606,21 @@ void ZeichneMarkerleisten(void) {
 	ZeichneMarkerleiste(M_TAKT);
 }
 
-void ZeichneInfobox(UBYTE sparten) {
-	WORD y;
-	WORD x, x2, xr;
+void ZeichneInfobox(uint8 sparten) {
+	int16 y;
+	int16 x, x2, xr;
 	char sign[6];
 
 	aktfenster = hfenster;
 	y = hfenster->Height - randou - 36 - guibox;
 	if (sparten) {
-#ifdef __amigaos4__
+
 		if (sparten & 1) Gradient(4, STIL_DN, 3, y + 1, 144, y + guibox - 6);
 		if (sparten & 2) Gradient(4, STIL_DN, 147, y + 1, 294, y + guibox - 6);
 		if (sparten & 4) Gradient(4, STIL_DN, 297, y + 1, 444, y + guibox - 6);
 		if (sparten & 8) Gradient(4, STIL_DN, 447, y + 1, 594, y + guibox - 6);
-#else
-		if (sparten & 1) Balken(4, 3, y + 1, 144, y + guibox - 6);
-		if (sparten & 2) Balken(4, 147, y + 1, 294, y + guibox - 6);
-		if (sparten & 4) Balken(4, 297, y + 1, 444, y + guibox - 6);
-		if (sparten & 8) Balken(4, 447, y + 1, 594, y + guibox - 6);
-#endif
 	} else {
-#ifdef __amigaos4__
 		Gradient(4, STIL_DN, 0, y - 1, hfenster->Width - randlr - 1, y + guibox - 3);
-#else
-		Balken(4, 0, y - 1, hfenster->Width - randlr - 1, y + guibox - 3);
-#endif
 		Linie(1, 0, y, hfenster->Width - randlr - 1, y);
 		Linie(2, 0, y + guibox - 2, hfenster->Width - randlr - 1, y + guibox - 2);
 		Linie(8, 0, y + guibox - 1, hfenster->Width - randlr - 1, y + guibox - 1);
@@ -679,9 +663,9 @@ void ZeichneInfobox(UBYTE sparten) {
 		if (spur[snum].prog >= 0) {
 			SchreibeZahl(1, x2, y + 36, spur[snum].prog);
 			if (spur[snum].bank0 >= 0) SchreibeZahl(1, x2 + 22, y + 36, spur[snum].bank0);
-			else Schreibe(1, x2 + 22, y + 36, "**", xr);
+			else Schreibe(1, x2 + 22, y + 36, (STRPTR)"**", xr);
 			if (spur[snum].bank32 >= 0) SchreibeZahl(1, x2 + 44, y + 36, spur[snum].bank32);
-			else Schreibe(1, x2 + 44, y + 36, "**", xr);
+			else Schreibe(1, x2 + 44, y + 36, (STRPTR)"**", xr);
 		} else {
 			Schreibe(1, x2, y + 36, CAT(MSG_0236, "not chosen"), xr);
 		}
@@ -691,21 +675,21 @@ void ZeichneInfobox(UBYTE sparten) {
 	if (seqinfo.benutzt && (sparten & 8)) {
 		x = 450; x2 = 500; xr = 595;
 		Schreibe(2, x, y + 12, CAT(MSG_0238, "Sequence:"), xr);
-			if (seqinfo.namemulti) Schreibe(2, x2, y + 12, "***", xr);
+			if (seqinfo.namemulti) Schreibe(2, x2, y + 12, (STRPTR)"***", xr);
 			else Schreibe(2, x2, y + 12, seqinfo.name, xr);
 		Schreibe(1, x, y + 24, CAT(MSG_0240, "Transpose:"), xr);
-			if (seqinfo.transmulti) Schreibe(1, x2, y + 24, "***", xr);
+			if (seqinfo.transmulti) Schreibe(1, x2, y + 24, (STRPTR)"***", xr);
 			else SchreibeZahl(1, x2, y + 24, seqinfo.trans);
 		Schreibe(1, x, y + 36, CAT(MSG_0241, "Mute:"), xr);
-			if (seqinfo.mutemulti) Schreibe(1, x2, y + 36, "***", xr);
+			if (seqinfo.mutemulti) Schreibe(1, x2, y + 36, (STRPTR)"***", xr);
 			else if (seqinfo.mute) Schreibe(1, x2, y + 36, CAT(MSG_0241A, "ON"), xr);
 			else Schreibe(1, x2, y + 36, CAT(MSG_0241B, "OFF"), xr);
 		Schreibe(1, x, y + 48, CAT(MSG_0242, "Aliases:"), xr); SchreibeZahl(1, x2, y + 48, seqinfo.aliasanz);
 	}
 }
 
-BYTE TestePunktInfo(WORD x, WORD y) {
-	BYTE b;
+int8 TestePunktInfo(int16 x, int16 y) {
+	int8 b;
 
 	x = x - hfenster->BorderLeft - 2;
 	y = y - hfenster->BorderTop -(hfenster->Height - hfenster->BorderTop - hfenster->BorderBottom - 32 - guibox);
@@ -715,8 +699,8 @@ BYTE TestePunktInfo(WORD x, WORD y) {
 
 void ZeichneAnzeigen(BOOL tt) {
 	char puf[20];
-	UWORD atakt;
-	UWORD viertel;
+	uint16 atakt;
+	uint16 viertel;
 	
 	aktfenster = hfenster;
 	Balken(2, 2, guileiste - 16, gui.spalte - 2, guileiste - 2); // SMPTE
@@ -728,12 +712,12 @@ void ZeichneAnzeigen(BOOL tt) {
 	}
 
 	if (lkmark && ltmark) {
-		sprintf(puf, "%d:%d:%d:%d", Ticks2hh(tick), Ticks2mm(tick), Ticks2ss(tick), Ticks2ff(tick));
+		sprintf(puf, "%ld:%ld:%ld:%ld", Ticks2hh(tick), Ticks2mm(tick), Ticks2ss(tick), (int32)Ticks2ff(tick));
 		Schreibe(1, 6, guileiste - 6, puf, gui.spalte - 2);
 	
-		viertel = ((ULONG)takt - lkmark->takt) >> VIERTEL;
+		viertel = ((uint32)takt - lkmark->takt) >> VIERTEL;
 		atakt = lkmark->m_taktnum + (viertel / lkmark->m_zaehler);
-		sprintf(puf, "%d | %d | %d", atakt, (viertel % lkmark->m_zaehler) + 1, ((takt & ~VIERTELMASKE) >> (VIERTEL - 2)) + 1);
+		sprintf(puf, "%ld | %ld | %ld", (int32)atakt, (int32)(viertel % lkmark->m_zaehler) + 1, ((takt & ~VIERTELMASKE) >> (VIERTEL - 2)) + 1);
 		Schreibe(1, 6, guileiste + 10, puf, gui.spalte - 2);
 
 		if (tt && lxmark) {
@@ -746,9 +730,9 @@ void ZeichneAnzeigen(BOOL tt) {
 	}
 }
 
-BYTE TestePunktBereich(WORD x, WORD y) {
-	UBYTE b = 0;
-	WORD uy, rx;
+int8 TestePunktBereich(int16 x, int16 y) {
+	uint8 b = 0;
+	int16 uy, rx;
 
 	x = x - hfenster->BorderLeft;
 	y = y - hfenster->BorderTop;

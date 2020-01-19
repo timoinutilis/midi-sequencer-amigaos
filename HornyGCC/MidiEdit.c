@@ -18,9 +18,9 @@ extern struct LIED lied;
 struct EVENT *stev[128];
 extern char oktnote[12][3];
 
-void AliaseAnpassen(struct SEQUENZ *original, WORD d) {
+void AliaseAnpassen(struct SEQUENZ *original, int16 d) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	if (original->aliasanz) {
 		for (s = 0; s < lied.spuranz; s++) {
@@ -38,9 +38,9 @@ void AliaseAnpassen(struct SEQUENZ *original, WORD d) {
 	}
 }
 
-void EventsVerschieben(struct SEQUENZ *seq, WORD d) {
+void EventsVerschieben(struct SEQUENZ *seq, int16 d) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	
 	if (d) {
 		evbl = seq->eventblock; evnum = 0;
@@ -59,7 +59,7 @@ void OrdneEvents(struct SEQUENZ *seq) {
 	struct EVENT *ev2;
 	struct EVENT evk;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	
 	evbl = seq->eventblock; evnum = 0;
 	if (evbl) {
@@ -86,10 +86,10 @@ void OrdneEvents(struct SEQUENZ *seq) {
 }
 
 void NotenEndenMarkieren(struct SEQUENZ *seq) {
-	UBYTE n;
+	uint8 n;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
-	WORD p;
+	int16 evnum;
+	int16 p;
 	
 	for (n = 0; n < 128; n++) stev[n] = NULL;
 
@@ -116,12 +116,12 @@ void NotenEndenMarkieren(struct SEQUENZ *seq) {
 	}
 }
 
-void QuantisiereSequenz(struct SEQUENZ *seq, WORD quant) {
+void QuantisiereSequenz(struct SEQUENZ *seq, int16 quant) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
-	LONG z;
-	LONG nstart;
-	LONG d;
+	int16 evnum;
+	int32 z;
+	int32 nstart;
+	int32 d;
 	
 	evbl = seq->eventblock; evnum = 0;
 	while (evbl) {
@@ -150,9 +150,9 @@ void QuantisiereSequenz(struct SEQUENZ *seq, WORD quant) {
 	AliaseAnpassen(seq, -d);
 }
 
-void MarkSequenzenQuantisieren(WORD quant) {
+void MarkSequenzenQuantisieren(int16 quant) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -173,7 +173,7 @@ void MarkSequenzenQuantisieren(WORD quant) {
 void MarkEventsEntfernen(struct SEQUENZ *seq) {
 	struct EVENTBLOCK *evbl1;
 	struct EVENTBLOCK *evbl2;
-	WORD evnum1, evnum2;
+	int16 evnum1, evnum2;
 	
 	evbl1 = seq->eventblock; evnum1 = 0;
 	evbl2 = seq->eventblock; evnum2 = 0;
@@ -190,11 +190,11 @@ void MarkEventsEntfernen(struct SEQUENZ *seq) {
 	EvblsAbschneiden(evbl1);
 }
 
-struct EVENT *EventEinfuegen(struct SEQUENZ *seq, LONG t, BYTE status, BYTE data1, BYTE data2, BOOL markieren) {
+struct EVENT *EventEinfuegen(struct SEQUENZ *seq, int32 t, int8 status, int8 data1, int8 data2, BOOL markieren) {
 	struct EVENTBLOCK *evbl1;
 	struct EVENTBLOCK *evbl2;
-	WORD evnum1;
-	WORD evnum2;
+	int16 evnum1;
+	int16 evnum2;
 	struct EVENT *ev = NULL;
 		
 	evbl1 = seq->eventblock;
@@ -229,7 +229,7 @@ struct EVENT *EventEinfuegen(struct SEQUENZ *seq, LONG t, BYTE status, BYTE data
 
 void MarkEventsKopieren(struct SEQUENZ *seq) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	
 	evbl = seq->eventblock;
@@ -251,9 +251,9 @@ void MarkEventsKopieren(struct SEQUENZ *seq) {
 	}
 }
 
-void MarkNotenVerschieben(struct SEQUENZ *seq, LONG d, WORD h) {
+void MarkNotenVerschieben(struct SEQUENZ *seq, int32 d, int16 h) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	
 	evbl = seq->eventblock; evnum = 0;
@@ -274,10 +274,10 @@ void MarkNotenVerschieben(struct SEQUENZ *seq, LONG d, WORD h) {
 	}
 }
 
-void MarkNotenEndenVerschieben(struct SEQUENZ *seq, LONG d) {
-	UBYTE n;
+void MarkNotenEndenVerschieben(struct SEQUENZ *seq, int32 d) {
+	uint8 n;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	
 	for (n = 0; n < 128; n++) stev[n] = NULL;
@@ -303,11 +303,11 @@ void MarkNotenEndenVerschieben(struct SEQUENZ *seq, LONG d) {
 	}
 }
 
-void MarkEventsDynamik(struct SEQUENZ *seq, BYTE thresh, BYTE ratio, BYTE gain) {
+void MarkEventsDynamik(struct SEQUENZ *seq, int8 thresh, int8 ratio, int8 gain) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
-	WORD u, w;
+	int16 u, w;
 	
 	evbl = seq->eventblock; evnum = 0;
 	while (evbl) {
@@ -315,7 +315,7 @@ void MarkEventsDynamik(struct SEQUENZ *seq, BYTE thresh, BYTE ratio, BYTE gain) 
 		if (!ev->status) break;
 		
 		if (((ev->status & MS_StatBits) != MS_NoteOff) && ev->markiert) {
-			u = (WORD)ev->data2;
+			u = (int16)ev->data2;
 			if ((ratio > 0) && (u > thresh)) u = ((u - thresh) / (1 + ratio)) + thresh;
 			if ((ratio < 0) && (u < thresh)) u = ((u - thresh) * (1 - ratio)) + thresh;
 			w = u + gain;
@@ -328,15 +328,15 @@ void MarkEventsDynamik(struct SEQUENZ *seq, BYTE thresh, BYTE ratio, BYTE gain) 
 	}
 }
 
-void MarkNotenQuantisieren(struct SEQUENZ *seq, WORD quant, BYTE modus, BOOL tripled) {
+void MarkNotenQuantisieren(struct SEQUENZ *seq, int16 quant, int8 modus, BOOL tripled) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
-	UBYTE status;
-	LONG z;
-	LONG faktor;
-	LONG ttakt;
-	LONG rest;
+	uint8 status;
+	int32 z;
+	int32 faktor;
+	int32 ttakt;
+	int32 rest;
 	
 	evbl = seq->eventblock; evnum = 0;
 	while (evbl) {
@@ -382,12 +382,12 @@ void MarkNotenQuantisieren(struct SEQUENZ *seq, WORD quant, BYTE modus, BOOL tri
 	OrdneEvents(seq);
 }
 
-struct EVENT *TaktContr(LONG t, BYTE contr, struct SEQUENZ *seq, struct EVENT **fcev) {
+struct EVENT *TaktContr(int32 t, int8 contr, struct SEQUENZ *seq, struct EVENT **fcev) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	struct EVENT *lcev;
-	UBYTE status;
+	uint8 status;
 	
 	lcev = NULL;
 	evbl = seq->eventblock; evnum = 0;
@@ -430,9 +430,9 @@ struct EVENT *TaktContr(LONG t, BYTE contr, struct SEQUENZ *seq, struct EVENT **
 }
 
 
-struct EVENT *TaktNote(LONG t, UBYTE note, struct SEQUENZ *seq, BYTE *p) {
+struct EVENT *TaktNote(int32 t, uint8 note, struct SEQUENZ *seq, int8 *p) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	struct EVENT *tn = NULL;
 	struct EVENT *tnu = NULL;
@@ -479,7 +479,7 @@ struct EVENT *TaktNote(LONG t, UBYTE note, struct SEQUENZ *seq, BYTE *p) {
 
 void KeineEventsMarkieren(struct SEQUENZ *seq) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	
 	evbl = seq->eventblock; evnum = 0;
 	while (evbl) {
@@ -489,9 +489,9 @@ void KeineEventsMarkieren(struct SEQUENZ *seq) {
 	}
 }
 
-void NotenMarkieren(struct SEQUENZ *seq, BYTE modus, UBYTE referenz) {
+void NotenMarkieren(struct SEQUENZ *seq, int8 modus, uint8 referenz) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	
 	if (modus == 4) KeineEventsMarkieren(seq);
@@ -516,11 +516,11 @@ void NotenMarkieren(struct SEQUENZ *seq, BYTE modus, UBYTE referenz) {
 	NotenEndenMarkieren(seq);
 }
 
-void NotenBereichMarkieren(struct SEQUENZ *seq, WORD vtast, WORD btast, LONG vt, LONG bt) {
+void NotenBereichMarkieren(struct SEQUENZ *seq, int16 vtast, int16 btast, int32 vt, int32 bt) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
-	LONG z;
+	int32 z;
 	
 	if (vtast > btast) {z = vtast; vtast = btast; btast = z;}
 	if (vt > bt) {z = vt; vt = bt; bt = z;}
@@ -541,11 +541,11 @@ void NotenBereichMarkieren(struct SEQUENZ *seq, WORD vtast, WORD btast, LONG vt,
 	NotenEndenMarkieren(seq);
 }
 
-void ControllerMarkieren(struct SEQUENZ *seq, BYTE contr) {
+void ControllerMarkieren(struct SEQUENZ *seq, int8 contr) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
-	UBYTE zstatus;
+	uint8 zstatus;
 	
 	if (contr >= 0) zstatus = MS_Ctrl; else zstatus = ((contr + 5) << 4) + MS_PolyPress;
 		
@@ -564,12 +564,12 @@ void ControllerMarkieren(struct SEQUENZ *seq, BYTE contr) {
 	}
 }
 
-void MarkContrReduzieren(struct SEQUENZ *seq, WORD quant) {
+void MarkContrReduzieren(struct SEQUENZ *seq, int16 quant) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	struct EVENT *altev;
-	LONG z;
+	int32 z;
 	
 	evbl = seq->eventblock;
 	evnum = 0;
@@ -601,11 +601,11 @@ void MarkContrReduzieren(struct SEQUENZ *seq, WORD quant) {
 
 void MarkContrGlaetten(struct SEQUENZ *seq) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	struct EVENT *altev = NULL;
-	BYTE altdata2 = -1;
-	BYTE altaltdata2 = -1;
+	int8 altdata2 = -1;
+	int8 altaltdata2 = -1;
 	
 	evbl = seq->eventblock;
 	evnum = 0;
@@ -617,7 +617,7 @@ void MarkContrGlaetten(struct SEQUENZ *seq) {
 			if (altev) {
 				altdata2 = altev->data2;
 				if (altaltdata2 > -1) {
-					altev->data2 = (BYTE)(((WORD)altaltdata2 + (WORD)altev->data2 + (WORD)ev->data2) / 3);
+					altev->data2 = (int8)(((int16)altaltdata2 + (int16)altev->data2 + (int16)ev->data2) / 3);
 				}
 				altaltdata2 = altdata2;
 			}
@@ -630,13 +630,13 @@ void MarkContrGlaetten(struct SEQUENZ *seq) {
 
 void RepariereNoten(struct SEQUENZ *seq) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	BOOL noteon[128];
-	WORD n;
+	int16 n;
 	struct NOTEOFF {
-		LONG takt;
-		BYTE note;
+		int32 takt;
+		int8 note;
 		struct NOTEOFF *next;
 	};
 	struct NOTEOFF *rootnoteoff = NULL;
@@ -657,7 +657,7 @@ void RepariereNoten(struct SEQUENZ *seq) {
 		
 		if ((ev->status & MS_StatBits) == MS_NoteOn) {
 			if (noteon[ev->data1]) {
-				akt = AllocVec(sizeof(struct NOTEOFF), 0);
+				akt = IExec->AllocVecTags(sizeof(struct NOTEOFF), TAG_END);
 				if (akt) {
 					akt->takt = ev->zeit - 1;
 					akt->note = ev->data1;
@@ -683,7 +683,7 @@ void RepariereNoten(struct SEQUENZ *seq) {
 	while (akt) {
 		EventEinfuegen(seq, akt->takt, MS_NoteOff, akt->note, 0, FALSE);
 		next = akt->next;
-		FreeVec(akt);
+		IExec->FreeVec(akt);
 		akt = next;
 	}
 	
@@ -715,11 +715,11 @@ void RepariereNoten(struct SEQUENZ *seq) {
 	else Meldung(CAT(MSG_0207, "All notes are okay"));
 }
 
-BYTE ZerschneideSequenzNoten(struct SEQUENZ *seq, LONG t, BYTE trennart) {
+int8 ZerschneideSequenzNoten(struct SEQUENZ *seq, int32 t, int8 trennart) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *noteon[128];
-	WORD n;
+	int16 n;
 	struct EVENT *ev;
 	BOOL bruch;
 	

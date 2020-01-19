@@ -99,11 +99,7 @@ struct UMGEBUNG umgebung = {
 	NULL, // pfadphonolith
 	NULL, // startproj
 	FALSE, // startaktiv
-#ifdef __amigaos4__
 	TASTATUR_PC,
-#else
-	TASTATUR_AMIGA,
-#endif
 	40, //playerPri
 	30, //thruPri
 	64, //sysexpuffer
@@ -115,11 +111,11 @@ BOOL scranders = FALSE;
 void SpeichereUmgebung(void);
 
 void InitPfadStrings(void) {
-	umgebung.pfadproj = String_Copy(NULL, "Projects/");
-	umgebung.pfadsmf = String_Copy(NULL, "Midi/");
-	umgebung.pfadsysex = String_Copy(NULL, "SysEx/");
-	umgebung.pfadphonolith = String_Copy(NULL, "Phonolith");
-	umgebung.startproj = String_Copy(NULL, "PROGDIR:System/Autoload.horny");
+	umgebung.pfadproj = String_Copy(NULL, (STRPTR)"Projects/");
+	umgebung.pfadsmf = String_Copy(NULL, (STRPTR)"Midi/");
+	umgebung.pfadsysex = String_Copy(NULL, (STRPTR)"SysEx/");
+	umgebung.pfadphonolith = String_Copy(NULL, (STRPTR)"Phonolith");
+	umgebung.startproj = String_Copy(NULL, (STRPTR)"PROGDIR:System/Autoload.horny");
 }
 
 void EntfernePfadStrings(void) {
@@ -138,12 +134,12 @@ void ErstelleEnvSeiten(void) {
 		LAYOUT_AddChild, VLayoutObject,
 			LAYOUT_SpaceOuter, TRUE,
 			
-			LAYOUT_AddChild, envgad[GAD_WBSCREEN] = CheckBoxObject,
+			LAYOUT_AddChild, envgad[GAD_WBSCREEN] = (struct Gadget *)CheckBoxObject,
 				GA_ID, GAD_WBSCREEN, GA_Text, CAT(MSG_0053, "Use Workbench"),
 				GA_RelVerify, TRUE,
 			End,
 			
-			LAYOUT_AddChild, envgad[GAD_SCREENMODE] = GetScreenModeObject,
+			LAYOUT_AddChild, envgad[GAD_SCREENMODE] = (struct Gadget *)GetScreenModeObject,
 				GA_ID, GAD_SCREENMODE, GA_RelVerify, TRUE,
 				GETSCREENMODE_DoWidth, TRUE,
 				GETSCREENMODE_DoHeight, TRUE,
@@ -157,7 +153,7 @@ void ErstelleEnvSeiten(void) {
 			End,
 			Label(CAT(MSG_0054, "Mode")),
 
-			LAYOUT_AddChild, envgad[GAD_BACKDROP] = CheckBoxObject,
+			LAYOUT_AddChild, envgad[GAD_BACKDROP] = (struct Gadget *)CheckBoxObject,
 				GA_ID, GAD_BACKDROP, GA_Text, CAT(MSG_0055, "Main Window as Background"),
 				GA_RelVerify, TRUE,
 			End,
@@ -172,43 +168,41 @@ void ErstelleEnvSeiten(void) {
 		LAYOUT_AddChild, VLayoutObject,
 			LAYOUT_SpaceOuter, TRUE,
 			
-			LAYOUT_AddChild, envgad[GAD_PFADPROJ] = GetFileObject,
+			LAYOUT_AddChild, envgad[GAD_PFADPROJ] = (struct Gadget *)GetFileObject,
 				GA_ID, GAD_PFADPROJ, GA_RelVerify, TRUE,
 				GETFILE_DrawersOnly, TRUE,
 				GETFILE_FullFileExpand, FALSE,
 			End,
 			Label(CAT(MSG_0057, "Horny Projects")),
 
-			LAYOUT_AddChild, envgad[GAD_PFADSMF] = GetFileObject,
+			LAYOUT_AddChild, envgad[GAD_PFADSMF] = (struct Gadget *)GetFileObject,
 				GA_ID, GAD_PFADSMF, GA_RelVerify, TRUE,
 				GETFILE_DrawersOnly, TRUE,
 				GETFILE_FullFileExpand, FALSE,
 			End,
 			Label(CAT(MSG_0058, "Midi Files (SMF)")),
 
-			LAYOUT_AddChild, envgad[GAD_PFADSYSEX] = GetFileObject,
+			LAYOUT_AddChild, envgad[GAD_PFADSYSEX] = (struct Gadget *)GetFileObject,
 				GA_ID, GAD_PFADSYSEX, GA_RelVerify, TRUE,
 				GETFILE_DrawersOnly, TRUE,
 				GETFILE_FullFileExpand, FALSE,
 			End,
 			Label(CAT(MSG_0058A, "SysEx Files")),
 
-			#ifdef __amigaos4__
-			LAYOUT_AddChild, envgad[GAD_PFADPHONOLITH] = GetFileObject,
+			LAYOUT_AddChild, envgad[GAD_PFADPHONOLITH] = (struct Gadget *)GetFileObject,
 				GA_ID, GAD_PFADPHONOLITH, GA_RelVerify, TRUE,
 			End,
 			Label("Phonolith"),
-			#endif
 
 			LAYOUT_AddChild, VLayoutObject,
 				LAYOUT_Label, CAT(MSG_0059, "Start Project"), LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 
-				LAYOUT_AddChild, envgad[GAD_SPBENUTZEN] = CheckBoxObject,
+				LAYOUT_AddChild, envgad[GAD_SPBENUTZEN] = (struct Gadget *)CheckBoxObject,
 					GA_ID, GAD_SPBENUTZEN, GA_Text, CAT(MSG_0060, "Use for New Projects"),
 					GA_RelVerify, TRUE,
 				End,
 
-				LAYOUT_AddChild, envgad[GAD_STARTPROJ] = GetFileObject,
+				LAYOUT_AddChild, envgad[GAD_STARTPROJ] = (struct Gadget *)GetFileObject,
 					GA_ID, GAD_STARTPROJ, GA_RelVerify, TRUE,
 					GA_Disabled, TRUE,
 					GETFILE_FullFileExpand, FALSE,
@@ -222,9 +216,9 @@ void ErstelleEnvSeiten(void) {
 	End;
 
 	// Steuerungs-Einstellungen
-	NewList(&envkeyblist);
-	AddTail(&envkeyblist, AllocRadioButtonNode(1, RBNA_Labels, CAT(MSG_0062B, "Amiga Keyboard (Rec: <*> Fast: <[> <]> Marker: <+> <->)"), TAG_DONE));
-	AddTail(&envkeyblist, AllocRadioButtonNode(1, RBNA_Labels, CAT(MSG_0062C, "PC Keyboard (Rec: <-> Fast: </> <*> Marker: <PgUp> <PgDn>)"), TAG_DONE));
+	IExec->NewList(&envkeyblist);
+	IExec->AddTail(&envkeyblist, IRadioButton->AllocRadioButtonNode(1, RBNA_Label, CAT(MSG_0062B, "Amiga Keyboard (Rec: <*> Fast: <[> <]> Marker: <+> <->)"), TAG_DONE));
+	IExec->AddTail(&envkeyblist, IRadioButton->AllocRadioButtonNode(1, RBNA_Label, CAT(MSG_0062C, "PC Keyboard (Rec: <-> Fast: </> <*> Marker: <PgUp> <PgDn>)"), TAG_DONE));
 	
 	seitesteuerung = LayoutObject,
 		LAYOUT_AddChild, VLayoutObject,
@@ -233,7 +227,7 @@ void ErstelleEnvSeiten(void) {
 			LAYOUT_AddChild, VLayoutObject,
 				LAYOUT_Label, CAT(MSG_0062A, "Transport Functions (Numpad)"), LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 
-				LAYOUT_AddChild, envgad[GAD_TASTATUR] = RadioButtonObject,
+				LAYOUT_AddChild, envgad[GAD_TASTATUR] = (struct Gadget *)RadioButtonObject,
 					GA_ID, GAD_TASTATUR,
 					RADIOBUTTON_Labels, &envkeyblist,
 					GA_RelVerify, TRUE,
@@ -243,7 +237,7 @@ void ErstelleEnvSeiten(void) {
 			LAYOUT_AddChild, VLayoutObject,
 				LAYOUT_Label, CAT(MSG_0062I, "Mouse Wheels"), LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 
-				LAYOUT_AddChild, envgad[GAD_MAUSRADTAUSCHEN] = CheckBoxObject,
+				LAYOUT_AddChild, envgad[GAD_MAUSRADTAUSCHEN] = (struct Gadget *)CheckBoxObject,
 					GA_ID, GAD_MAUSRADTAUSCHEN, GA_Text, CAT(MSG_0062J, "Swap Horizontal/Vertical"),
 					GA_RelVerify, TRUE,
 				End,
@@ -267,7 +261,7 @@ void ErstelleEnvSeiten(void) {
 			LAYOUT_AddChild, VLayoutObject,
 				LAYOUT_Label, CAT(MSG_0062E, "Multitasking Priorities"), LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 
-				LAYOUT_AddChild, envgad[GAD_PLAYERPRI] = IntegerObject,
+				LAYOUT_AddChild, envgad[GAD_PLAYERPRI] = (struct Gadget *)IntegerObject,
 					GA_ID, GAD_PLAYERPRI, GA_RelVerify, TRUE,
 					INTEGER_Minimum, -128,
 					INTEGER_Maximum, 127,
@@ -276,7 +270,7 @@ void ErstelleEnvSeiten(void) {
 				Label(CAT(MSG_0062F, "Player Process")),
 				CHILD_WeightedWidth, 0,
 
-				LAYOUT_AddChild, envgad[GAD_THRUPRI] = IntegerObject,
+				LAYOUT_AddChild, envgad[GAD_THRUPRI] = (struct Gadget *)IntegerObject,
 					GA_ID, GAD_THRUPRI, GA_RelVerify, TRUE,
 					INTEGER_Minimum, -128,
 					INTEGER_Maximum, 127,
@@ -289,7 +283,7 @@ void ErstelleEnvSeiten(void) {
 			LAYOUT_AddChild, VLayoutObject,
 				LAYOUT_Label, "CAMD", LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 
-				LAYOUT_AddChild, envgad[GAD_SYSEXPUFFER] = IntegerObject,
+				LAYOUT_AddChild, envgad[GAD_SYSEXPUFFER] = (struct Gadget *)IntegerObject,
 					GA_ID, GAD_PLAYERPRI, GA_RelVerify, TRUE,
 					INTEGER_Minimum, 1,
 					INTEGER_MinVisible, 8,
@@ -308,23 +302,23 @@ void ErstelleUmgebungsfenster(void) {
 
 	if (!envfensterobj) {
 		if (!umgebung.screenmode) {
-			scr = LockPubScreen(NULL);
+			scr = IIntuition->LockPubScreen(NULL);
 			if (scr) {
-				umgebung.screenmode = GetVPModeID(&scr->ViewPort);
+				umgebung.screenmode = IGraphics->GetVPModeID(&scr->ViewPort);
 				umgebung.scrbreite = scr->Width;
 				umgebung.scrhoehe = scr->Height;
 				umgebung.scrtiefe = scr->RastPort.BitMap->Depth;
-				UnlockPubScreen(NULL, scr);
+				IIntuition->UnlockPubScreen(NULL, scr);
 			}
 		}
 
 		ErstelleEnvSeiten();
 
-		NewList(&envctlist);
-		AddTail(&envctlist, AllocClickTabNode(TNA_Text, CAT(MSG_0063, "Screen"), TNA_Number, 0, TAG_DONE));
-		AddTail(&envctlist, AllocClickTabNode(TNA_Text, CAT(MSG_0064, "Paths"), TNA_Number, 1, TAG_DONE));
-		AddTail(&envctlist, AllocClickTabNode(TNA_Text, CAT(MSG_0064A, "Control"), TNA_Number, 2, TAG_DONE));
-		AddTail(&envctlist, AllocClickTabNode(TNA_Text, CAT(MSG_0064B, "System"), TNA_Number, 3, TAG_DONE));
+		IExec->NewList(&envctlist);
+		IExec->AddTail(&envctlist, IClickTab->AllocClickTabNode(TNA_Text, CAT(MSG_0063, "Screen"), TNA_Number, 0, TAG_DONE));
+		IExec->AddTail(&envctlist, IClickTab->AllocClickTabNode(TNA_Text, CAT(MSG_0064, "Paths"), TNA_Number, 1, TAG_DONE));
+		IExec->AddTail(&envctlist, IClickTab->AllocClickTabNode(TNA_Text, CAT(MSG_0064A, "Control"), TNA_Number, 2, TAG_DONE));
+		IExec->AddTail(&envctlist, IClickTab->AllocClickTabNode(TNA_Text, CAT(MSG_0064B, "System"), TNA_Number, 3, TAG_DONE));
 
 		envfensterobj = WindowObject,
 			WA_PubScreen, hschirm,
@@ -338,10 +332,10 @@ void ErstelleUmgebungsfenster(void) {
 			WINDOW_ParentGroup, VLayoutObject,
 				LAYOUT_SpaceOuter, TRUE,
 
-				LAYOUT_AddChild, envgad[GAD_CLICKTAB] = ClickTabObject,
+				LAYOUT_AddChild, envgad[GAD_CLICKTAB] = (struct Gadget *)ClickTabObject,
 					GA_ID, GAD_CLICKTAB, GA_RelVerify, TRUE,
 					CLICKTAB_Labels, &envctlist,
-					CLICKTAB_PageGroup, envgad[GAD_PAGE] = PageObject,
+					CLICKTAB_PageGroup, envgad[GAD_PAGE] = (struct Gadget *)PageObject,
 						PAGE_Add, seitescreenmode,
 						PAGE_Add, seitepfade,
 						PAGE_Add, seitesteuerung,
@@ -367,68 +361,66 @@ void ErstelleUmgebungsfenster(void) {
 	
 	if (envfensterobj) {
 		if (fenp[ENV].b > 0) {
-			SetAttrs(envfensterobj,
+			IIntuition->SetAttrs(envfensterobj,
 				WA_Left, fenp[ENV].x, WA_Top, fenp[ENV].y,
 				WA_InnerWidth, fenp[ENV].b, WA_InnerHeight, fenp[ENV].h,
 				TAG_DONE);
 		}
 
-		SetPageGadgetAttrs(envgad[GAD_WBSCREEN], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_WBSCREEN], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GA_Selected, umgebung.wbscreen,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_SCREENMODE], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_SCREENMODE], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GA_Disabled, umgebung.wbscreen,
 			GETSCREENMODE_DisplayID, umgebung.screenmode,
 			GETSCREENMODE_DisplayWidth, umgebung.scrbreite,
 			GETSCREENMODE_DisplayHeight, umgebung.scrhoehe,
 			GETSCREENMODE_DisplayDepth, umgebung.scrtiefe,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_BACKDROP], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_BACKDROP], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GA_Disabled, umgebung.wbscreen,
 			GA_Selected, umgebung.backdrop,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_PFADPROJ], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_PFADPROJ], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GETFILE_Drawer, umgebung.pfadproj,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_PFADSMF], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_PFADSMF], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GETFILE_Drawer, umgebung.pfadsmf,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_PFADSYSEX], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_PFADSYSEX], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GETFILE_Drawer, umgebung.pfadsysex,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_SPBENUTZEN], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_SPBENUTZEN], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GA_Selected, umgebung.startaktiv,
 			TAG_DONE);
-		#ifdef __amigaos4__
-		SetPageGadgetAttrs(envgad[GAD_PFADPHONOLITH], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_PFADPHONOLITH], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GETFILE_FullFile, umgebung.pfadphonolith,
 			TAG_DONE);
-		#endif
-		SetPageGadgetAttrs(envgad[GAD_STARTPROJ], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_STARTPROJ], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GA_Disabled, !umgebung.startaktiv,
 			GETFILE_FullFile, umgebung.startproj,
 			TAG_DONE);
 
-		SetPageGadgetAttrs(envgad[GAD_TASTATUR], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_TASTATUR], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			RADIOBUTTON_Selected, umgebung.tastatur,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_MAUSRADTAUSCHEN], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_MAUSRADTAUSCHEN], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			GA_Selected, umgebung.mausradtauschen,
 			TAG_DONE);
 
-		SetPageGadgetAttrs(envgad[GAD_PLAYERPRI], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_PLAYERPRI], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			INTEGER_Number, umgebung.playerPri,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_THRUPRI], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_THRUPRI], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			INTEGER_Number, umgebung.thruPri,
 			TAG_DONE);
-		SetPageGadgetAttrs(envgad[GAD_SYSEXPUFFER], (Object *)envgad[GAD_PAGE], envfenster, NULL,
+		ILayout->SetPageGadgetAttrs(envgad[GAD_SYSEXPUFFER], (Object *)envgad[GAD_PAGE], envfenster, NULL,
 			INTEGER_Number, umgebung.sysexpuffer,
 			TAG_DONE);
 
 
 		envfenster = (struct Window *)RA_OpenWindow(envfensterobj);
-		SetMenuStrip(envfenster, minmenu);
+		IIntuition->SetMenuStrip(envfenster, minmenu);
 	}
 	scranders = FALSE;
 }
@@ -439,53 +431,55 @@ void EntferneUmgebungsfenster(void) {
 	if (envfensterobj) {
 		if (envfenster) {
 			HoleFensterObjpos(envfensterobj, ENV);
-			ClearMenuStrip(envfenster);
+			IIntuition->ClearMenuStrip(envfenster);
 		}
-		DisposeObject(envfensterobj);
+		IIntuition->DisposeObject(envfensterobj);
 		envfensterobj = NULL;
 		envfenster = NULL;
 		
-		while (node = RemTail(&envctlist)) FreeClickTabNode(node);
-		while (node = RemTail(&envkeyblist)) FreeRadioButtonNode(node);
+		while ((node = IExec->RemTail(&envctlist))) {
+			IClickTab->FreeClickTabNode(node);
+		}
+		while ((node = IExec->RemTail(&envkeyblist))) {
+			IRadioButton->FreeRadioButtonNode(node);
+		}
 	}
 }
 
 void UmgebungsGadgetsLesen(void) {
-	ULONG var;
+	uint32 var;
 	STRPTR str;
 
 	// Bildschirm
-	GetAttr(GA_Selected, (Object *)envgad[GAD_WBSCREEN], &var); umgebung.wbscreen = (BOOL)var;
-	GetAttr(GETSCREENMODE_DisplayID, (Object *)envgad[GAD_SCREENMODE], &umgebung.screenmode);
-	GetAttr(GETSCREENMODE_DisplayWidth, (Object *)envgad[GAD_SCREENMODE], &var); umgebung.scrbreite = (WORD)var;
-	GetAttr(GETSCREENMODE_DisplayHeight, (Object *)envgad[GAD_SCREENMODE], &var); umgebung.scrhoehe = (WORD)var;
-	GetAttr(GETSCREENMODE_DisplayDepth, (Object *)envgad[GAD_SCREENMODE], &var); umgebung.scrtiefe = (WORD)var;
-	GetAttr(GA_Selected, (Object *)envgad[GAD_BACKDROP], &var); umgebung.backdrop = (BOOL)var;
+	IIntuition->GetAttr(GA_Selected, (Object *)envgad[GAD_WBSCREEN], &var); umgebung.wbscreen = (BOOL)var;
+	IIntuition->GetAttr(GETSCREENMODE_DisplayID, (Object *)envgad[GAD_SCREENMODE], &umgebung.screenmode);
+	IIntuition->GetAttr(GETSCREENMODE_DisplayWidth, (Object *)envgad[GAD_SCREENMODE], &var); umgebung.scrbreite = (int16)var;
+	IIntuition->GetAttr(GETSCREENMODE_DisplayHeight, (Object *)envgad[GAD_SCREENMODE], &var); umgebung.scrhoehe = (int16)var;
+	IIntuition->GetAttr(GETSCREENMODE_DisplayDepth, (Object *)envgad[GAD_SCREENMODE], &var); umgebung.scrtiefe = (int16)var;
+	IIntuition->GetAttr(GA_Selected, (Object *)envgad[GAD_BACKDROP], &var); umgebung.backdrop = (BOOL)var;
 
 	// Pfade
-	GetAttr(GETFILE_Drawer, (Object *)envgad[GAD_PFADPROJ], (ULONG *)&str); umgebung.pfadproj = String_Copy(umgebung.pfadproj, str);
-	GetAttr(GETFILE_Drawer, (Object *)envgad[GAD_PFADSMF], (ULONG *)&str); umgebung.pfadsmf = String_Copy(umgebung.pfadsmf, str);
-	GetAttr(GETFILE_Drawer, (Object *)envgad[GAD_PFADSYSEX], (ULONG *)&str); umgebung.pfadsysex = String_Copy(umgebung.pfadsysex, str);
-	#ifdef __amigaos4__
-	GetAttr(GETFILE_FullFile, (Object *)envgad[GAD_PFADPHONOLITH], (ULONG *)&str); umgebung.pfadphonolith = String_Copy(umgebung.pfadphonolith, str);
-	#endif
-	GetAttr(GETFILE_FullFile, (Object *)envgad[GAD_STARTPROJ], (ULONG *)&str); umgebung.startproj = String_Copy(umgebung.startproj, str);
-	GetAttr(GA_Selected, (Object *)envgad[GAD_SPBENUTZEN], &var); umgebung.startaktiv = (BOOL)var;
+	IIntuition->GetAttr(GETFILE_Drawer, (Object *)envgad[GAD_PFADPROJ], (uint32 *)&str); umgebung.pfadproj = String_Copy(umgebung.pfadproj, str);
+	IIntuition->GetAttr(GETFILE_Drawer, (Object *)envgad[GAD_PFADSMF], (uint32 *)&str); umgebung.pfadsmf = String_Copy(umgebung.pfadsmf, str);
+	IIntuition->GetAttr(GETFILE_Drawer, (Object *)envgad[GAD_PFADSYSEX], (uint32 *)&str); umgebung.pfadsysex = String_Copy(umgebung.pfadsysex, str);
+	IIntuition->GetAttr(GETFILE_FullFile, (Object *)envgad[GAD_PFADPHONOLITH], (uint32 *)&str); umgebung.pfadphonolith = String_Copy(umgebung.pfadphonolith, str);
+	IIntuition->GetAttr(GETFILE_FullFile, (Object *)envgad[GAD_STARTPROJ], (uint32 *)&str); umgebung.startproj = String_Copy(umgebung.startproj, str);
+	IIntuition->GetAttr(GA_Selected, (Object *)envgad[GAD_SPBENUTZEN], &var); umgebung.startaktiv = (BOOL)var;
 
 	// Steuerung
-	GetAttr(RADIOBUTTON_Selected, (Object *)envgad[GAD_TASTATUR], &var); umgebung.tastatur = (UBYTE)var;
-	GetAttr(GA_Selected, (Object *)envgad[GAD_MAUSRADTAUSCHEN], &var); umgebung.mausradtauschen = (BOOL)var;
+	IIntuition->GetAttr(RADIOBUTTON_Selected, (Object *)envgad[GAD_TASTATUR], &var); umgebung.tastatur = (uint8)var;
+	IIntuition->GetAttr(GA_Selected, (Object *)envgad[GAD_MAUSRADTAUSCHEN], &var); umgebung.mausradtauschen = (BOOL)var;
 
 	// System
-	GetAttr(INTEGER_Number, (Object *)envgad[GAD_PLAYERPRI], &var); umgebung.playerPri = (BYTE)var;
-	GetAttr(INTEGER_Number, (Object *)envgad[GAD_THRUPRI], &var); umgebung.thruPri = (BYTE)var;
-	GetAttr(INTEGER_Number, (Object *)envgad[GAD_SYSEXPUFFER], &var); umgebung.sysexpuffer = (WORD)var;
+	IIntuition->GetAttr(INTEGER_Number, (Object *)envgad[GAD_PLAYERPRI], &var); umgebung.playerPri = (int8)var;
+	IIntuition->GetAttr(INTEGER_Number, (Object *)envgad[GAD_THRUPRI], &var); umgebung.thruPri = (int8)var;
+	IIntuition->GetAttr(INTEGER_Number, (Object *)envgad[GAD_SYSEXPUFFER], &var); umgebung.sysexpuffer = (int16)var;
 }
 
 BOOL KontrolleUmgebungsfenster(void) {
 	BOOL schliessen = FALSE;
-	ULONG result;
-	UWORD code;
+	uint32 result;
+	uint16 code;
 	
 	while ((result = RA_HandleInput(envfensterobj, &code)) != WMHI_LASTMSG) {
 		switch (result & WMHI_CLASSMASK) {
@@ -497,11 +491,11 @@ BOOL KontrolleUmgebungsfenster(void) {
 			switch (result & WMHI_GADGETMASK) {
 				case GAD_WBSCREEN:
 				scranders = TRUE;
-				if (SetGadgetAttrs(envgad[GAD_SCREENMODE], envfenster, NULL, GA_Disabled, code, TAG_DONE)) {
-					RethinkLayout(envgad[GAD_SCREENMODE], envfenster, NULL, TRUE);
+				if (IIntuition->SetGadgetAttrs(envgad[GAD_SCREENMODE], envfenster, NULL, GA_Disabled, code, TAG_DONE)) {
+					ILayout->RethinkLayout(envgad[GAD_SCREENMODE], envfenster, NULL, TRUE);
 				}
-				if (SetGadgetAttrs(envgad[GAD_BACKDROP], envfenster, NULL, GA_Disabled, code, TAG_DONE)) {
-					RethinkLayout(envgad[GAD_BACKDROP], envfenster, NULL, TRUE);
+				if (IIntuition->SetGadgetAttrs(envgad[GAD_BACKDROP], envfenster, NULL, GA_Disabled, code, TAG_DONE)) {
+					ILayout->RethinkLayout(envgad[GAD_BACKDROP], envfenster, NULL, TRUE);
 				}
 				break;
 				
@@ -526,14 +520,12 @@ BOOL KontrolleUmgebungsfenster(void) {
 				gfRequestDir((Object *)envgad[GAD_PFADSYSEX], envfenster);
 				break;
 
-				#ifdef __amigaos4__
 				case GAD_PFADPHONOLITH:
 				gfRequestFile((Object *)envgad[GAD_PFADPHONOLITH], envfenster);
 				break;
-				#endif
 
 				case GAD_SPBENUTZEN:
-				SetGadgetAttrs(envgad[GAD_STARTPROJ], envfenster, NULL, GA_Disabled, !code, TAG_DONE);
+				IIntuition->SetGadgetAttrs(envgad[GAD_STARTPROJ], envfenster, NULL, GA_Disabled, !code, TAG_DONE);
 				break;
 
 				case GAD_STARTPROJ:
@@ -560,7 +552,7 @@ BOOL KontrolleUmgebungsfenster(void) {
 	}
 	if (schliessen) {
 		HoleFensterObjpos(envfensterobj, ENV);
-		ClearMenuStrip(envfenster);
+		IIntuition->ClearMenuStrip(envfenster);
 		RA_CloseWindow(envfensterobj);
 		envfenster = NULL;
 		return(scranders);
@@ -573,27 +565,27 @@ void SpeichereUmgebung(void) {
 	BPTR file;
 	char zeile[1024];
 	
-	file = Open("PROGDIR:System/environment.config", MODE_NEWFILE);
+	file = IDOS->Open("PROGDIR:System/environment.config", MODE_NEWFILE);
 	if (file) {
-		sprintf(zeile, "wb_screen=%d\n", umgebung.wbscreen); FPuts(file, zeile);
-		sprintf(zeile, "screen_mode=%ld\n", umgebung.screenmode); FPuts(file, zeile);
-		sprintf(zeile, "screen_width=%d\n", umgebung.scrbreite); FPuts(file, zeile);
-		sprintf(zeile, "screen_height=%d\n", umgebung.scrhoehe); FPuts(file, zeile);
-		sprintf(zeile, "screen_depth=%d\n", umgebung.scrtiefe); FPuts(file, zeile);
-		sprintf(zeile, "backdrop=%d\n", umgebung.backdrop); FPuts(file, zeile);
-		sprintf(zeile, "path_project=%s\n", umgebung.pfadproj); FPuts(file, zeile);
-		sprintf(zeile, "path_midi=%s\n", umgebung.pfadsmf); FPuts(file, zeile);
-		sprintf(zeile, "path_sysex=%s\n", umgebung.pfadsysex); FPuts(file, zeile);
-		sprintf(zeile, "path_phonolith=%s\n", umgebung.pfadphonolith); FPuts(file, zeile);
-		sprintf(zeile, "start_project=%s\n", umgebung.startproj); FPuts(file, zeile);
-		sprintf(zeile, "start_project_active=%d\n", umgebung.startaktiv); FPuts(file, zeile);
-		sprintf(zeile, "keyboard_type=%d\n", umgebung.tastatur); FPuts(file, zeile);
-		sprintf(zeile, "mouse_wheel_swap=%d\n", umgebung.mausradtauschen); FPuts(file, zeile);
-		sprintf(zeile, "player_priority=%d\n", umgebung.playerPri); FPuts(file, zeile);
-		sprintf(zeile, "thru_priority=%d\n", umgebung.thruPri); FPuts(file, zeile);
-		sprintf(zeile, "sysex_buffer_size=%d\n", umgebung.sysexpuffer); FPuts(file, zeile);
+		sprintf(zeile, "wb_screen=%d\n", umgebung.wbscreen); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "screen_mode=%ld\n", umgebung.screenmode); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "screen_width=%d\n", umgebung.scrbreite); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "screen_height=%d\n", umgebung.scrhoehe); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "screen_depth=%d\n", umgebung.scrtiefe); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "backdrop=%d\n", umgebung.backdrop); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "path_project=%s\n", umgebung.pfadproj); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "path_midi=%s\n", umgebung.pfadsmf); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "path_sysex=%s\n", umgebung.pfadsysex); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "path_phonolith=%s\n", umgebung.pfadphonolith); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "start_project=%s\n", umgebung.startproj); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "start_project_active=%d\n", umgebung.startaktiv); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "keyboard_type=%d\n", umgebung.tastatur); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "mouse_wheel_swap=%d\n", umgebung.mausradtauschen); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "player_priority=%d\n", umgebung.playerPri); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "thru_priority=%d\n", umgebung.thruPri); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "sysex_buffer_size=%d\n", umgebung.sysexpuffer); IDOS->FPuts(file, zeile);
 
-		Close(file);
+		IDOS->Close(file);
 	}
 }
 
@@ -601,17 +593,17 @@ void SpeichereFensterPos(void) {
 	BPTR file;
 	char zeile[1024];
 	
-	file = Open("PROGDIR:System/windows.config", MODE_NEWFILE);
+	file = IDOS->Open("PROGDIR:System/windows.config", MODE_NEWFILE);
 	if (file) {
-		sprintf(zeile, "window_main=%d/%d/%d/%d\n", fenp[HAUPT].x, fenp[HAUPT].y, fenp[HAUPT].b, fenp[HAUPT].h); FPuts(file, zeile);
-		sprintf(zeile, "window_set=%d/%d/%d/%d\n", fenp[SET].x, fenp[SET].y, fenp[SET].b, fenp[SET].h); FPuts(file, zeile);
-		sprintf(zeile, "window_env=%d/%d/%d/%d\n", fenp[ENV].x, fenp[ENV].y, fenp[ENV].b, fenp[ENV].h); FPuts(file, zeile);
-		sprintf(zeile, "window_ed=%d/%d/%d/%d\n", fenp[ED].x, fenp[ED].y, fenp[ED].b, fenp[ED].h); FPuts(file, zeile);
-		sprintf(zeile, "window_sex=%d/%d/%d/%d\n", fenp[SEX].x, fenp[SEX].y, fenp[SEX].b, fenp[SEX].h); FPuts(file, zeile);
-		sprintf(zeile, "window_mp=%d/%d/%d/%d\n", fenp[MISCHER].x, fenp[MISCHER].y, fenp[MISCHER].b, fenp[MISCHER].h); FPuts(file, zeile);
-		sprintf(zeile, "window_cc=%d/%d/%d/%d\n", fenp[CC].x, fenp[CC].y, fenp[CC].b, fenp[CC].h); FPuts(file, zeile);
+		sprintf(zeile, "window_main=%d/%d/%d/%d\n", fenp[HAUPT].x, fenp[HAUPT].y, fenp[HAUPT].b, fenp[HAUPT].h); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "window_set=%d/%d/%d/%d\n", fenp[SET].x, fenp[SET].y, fenp[SET].b, fenp[SET].h); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "window_env=%d/%d/%d/%d\n", fenp[ENV].x, fenp[ENV].y, fenp[ENV].b, fenp[ENV].h); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "window_ed=%d/%d/%d/%d\n", fenp[ED].x, fenp[ED].y, fenp[ED].b, fenp[ED].h); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "window_sex=%d/%d/%d/%d\n", fenp[SEX].x, fenp[SEX].y, fenp[SEX].b, fenp[SEX].h); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "window_mp=%d/%d/%d/%d\n", fenp[MISCHER].x, fenp[MISCHER].y, fenp[MISCHER].b, fenp[MISCHER].h); IDOS->FPuts(file, zeile);
+		sprintf(zeile, "window_cc=%d/%d/%d/%d\n", fenp[CC].x, fenp[CC].y, fenp[CC].b, fenp[CC].h); IDOS->FPuts(file, zeile);
 
-		Close(file);
+		IDOS->Close(file);
 	}
 }
 
@@ -621,9 +613,9 @@ void LadeUmgebung(void) {
 	STRPTR wert;
 	char *ende;
 	
-	file = Open("PROGDIR:System/environment.config", MODE_OLDFILE);
+	file = IDOS->Open("PROGDIR:System/environment.config", MODE_OLDFILE);
 	if (file) {
-		while (FGets(file, zeile, 1024)) {
+		while (IDOS->FGets(file, zeile, 1024)) {
 			wert = strchr(zeile, '=');
 			if (wert) {
 				*wert++ = 0;
@@ -632,10 +624,10 @@ void LadeUmgebung(void) {
 				if (ende) *ende = 0;
 				
 				if (strcmp(zeile, "wb_screen") == 0) umgebung.wbscreen = (BOOL)atoi(wert);
-				else if (strcmp(zeile, "screen_mode") == 0) umgebung.screenmode = (ULONG)atol(wert);
-				else if (strcmp(zeile, "screen_width") == 0) umgebung.scrbreite = (WORD)atoi(wert);
-				else if (strcmp(zeile, "screen_height") == 0) umgebung.scrhoehe = (WORD)atoi(wert);
-				else if (strcmp(zeile, "screen_depth") == 0) umgebung.scrtiefe = (UBYTE)atoi(wert);
+				else if (strcmp(zeile, "screen_mode") == 0) umgebung.screenmode = (uint32)atol(wert);
+				else if (strcmp(zeile, "screen_width") == 0) umgebung.scrbreite = (int16)atoi(wert);
+				else if (strcmp(zeile, "screen_height") == 0) umgebung.scrhoehe = (int16)atoi(wert);
+				else if (strcmp(zeile, "screen_depth") == 0) umgebung.scrtiefe = (uint8)atoi(wert);
 				else if (strcmp(zeile, "backdrop") == 0) umgebung.backdrop = (BOOL)atoi(wert);
 				else if (strcmp(zeile, "path_project") == 0) umgebung.pfadproj = String_Copy(umgebung.pfadproj, wert);
 				else if (strcmp(zeile, "path_midi") == 0) umgebung.pfadsmf = String_Copy(umgebung.pfadsmf, wert);
@@ -643,19 +635,19 @@ void LadeUmgebung(void) {
 				else if (strcmp(zeile, "path_phonolith") == 0) umgebung.pfadphonolith = String_Copy(umgebung.pfadphonolith, wert);
 				else if (strcmp(zeile, "start_project") == 0) umgebung.startproj = String_Copy(umgebung.startproj, wert);
 				else if (strcmp(zeile, "start_project_active") == 0) umgebung.startaktiv = (BOOL)atoi(wert);
-				else if (strcmp(zeile, "keyboard_type") == 0) umgebung.tastatur = (UBYTE)atoi(wert);
+				else if (strcmp(zeile, "keyboard_type") == 0) umgebung.tastatur = (uint8)atoi(wert);
 				else if (strcmp(zeile, "mouse_wheel_swap") == 0) umgebung.mausradtauschen = (BOOL)atoi(wert);
 
-				else if (strcmp(zeile, "player_priority") == 0) umgebung.playerPri = (BYTE)atoi(wert);
-				else if (strcmp(zeile, "thru_priority") == 0) umgebung.thruPri = (BYTE)atoi(wert);
-				else if (strcmp(zeile, "sysex_buffer_size") == 0) umgebung.sysexpuffer = (WORD)atoi(wert);
+				else if (strcmp(zeile, "player_priority") == 0) umgebung.playerPri = (int8)atoi(wert);
+				else if (strcmp(zeile, "thru_priority") == 0) umgebung.thruPri = (int8)atoi(wert);
+				else if (strcmp(zeile, "sysex_buffer_size") == 0) umgebung.sysexpuffer = (int16)atoi(wert);
 			}
 		}
-		Close(file);
+		IDOS->Close(file);
 	}
 }
 
-void DekodiereFensterPos(UBYTE fenid, STRPTR wert) {
+void DekodiereFensterPos(uint8 fenid, STRPTR wert) {
 	fenp[fenid].x = atoi(wert);
 	wert = strchr(wert, '/');
 	if (wert) {wert++; fenp[fenid].y = atoi(wert);}
@@ -671,9 +663,9 @@ void LadeFensterPos(void) {
 	STRPTR wert;
 	char *ende;
 	
-	file = Open("PROGDIR:System/windows.config", MODE_OLDFILE);
+	file = IDOS->Open("PROGDIR:System/windows.config", MODE_OLDFILE);
 	if (file) {
-		while (FGets(file, zeile, 1024)) {
+		while (IDOS->FGets(file, zeile, 1024)) {
 			wert = strchr(zeile, '=');
 			if (wert) {
 				*wert++ = 0;
@@ -690,6 +682,6 @@ void LadeFensterPos(void) {
 				else if (strcmp(zeile, "window_cc") == 0) DekodiereFensterPos(CC, wert);
 			}
 		}
-		Close(file);
+		IDOS->Close(file);
 	}
 }

@@ -12,13 +12,13 @@
 #include "Gui.h"
 #include "Gui2.h"
 
-extern WORD snum;
+extern int16 snum;
 extern struct LIED lied;
 extern struct SPUR spur[];
 extern struct SPURTEMP sp[];
 extern struct GUI gui;
 
-void InitSpur(WORD s) {
+void InitSpur(int16 s) {
 	sprintf(spur[s].name, CAT(MSG_0007, "Track %d"), s + 1);
 	spur[s].port = 0;
 	spur[s].channel = 0;
@@ -35,8 +35,8 @@ void InitSpur(WORD s) {
 }
 
 void AktualisiereSpuren(BOOL spalten) {
-	WORD n;
-	WORD s;
+	int16 n;
+	int16 s;
 	
 	KeinePosition();
 	for (n = 0; n < gui.spsicht; n++) {
@@ -54,7 +54,7 @@ void AktualisiereSpuren(BOOL spalten) {
 	ZeichnePosition(TRUE);
 }
 
-BOOL SpurInSicht(WORD s) {
+BOOL SpurInSicht(int16 s) {
 	if (s == gui.spur - 1) {gui.spur--; return(TRUE);}
 	if (s == gui.spur + gui.spsicht) {gui.spur++; return(TRUE);}
 	if ((s < gui.spur) || (s >= gui.spur + gui.spsicht)) {
@@ -65,7 +65,7 @@ BOOL SpurInSicht(WORD s) {
 	return(FALSE);
 }
 
-void SpurAktivieren(WORD s) {
+void SpurAktivieren(int16 s) {
 	if (SpurInSicht(s)) {
 		snum = s;
 		KeinePosition(); ZeichneSpuren(TRUE, TRUE); ZeichnePosition(TRUE);
@@ -79,7 +79,7 @@ void SpurAktivieren(WORD s) {
 	AktualisiereFunctGadgets();
 }
 
-void SpurScroll(WORD ds) {
+void SpurScroll(int16 ds) {
 	if (ds < 0) {
 		if (gui.spur > 0) {
 			gui.spur--;
@@ -94,11 +94,11 @@ void SpurScroll(WORD ds) {
 	AktualisiereGadgets();
 }
 
-void FolgenderName(STRPTR name, WORD spur) {
-	WORD i;
-	WORD len = strlen(name);
+void FolgenderName(STRPTR name, int16 spur) {
+	int16 i;
+	int16 len = strlen(name);
 	char puf[256];
-	WORD z;
+	int16 z;
 	
 	for (i = len - 1; i >= 0; i--) {
 		if (name[i] < '0' || name[i] > '9') break;
@@ -136,10 +136,10 @@ void NeueSpur(void) {
 	}
 }
 
-void SpurLoeschen(WORD s) {
+void SpurLoeschen(int16 s) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *zseq;
-	WORD n;
+	int16 n;
 
 	seq = spur[s].seq;
 	while (seq) {
@@ -182,9 +182,9 @@ void SpurLoeschen(WORD s) {
 	}
 }
 
-void SpurVerschieben(WORD s1, WORD s2) {
+void SpurVerschieben(int16 s1, int16 s2) {
 	struct SPUR ksp;
-	WORD n;
+	int16 n;
 	
 	memcpy(&ksp, &spur[s1], sizeof(struct SPUR));
 	KeinePosition();
@@ -208,8 +208,8 @@ void SpurVerschieben(WORD s1, WORD s2) {
 	ZeichnePosition(TRUE);
 }
 
-void SpurDuplizieren(WORD s) {
-	WORD neus;
+void SpurDuplizieren(int16 s) {
+	int16 neus;
 	
 	if (lied.spuranz < verSPUREN) {
 		lied.spuranz++; neus = lied.spuranz - 1;
@@ -231,14 +231,14 @@ void SpurDuplizieren(WORD s) {
 }
 
 
-void SpurMuteSchalter(WORD s) {
+void SpurMuteSchalter(int16 s) {
 	spur[s].mute = !spur[s].mute;
 	if (spur[s].mute) SpurAbklingen(s);
 	ZeichneSpurSpalte(s, s == snum);
 }
 
-void SpurSolo(WORD s) {
-	WORD n;
+void SpurSolo(int16 s) {
+	int16 n;
 	
 	spur[s].mute = FALSE; ZeichneSpurSpalte(s, s == snum);
 	for (n = 0; n < lied.spuranz; n++) {
@@ -250,7 +250,7 @@ void SpurSolo(WORD s) {
 }
 
 void SpurenMutesAus(void) {
-	WORD s;
+	int16 s;
 	
 	for (s = 0; s < lied.spuranz; s++) {
 		if (spur[s].mute) {

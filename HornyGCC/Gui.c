@@ -12,9 +12,7 @@
 #include <proto/checkbox.h>
 #include <proto/slider.h>
 #include <proto/chooser.h>
-#ifdef __amigaos4__
 #include <proto/layers.h>
-#endif
 
 #include <intuition/gadgetclass.h>
 #include <intuition/icclass.h>
@@ -23,6 +21,7 @@
 #include <gadgets/checkbox.h>
 #include <gadgets/slider.h>
 #include <gadgets/chooser.h>
+#include <gadgets/page.h>
 
 #include "catalogids.h"
 
@@ -36,26 +35,9 @@
 #include "DTGrafik.h"
 #include "Midi.h"
 
-#define CAT(X,Y) GetCatalogStr(catalog,X,Y)
+#include "oca.h"
 
-#ifndef __amigaos4__
-struct Library *ButtonBase = NULL;
-struct Library *ScrollerBase = NULL;
-struct Library *ChooserBase = NULL;
-struct Library *StringBase = NULL;
-struct Library *IntegerBase = NULL;
-struct Library *SliderBase = NULL;
-struct Library *CheckBoxBase = NULL;
-struct Library *ListBrowserBase = NULL;
-struct Library *WindowBase = NULL;
-struct Library *LayoutBase = NULL;
-struct Library *LabelBase = NULL;
-struct Library *ClickTabBase = NULL;
-struct Library *GetScreenModeBase = NULL;
-struct Library *GetFileBase = NULL;
-struct Library *RadioButtonBase = NULL;
-struct Library *BitMapBase = NULL;
-#endif
+#define CAT(X,Y) ILocale->GetCatalogStr(catalog,X,Y)
 
 struct TextFont *font = NULL;
 struct Catalog *catalog = NULL;
@@ -74,15 +56,15 @@ struct FENSTERPOS fenp[] = {
 	{20, 30, 0, 0} //CC
 };
 
-extern WORD guibox;
-extern WORD guileiste;
-WORD altposx = -1;
-WORD alteditx = -1;
-WORD altprjstart = -1;
-WORD altprjende = -1;
-WORD randlr;
-WORD randou;
-LONG guifar[FARBEN_ANZ];
+extern int16 guibox;
+extern int16 guileiste;
+int16 altposx = -1;
+int16 alteditx = -1;
+int16 altprjstart = -1;
+int16 altprjende = -1;
+int16 randlr;
+int16 randou;
+int32 guifar[FARBEN_ANZ];
 char fenstertitel[55];
 
 extern Object *setfensterobj;
@@ -91,11 +73,11 @@ extern Object *sexfensterobj;
 extern struct Window *edfenster;
 extern struct Window *mpfenster;
 extern Object *ccfensterobj;
-WORD edaltposx = -1;
-WORD edalteditx = -1;
-extern WORD edlr;
-extern WORD edou;
-extern WORD edguibox;
+int16 edaltposx = -1;
+int16 edalteditx = -1;
+extern int16 edlr;
+extern int16 edou;
+extern int16 edguibox;
 extern struct EDGUI edgui;
 
 extern struct GUI gui;
@@ -106,133 +88,87 @@ extern struct LOOP loop;
 extern struct METRONOM metro;
 extern struct UMGEBUNG umgebung;
 
-extern LONG takt;
-extern LONG edittakt;
-extern WORD snum;
+extern int32 takt;
+extern int32 edittakt;
+extern int16 snum;
 
 extern struct MARKER *rootmark;
 struct List markerlist = {NULL};
 extern struct MARKER *sprung[20];
 
-struct TagItem guimapscroller[] = {SCROLLER_Top, ICSPECIAL_CODE, TAG_DONE};
-struct TagItem guimapslider[] = {SLIDER_Level, ICSPECIAL_CODE, TAG_DONE};
+struct TagItem guimapscroller[] = {{SCROLLER_Top, ICSPECIAL_CODE}, {TAG_DONE, TAG_DONE}};
+struct TagItem guimapslider[] = {{SLIDER_Level, ICSPECIAL_CODE}, {TAG_DONE, TAG_DONE}};
 
 extern Object *bmo[];
 
 struct Hook *backfill = NULL;
-#ifdef __amigaos4__
 struct DrawInfo *drinfo = NULL;
 struct GradientSpec gradspec;
 struct Library *LayersBase = NULL;
 struct LayersIFace *ILayers = NULL;
-#endif
 
 void OeffneFont(void) {
 	struct TextAttr textattr = {"helvetica.font", 11, FS_NORMAL, 0};
 
-	font = OpenDiskFont(&textattr);
+	font = IDiskfont->OpenDiskFont(&textattr);
 }
 
 void EntferneFont(void) {
-	CloseFont(font);
+	IGraphics->CloseFont(font);
 }
 
 void ErstelleGuiClasses(void) {
-#ifndef __amigaos4__
-	if (!(ButtonBase = OpenLibrary("gadgets/button.gadget", 44))) Meldung("Could not open button.gadget");
-	if (!(ScrollerBase = OpenLibrary("gadgets/scroller.gadget", 44))) Meldung("Could not open scroller.gadget");
-	if (!(ChooserBase = OpenLibrary("gadgets/chooser.gadget", 44))) Meldung("Could not open chooser.gadget");
-	if (!(StringBase = OpenLibrary("gadgets/string.gadget", 44))) Meldung("Could not open string.gadget");
-	if (!(IntegerBase = OpenLibrary("gadgets/integer.gadget", 44))) Meldung("Could not open integer.gadget");
-	if (!(SliderBase = OpenLibrary("gadgets/slider.gadget", 44))) Meldung("Could not open slider.gadget");
-	if (!(CheckBoxBase = OpenLibrary("gadgets/checkbox.gadget", 44))) Meldung("Could not open checkbox.gadget");
-	if (!(ListBrowserBase = OpenLibrary("gadgets/listbrowser.gadget", 44))) Meldung("Could not open listbrowser.gadget");
-	if (!(WindowBase = OpenLibrary("window.class", 44))) Meldung("Could not open window.class");
-	if (!(LayoutBase = OpenLibrary("gadgets/layout.gadget", 44))) Meldung("Could not open layout.gadget");
-	if (!(LabelBase = OpenLibrary("images/label.image", 44))) Meldung("Could not open label.image");
-	if (!(ClickTabBase = OpenLibrary("gadgets/clicktab.gadget", 44))) Meldung("Could not open clicktab.gadget");
-	if (!(GetScreenModeBase = OpenLibrary("gadgets/getscreenmode.gadget", 44))) Meldung("Could not open getscreenmode.gadget");
-	if (!(GetFileBase = OpenLibrary("gadgets/getfile.gadget", 44))) Meldung("Could not open getfile.gadget");
-	if (!(RadioButtonBase = OpenLibrary("gadgets/radiobutton.gadget", 44))) Meldung("Could not open radiobutton.gadget");
-	if (!(BitMapBase = OpenLibrary("images/bitmap.image", 44))) Meldung("Could not open bitmap.image");
-#endif
 
-#ifdef __amigaos4__
-	LayersBase = OpenLibrary("layers.library", 45);
+	LayersBase = IExec->OpenLibrary("layers.library", 45);
 	if (LayersBase) {
-		ILayers = (struct LayersIFace *)GetInterface(LayersBase, "main", 1, NULL);
-		if (!ILayers) Meldung("Could not obtain layers interface");
-	} else Meldung("Could not open layers.library");
-#endif
+		ILayers = (struct LayersIFace *)IExec->GetInterface(LayersBase, "main", 1, NULL);
+		if (!ILayers) Meldung((STRPTR)"Could not obtain layers interface");
+	} else Meldung((STRPTR)"Could not open layers.library");
 
-	catalog = OpenCatalogA(NULL, "Horny.catalog", NULL);
+	catalog = ILocale->OpenCatalogA(NULL, "Horny.catalog", NULL);
 }
 
 void EntferneGuiClasses(void) {
 
-#ifndef __amigaos4__
-	CloseLibrary(ButtonBase);
-	CloseLibrary(ScrollerBase);
-	CloseLibrary(ChooserBase);
-	CloseLibrary(StringBase);
-	CloseLibrary(IntegerBase);
-	CloseLibrary(SliderBase);
-	CloseLibrary(CheckBoxBase);
-	CloseLibrary(ListBrowserBase);
-	CloseLibrary(WindowBase);
-	CloseLibrary(LayoutBase);
-	CloseLibrary(LabelBase);
-	CloseLibrary(ClickTabBase);
-	CloseLibrary(GetScreenModeBase);
-	CloseLibrary(GetFileBase);
-	CloseLibrary(RadioButtonBase);
-	CloseLibrary(BitMapBase);
-#endif
-	CloseCatalog(catalog);
-#ifdef __amigaos4__
-	DropInterface(ILayers);
-	CloseLibrary(LayersBase);
-#endif
+	ILocale->CloseCatalog(catalog);
+	IExec->DropInterface((struct Interface *)ILayers);
+	IExec->CloseLibrary(LayersBase);
 }
 
 void ErstelleFarben(void) {
-	WORD f;
+	int16 f;
 
-	guifar[0] = ObtainBestPen(hfenster->WScreen->ViewPort.ColorMap, 0xAAAAAAAA, 0xAAAAAAAA, 0xAAAAAAAA, OBP_Precision, PRECISION_EXACT, TAG_DONE);
+	guifar[0] = IGraphics->ObtainBestPen(hfenster->WScreen->ViewPort.ColorMap, 0xAAAAAAAA, 0xAAAAAAAA, 0xAAAAAAAA, OBP_Precision, PRECISION_EXACT, TAG_DONE);
 	for (f = 1; f < 4; f++) guifar[f] = f;
 	for (f = 0; f < FARBEN_ANZ - 4; f++) {
-		guifar[f + 4] = ObtainBestPen(hfenster->WScreen->ViewPort.ColorMap, farbe[f].r, farbe[f].g, farbe[f].b, OBP_Precision, PRECISION_EXACT, TAG_DONE);
+		guifar[f + 4] = IGraphics->ObtainBestPen(hfenster->WScreen->ViewPort.ColorMap, farbe[f].r, farbe[f].g, farbe[f].b, OBP_Precision, PRECISION_EXACT, TAG_DONE);
 	}
 
-#ifdef __amigaos4__
-	drinfo = GetScreenDrawInfo(hfenster->WScreen);
+	drinfo = IIntuition->GetScreenDrawInfo(hfenster->WScreen);
 	memset(&gradspec, 0, sizeof(gradspec));
 	gradspec.Mode = GRADMODE_SIMPLE | GRADMODE_PALETTE; //COLOR;
 	
-	backfill = CreateBackFillHook(BFHA_APen, guifar[0], TAG_DONE);
-#endif
+	backfill = ILayers->CreateBackFillHook(BFHA_APen, guifar[0], TAG_DONE);
 }
 
 void EntferneFarben(void) {
-	WORD f;
+	int16 f;
 
-	ReleasePen(hfenster->WScreen->ViewPort.ColorMap, guifar[0]);
-	for (f = 4; f < FARBEN_ANZ; f++) ReleasePen(hfenster->WScreen->ViewPort.ColorMap, guifar[f]);
+	IGraphics->ReleasePen(hfenster->WScreen->ViewPort.ColorMap, guifar[0]);
+	for (f = 4; f < FARBEN_ANZ; f++) IGraphics->ReleasePen(hfenster->WScreen->ViewPort.ColorMap, guifar[f]);
 
-#ifdef __amigaos4__
-	FreeScreenDrawInfo(hfenster->WScreen, drinfo);
+	IIntuition->FreeScreenDrawInfo(hfenster->WScreen, drinfo);
 	drinfo = NULL;
 	
-	DeleteBackFillHook(backfill);
+	ILayers->DeleteBackFillHook(backfill);
 	backfill = NULL;
-#endif
 }
 
 void ErstelleBildschirm(void) {
-	UWORD pens = ~0;
+	uint16 pens = ~0;
 
 	if (!umgebung.wbscreen) {
-		hschirm = OpenScreenTags(NULL,
+		hschirm = IIntuition->OpenScreenTags(NULL,
 			SA_Width, umgebung.scrbreite,
 			SA_Height, umgebung.scrhoehe,
 			SA_Depth, umgebung.scrtiefe,
@@ -246,24 +182,24 @@ void ErstelleBildschirm(void) {
 			SA_SharePens, TRUE,
 			SA_Behind, TRUE,
 			TAG_DONE);
-		if (!hschirm) Meldung(CAT(MSG_0140, "Could not open screen"));
+		if (!hschirm) Meldung((STRPTR)CAT(MSG_0140, "Could not open screen"));
 	}
 }
 
 void ZeigeBildschirm(void) {
-	if (hschirm) ScreenToFront(hschirm);
+	if (hschirm) IIntuition->ScreenToFront(hschirm);
 }
 
 void ErstelleHauptfenster(void) {
 	struct Screen *scr;
 	BOOL fensterform;
-	WORD winx, winy, winbr, winho;
+	int16 winx, winy, winbr, winho;
 
 	if (hschirm) {
-		PubScreenStatus(hschirm, 0);
+		IIntuition->PubScreenStatus(hschirm, 0);
 		scr = hschirm;
 	} else {
-		scr = LockPubScreen(NULL);
+		scr = IIntuition->LockPubScreen(NULL);
 	}
 	if (hschirm && umgebung.backdrop) {
 		fensterform = FALSE;
@@ -276,7 +212,7 @@ void ErstelleHauptfenster(void) {
 		winbr = fenp[HAUPT].b; winho = fenp[HAUPT].h;
 	}
 
-	hfenster = OpenWindowTags(NULL,
+	hfenster = IIntuition->OpenWindowTags(NULL,
 		WA_PubScreen, hschirm,
 		WA_Left, winx,
 		WA_Top, winy,
@@ -289,9 +225,7 @@ void ErstelleHauptfenster(void) {
 		WA_IDCMP, IDCMP_RAWKEY | IDCMP_MOUSEBUTTONS | IDCMP_MOUSEMOVE | IDCMP_NEWSIZE |
 					IDCMP_VANILLAKEY | IDCMP_GADGETUP | IDCMP_GADGETDOWN | IDCMP_MENUPICK |
 					IDCMP_IDCMPUPDATE | IDCMP_CLOSEWINDOW
-#ifdef __amigaos4__
 					| IDCMP_EXTENDEDMOUSE
-#endif
 					,
 		WA_SizeGadget, fensterform,
 		WA_DragBar, fensterform,
@@ -304,31 +238,29 @@ void ErstelleHauptfenster(void) {
 		WA_SmartRefresh, TRUE,
 		WA_Activate, TRUE,
 		TAG_DONE);
-	if (!hschirm) UnlockPubScreen(NULL, scr);
-	SetDrMd(hfenster->RPort, JAM1);
-	SetFont(hfenster->RPort, font);
+	if (!hschirm) IIntuition->UnlockPubScreen(NULL, scr);
+	IGraphics->SetDrMd(hfenster->RPort, JAM1);
+	IGraphics->SetFont(hfenster->RPort, font);
 	randlr = hfenster->BorderLeft + hfenster->BorderRight;
 	randou = hfenster->BorderTop + hfenster->BorderBottom;
 	ErstelleFarben();
-#ifdef __amigaos4__
-	InstallLayerHook(hfenster->RPort->Layer, backfill);
-#endif
+	ILayers->InstallLayerHook(hfenster->RPort->Layer, backfill);
 	aktfenster = hfenster;
 }
 
 void EntferneHauptfenster(void) {
 	HoleFensterWinpos(hfenster, HAUPT);
 	EntferneFarben();
-	CloseWindow(hfenster); hfenster = NULL; aktfenster = NULL;
+	IIntuition->CloseWindow(hfenster); hfenster = NULL; aktfenster = NULL;
 }
 
 void EntferneBildschirm(void) {
 	if (hschirm) {
-		while (!CloseScreen(hschirm)) {
-			aktfenster = OpenWindowTags(NULL, WA_PubScreen, hschirm, WA_Width, 16, WA_Height, 16, WA_Borderless, TRUE, WA_Backdrop, TRUE, TAG_DONE);
-			Meldung(CAT(MSG_0141, "There are open windows.\nCannot close screen."));
+		while (!IIntuition->CloseScreen(hschirm)) {
+			aktfenster = IIntuition->OpenWindowTags(NULL, WA_PubScreen, hschirm, WA_Width, 16, WA_Height, 16, WA_Borderless, TRUE, WA_Backdrop, TRUE, TAG_DONE);
+			Meldung((STRPTR)CAT(MSG_0141, "There are open windows.\nCannot close screen."));
 			if (aktfenster) {
-				CloseWindow(aktfenster); aktfenster = NULL;
+				IIntuition->CloseWindow(aktfenster); aktfenster = NULL;
 			}
 		}
 		hschirm = NULL;
@@ -336,7 +268,7 @@ void EntferneBildschirm(void) {
 }
 
 void FensterTitel(STRPTR projekt) {
-	WORD l;
+	int16 l;
 
 	l = strlen(projekt);
 	if (l > 0) {
@@ -344,7 +276,7 @@ void FensterTitel(STRPTR projekt) {
 			if (verLITE) sprintf(fenstertitel, "Horny Lite [ %s ]", projekt);
 			else sprintf(fenstertitel, "Horny [ %s ]", projekt);
 		} else {
-			projekt = (STRPTR)((ULONG)projekt + l - 30);
+			projekt = (STRPTR)((uint32)projekt + l - 30);
 			if (verLITE) sprintf(fenstertitel, "Horny Lite [ ...%s ]", projekt);
 			else sprintf(fenstertitel, "Horny [ ...%s ]", projekt);
 		}
@@ -353,95 +285,97 @@ void FensterTitel(STRPTR projekt) {
 		else strcpy(fenstertitel, "Horny");
 	}
 	if (!(hschirm && umgebung.backdrop)) {
-		if (verLITE) SetWindowTitles(hfenster, fenstertitel, "Inutilis Horny Lite Midi-Sequencer");
-		else SetWindowTitles(hfenster, fenstertitel, "Inutilis Horny Midi-Sequencer");
+		if (verLITE) IIntuition->SetWindowTitles(hfenster, fenstertitel, "Inutilis Horny Lite Midi-Sequencer");
+		else IIntuition->SetWindowTitles(hfenster, fenstertitel, "Inutilis Horny Midi-Sequencer");
 	} else {
-		SetWindowTitles(hfenster, (STRPTR)-1, fenstertitel);
+		IIntuition->SetWindowTitles(hfenster, (STRPTR)-1, fenstertitel);
 	}
 }
 
 void SetzeFont(void) {
-	SetDrMd(aktfenster->RPort, JAM1);
-	SetFont(aktfenster->RPort, font);
+	IGraphics->SetDrMd(aktfenster->RPort, JAM1);
+	IGraphics->SetFont(aktfenster->RPort, font);
 }
 
 void Fett(BOOL f) {
 	if (f) {
-		SetSoftStyle(aktfenster->RPort, FSF_BOLD, FSF_BOLD);
+		IGraphics->SetSoftStyle(aktfenster->RPort, FSF_BOLD, FSF_BOLD);
 	} else {
-		SetSoftStyle(aktfenster->RPort, FS_NORMAL, FSF_BOLD);
+		IGraphics->SetSoftStyle(aktfenster->RPort, FS_NORMAL, FSF_BOLD);
 	}
 }
 
 void EntferneSprungliste(void) {
 	struct Node *node;
 
-	while (node = RemTail(&markerlist)) FreeChooserNode(node);
+	while ((node = IExec->RemTail(&markerlist))) {
+		IChooser->FreeChooserNode(node);
+	}
 }
 
 void AktualisiereSprungliste(void) {
 	struct Node *node;
 	struct MARKER *mark;
-	BYTE n;
+	int8 n;
 
-	if (!markerlist.lh_Head) NewList(&markerlist);
-	if (hfenster) SetAttrs(gadget[GAD_T_MARKER], CHOOSER_Labels, NULL, TAG_DONE);
+	if (!markerlist.lh_Head) IExec->NewList(&markerlist);
+	if (hfenster) IIntuition->SetAttrs(gadget[GAD_T_MARKER], CHOOSER_Labels, NULL, TAG_DONE);
 	EntferneSprungliste();
 
 	for (n = 0; n < 20; n++) sprung[n] = NULL;
-	NewList(&markerlist);
+	IExec->NewList(&markerlist);
 	mark = TaktMarker(rootmark, M_TEXT, 0);
 	n = 0;
 	while (mark) {
-		node = AllocChooserNode(CNA_Text, &mark->text, TAG_DONE);
-		if (node) AddTail(&markerlist, node);
+		node = IChooser->AllocChooserNode(CNA_Text, &mark->text, TAG_DONE);
+		if (node) IExec->AddTail(&markerlist, node);
 		sprung[n] = mark;
 		mark = NextMarker(mark);
 		n++; if (n == 20) break;
 	}
-	if (hfenster) SetAttrs(gadget[GAD_T_MARKER], CHOOSER_Labels, &markerlist, TAG_DONE);
+	if (hfenster) IIntuition->SetAttrs(gadget[GAD_T_MARKER], CHOOSER_Labels, &markerlist, TAG_DONE);
 }
 
 void ErstelleGadgets(void) {
-	WORD y;
+	int16 y;
 
 	y = hfenster->Height - hfenster->BorderBottom - 34;
 
-	gadget[GAD_T_PREV] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_T_PREV] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 6,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
 		GA_ID, GAD_T_PREV, GA_Image, bmo[IMG_PREV], BUTTON_BevelStyle, BVS_NONE,
 		TAG_DONE);
 
-	gadget[GAD_T_NEXT] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_T_NEXT] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_T_PREV],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 36,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
 		GA_ID, GAD_T_NEXT, GA_Image, bmo[IMG_NEXT], BUTTON_BevelStyle, BVS_NONE,
 		TAG_DONE);
 
-	gadget[GAD_T_STOP] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_T_STOP] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_T_NEXT],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 76,
 		GA_Width, 40, GA_Height, 30, GA_RelVerify, TRUE,
 		GA_ID, GAD_T_STOP, GA_Image, bmo[IMG_STOP], BUTTON_BevelStyle, BVS_NONE,
 		TAG_DONE);
 
-	gadget[GAD_T_PLAY] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_T_PLAY] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_T_STOP],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 120,
 		GA_Width, 40, GA_Height, 30, GA_RelVerify, TRUE,
 		GA_ID, GAD_T_PLAY, GA_Image, bmo[IMG_PLAY], BUTTON_BevelStyle, BVS_NONE,
 		TAG_DONE);
 
-	gadget[GAD_T_REC] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_T_REC] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_T_PLAY],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 164,
 		GA_Width, 40, GA_Height, 30, GA_RelVerify, TRUE,
 		GA_ID, GAD_T_REC, GA_Image, bmo[IMG_REC], BUTTON_BevelStyle, BVS_NONE,
 		TAG_DONE);
 
-	gadget[GAD_T_MARKER] = NewObject(CHOOSER_GetClass(), NULL,
+	gadget[GAD_T_MARKER] = (struct Gadget *)IIntuition->NewObject(ChooserClass, NULL,
 		GA_Previous, gadget[GAD_T_REC],
 		GA_Top, hfenster->BorderTop + 1, GA_Left, hfenster->BorderLeft + 1,
 		GA_Width, 20, GA_Height, 14, GA_RelVerify, TRUE,
@@ -452,7 +386,7 @@ void ErstelleGadgets(void) {
 		CHOOSER_MaxLabels, 20,
 		TAG_DONE);
 
-	gadget[GAD_S_H] = NewObject(SCROLLER_GetClass(), NULL,
+	gadget[GAD_S_H] = (struct Gadget *)IIntuition->NewObject(ScrollerClass, NULL,
 		GA_BackFill, backfill,
 		GA_Previous, gadget[GAD_T_MARKER],
 		GA_Top, y - guibox - 20, GA_Left, hfenster->BorderLeft + 62,
@@ -467,7 +401,7 @@ void ErstelleGadgets(void) {
 		ICA_MAP, guimapscroller,
 		TAG_DONE);
 
-	gadget[GAD_S_V] = NewObject(SCROLLER_GetClass(), NULL,
+	gadget[GAD_S_V] = (struct Gadget *)IIntuition->NewObject(ScrollerClass, NULL,
 		GA_BackFill, backfill,
 		GA_Previous, gadget[GAD_S_H],
 		GA_Top, hfenster->BorderTop + 62, GA_Left, hfenster->Width - hfenster->BorderRight - 17,
@@ -482,7 +416,7 @@ void ErstelleGadgets(void) {
 		ICA_MAP, guimapscroller,
 		TAG_DONE);
 
-	gadget[GAD_Z_H] = NewObject(SLIDER_GetClass(), NULL,
+	gadget[GAD_Z_H] = (struct Gadget *)IIntuition->NewObject(SliderClass, NULL,
 		GA_BackFill, backfill,
 		GA_Previous, gadget[GAD_S_V],
 		GA_Top, y - guibox - 20, GA_Left, hfenster->BorderLeft + 2,
@@ -496,7 +430,7 @@ void ErstelleGadgets(void) {
 		ICA_MAP, guimapslider,
 		TAG_DONE);
 
-	gadget[GAD_Z_V] = NewObject(SLIDER_GetClass(), NULL,
+	gadget[GAD_Z_V] = (struct Gadget *)IIntuition->NewObject(SliderClass, NULL,
 		GA_BackFill, backfill,
 		GA_Previous, gadget[GAD_Z_H],
 		GA_Top, hfenster->BorderTop + 2, GA_Left, hfenster->Width - hfenster->BorderRight - 17,
@@ -510,7 +444,7 @@ void ErstelleGadgets(void) {
 		ICA_MAP, guimapslider,
 		TAG_DONE);
 
-	gadget[GAD_F_MREC] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_F_MREC] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_Z_V],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 222,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
@@ -519,7 +453,7 @@ void ErstelleGadgets(void) {
 		BUTTON_PushButton, TRUE,
 		TAG_DONE);
 
-	gadget[GAD_F_MPLAY] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_F_MPLAY] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_F_MREC],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 252,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
@@ -527,7 +461,7 @@ void ErstelleGadgets(void) {
 		BUTTON_PushButton, TRUE,
 		TAG_DONE);
 
-	gadget[GAD_F_LOOP] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_F_LOOP] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_F_MPLAY],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 282,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
@@ -535,7 +469,7 @@ void ErstelleGadgets(void) {
 		BUTTON_PushButton, TRUE,
 		TAG_DONE);
 
-	gadget[GAD_F_FOLLOW] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_F_FOLLOW] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_F_LOOP],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 312,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
@@ -543,7 +477,7 @@ void ErstelleGadgets(void) {
 		BUTTON_PushButton, TRUE,
 		TAG_DONE);
 
-	gadget[GAD_F_THRU] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_F_THRU] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_F_FOLLOW],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 342,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
@@ -551,7 +485,7 @@ void ErstelleGadgets(void) {
 		BUTTON_PushButton, TRUE,
 		TAG_DONE);
 
-	gadget[GAD_F_SYNC] = NewObject(BUTTON_GetClass(), NULL,
+	gadget[GAD_F_SYNC] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Previous, gadget[GAD_F_THRU],
 		GA_Top, y, GA_Left, hfenster->BorderLeft + 372,
 		GA_Width, 27, GA_Height, 30, GA_RelVerify, TRUE,
@@ -559,59 +493,59 @@ void ErstelleGadgets(void) {
 		BUTTON_PushButton, TRUE,
 		TAG_DONE);
 
-	AddGList(hfenster, gadget[0], 0, GADANZ, NULL);
-	RefreshGList(gadget[0], hfenster, NULL, -1);
+	IIntuition->AddGList(hfenster, gadget[0], 0, GADANZ, NULL);
+	IIntuition->RefreshGList(gadget[0], hfenster, NULL, -1);
 }
 
 void EntferneGadgets(void) {
-	BYTE n;
+	int8 n;
 
-	RemoveGList(hfenster, gadget[0], GADANZ);
+	IIntuition->RemoveGList(hfenster, gadget[0], GADANZ);
 	for(n = 0; n < GADANZ; n++) {
 		if (gadget[n]) {
-			DisposeObject(gadget[n]);
+			IIntuition->DisposeObject((Object *)gadget[n]);
 			gadget[n] = NULL;
 		}
 	}
 }
 
 void PositioniereGadgets(void) {
-	WORD y;
+	int16 y;
 
 	y = hfenster->Height - hfenster->BorderBottom - 34;
-	RemoveGList(hfenster, gadget[0], GADANZ);
-	RefreshWindowFrame(hfenster);
+	IIntuition->RemoveGList(hfenster, gadget[0], GADANZ);
+	IIntuition->RefreshWindowFrame(hfenster);
 
-	SetAttrs(gadget[GAD_T_PREV], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_T_NEXT], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_T_STOP], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_T_PLAY], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_T_REC], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_S_H],
+	IIntuition->SetAttrs(gadget[GAD_T_PREV], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_T_NEXT], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_T_STOP], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_T_PLAY], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_T_REC], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_S_H],
 		GA_Top, y - guibox - 20,
 		GA_Width, hfenster->Width - randlr - 64,
 		TAG_DONE);
-	SetAttrs(gadget[GAD_S_V],
+	IIntuition->SetAttrs(gadget[GAD_S_V],
 		GA_Left, hfenster->Width - hfenster->BorderRight - 17,
 		GA_Height, hfenster->Height - randou - 118 - guibox,
 		TAG_DONE);
-	SetAttrs(gadget[GAD_Z_H], GA_Top, y - guibox - 20, TAG_DONE);
-	SetAttrs(gadget[GAD_Z_V], GA_Left, hfenster->Width - hfenster->BorderRight - 17, TAG_DONE);
-	SetAttrs(gadget[GAD_F_MREC], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_F_MPLAY], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_F_LOOP], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_F_FOLLOW], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_F_THRU], GA_Top, y, TAG_DONE);
-	SetAttrs(gadget[GAD_F_SYNC], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_Z_H], GA_Top, y - guibox - 20, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_Z_V], GA_Left, hfenster->Width - hfenster->BorderRight - 17, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_F_MREC], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_F_MPLAY], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_F_LOOP], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_F_FOLLOW], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_F_THRU], GA_Top, y, TAG_DONE);
+	IIntuition->SetAttrs(gadget[GAD_F_SYNC], GA_Top, y, TAG_DONE);
 
 
-	AddGList(hfenster, gadget[0], 0, GADANZ, NULL);
-	RefreshGList(gadget[0], hfenster, NULL, -1);
+	IIntuition->AddGList(hfenster, gadget[0], 0, GADANZ, NULL);
+	IIntuition->RefreshGList(gadget[0], hfenster, NULL, -1);
 }
 
 void AktualisiereGadgets(void) {
-	WORD totalhoriz;
-	WORD totalvert;
+	int16 totalhoriz;
+	int16 totalvert;
 
 	totalhoriz = (gui.takt >> VIERTEL) + gui.tasicht;
 	if (totalhoriz < lied.taktanz) totalhoriz = lied.taktanz;
@@ -619,30 +553,30 @@ void AktualisiereGadgets(void) {
 	totalvert = lied.spuranz + 1;
 	if (lied.spuranz - gui.spur < gui.spsicht) totalvert = gui.spur + gui.spsicht;
 
-	SetGadgetAttrs(gadget[GAD_S_H], hfenster, NULL,
+	IIntuition->SetGadgetAttrs(gadget[GAD_S_H], hfenster, NULL,
 		SCROLLER_Top, gui.takt >> VIERTEL,
 		SCROLLER_Visible, gui.tasicht,
 		SCROLLER_Total, totalhoriz,
 		TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_S_V], hfenster, NULL,
+	IIntuition->SetGadgetAttrs(gadget[GAD_S_V], hfenster, NULL,
 		SCROLLER_Top, gui.spur,
 		SCROLLER_Visible, gui.spsicht,
 		SCROLLER_Total, totalvert,
 		TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_Z_H], hfenster, NULL, SLIDER_Level, gui.tab, TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_Z_V], hfenster, NULL, SLIDER_Level, gui.sph, TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_Z_H], hfenster, NULL, SLIDER_Level, gui.tab, TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_Z_V], hfenster, NULL, SLIDER_Level, gui.sph, TAG_DONE);
 }
 
 void AktualisiereFunctGadgets(void) {
-	SetGadgetAttrs(gadget[GAD_F_MREC], hfenster, NULL, GA_Selected, metro.rec, TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_F_MPLAY], hfenster, NULL, GA_Selected, metro.play, TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_F_LOOP], hfenster, NULL, GA_Selected, loop.aktiv, TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_F_FOLLOW], hfenster, NULL, GA_Selected, gui.folgen, TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_F_THRU], hfenster, NULL, GA_Selected, outport[spur[snum].port].thru, TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_F_SYNC], hfenster, NULL, GA_Selected, IstExtreamSyncAktiv(), TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_F_MREC], hfenster, NULL, GA_Selected, metro.rec, TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_F_MPLAY], hfenster, NULL, GA_Selected, metro.play, TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_F_LOOP], hfenster, NULL, GA_Selected, loop.aktiv, TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_F_FOLLOW], hfenster, NULL, GA_Selected, gui.folgen, TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_F_THRU], hfenster, NULL, GA_Selected, outport[spur[snum].port].thru, TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_F_SYNC], hfenster, NULL, GA_Selected, IstExtreamSyncAktiv(), TAG_DONE);
 }
 
-void HoleFensterWinpos(struct Window *fenster, UBYTE fenid) {
+void HoleFensterWinpos(struct Window *fenster, uint8 fenid) {
 	if (fenster) {
 		if ((fenid != HAUPT) || fenster->Flags & WFLG_DRAGBAR) {
 			fenp[fenid].x = fenster->LeftEdge;
@@ -653,21 +587,21 @@ void HoleFensterWinpos(struct Window *fenster, UBYTE fenid) {
 	}
 }
 
-void HoleFensterObjpos(Object *fensterobj, UBYTE fenid) {
-	ULONG x, y, w, h;
+void HoleFensterObjpos(Object *fensterobj, uint8 fenid) {
+	uint32 x, y, w, h;
 	if (fensterobj) {
 		#if __amigaos4__
-		GetAttrs(fensterobj,
+		IIntuition->GetAttrs(fensterobj,
 			WA_Left, &x,
 			WA_Top, &y,
 			WA_InnerWidth, &w,
 			WA_InnerHeight, &h,
 			TAG_DONE);
 		#else
-		GetAttr(WA_Left, fensterobj, &x);
-		GetAttr(WA_Top, fensterobj, &y);
-		GetAttr(WA_InnerWidth, fensterobj, &w);
-		GetAttr(WA_InnerHeight, fensterobj, &h);
+		IIntuition->GetAttr(WA_Left, fensterobj, &x);
+		IIntuition->GetAttr(WA_Top, fensterobj, &y);
+		IIntuition->GetAttr(WA_InnerWidth, fensterobj, &w);
+		IIntuition->GetAttr(WA_InnerHeight, fensterobj, &h);
 		#endif
 
 		fenp[fenid].x = x;
@@ -688,138 +622,133 @@ void HoleAlleFensterpos(void) {
 }
 
 void BildFrei(void) {
-	SetAPen(aktfenster->RPort, guifar[0]);
-	RectFill(aktfenster->RPort, aktfenster->BorderLeft, aktfenster->BorderTop, aktfenster->Width - aktfenster->BorderRight - 1, aktfenster->Height - aktfenster->BorderBottom - 1);
+	IGraphics->SetAPen(aktfenster->RPort, guifar[0]);
+	IGraphics->RectFill(aktfenster->RPort, aktfenster->BorderLeft, aktfenster->BorderTop, aktfenster->Width - aktfenster->BorderRight - 1, aktfenster->Height - aktfenster->BorderBottom - 1);
 	if (aktfenster == hfenster) altposx = -1;
 }
 
-void Schreibe(UBYTE f, WORD x, WORD y, STRPTR t, WORD xe) {
-	LONG l;
+void Schreibe(uint8 f, int16 x, int16 y, STRPTR t, int16 xe) {
+	int32 l;
 	struct TextExtent te;
 
-	Move(aktfenster->RPort, x + aktfenster->BorderLeft, y + aktfenster->BorderTop);
-	SetAPen(aktfenster->RPort, guifar[f]);
+	IGraphics->Move(aktfenster->RPort, x + aktfenster->BorderLeft, y + aktfenster->BorderTop);
+	IGraphics->SetAPen(aktfenster->RPort, guifar[f]);
 	if (xe < x) xe = x;
-	l = TextFit(aktfenster->RPort, t, strlen(t), &te, NULL, 1, xe - x, 100);
-	Text(aktfenster->RPort, t, l);
+	l = IGraphics->TextFit(aktfenster->RPort, t, strlen(t), &te, NULL, 1, xe - x, 100);
+	IGraphics->Text(aktfenster->RPort, t, l);
 }
 
-void SchreibeSys(UBYTE f, WORD x, WORD y, STRPTR t) {
-	Move(aktfenster->RPort, x, y);
-	SetAPen(aktfenster->RPort, f);
-	Text(aktfenster->RPort, t, strlen(t));
+void SchreibeSys(uint8 f, int16 x, int16 y, STRPTR t) {
+	IGraphics->Move(aktfenster->RPort, x, y);
+	IGraphics->SetAPen(aktfenster->RPort, f);
+	IGraphics->Text(aktfenster->RPort, t, strlen(t));
 }
 
-void SchreibeZahl(UBYTE f, WORD x, WORD y, WORD z) {
+void SchreibeZahl(uint8 f, int16 x, int16 y, int16 z) {
 	char t[10];
-	sprintf(t, "%ld", z); Schreibe(f, x, y, t, x + 100);
+	sprintf(t, "%ld", (int32)z); 
+	Schreibe(f, x, y, t, x + 100);
 }
 
-#ifdef __amigaos4__
-void Gradient(UBYTE f, UBYTE stil, WORD x1, WORD y1, WORD x2, WORD y2) {
+void Gradient(uint8 f, uint8 stil, int16 x1, int16 y1, int16 x2, int16 y2) {
 	if ((x2 >= x1) && (y2 >= y1)) {
 		gradspec.Specs.Rel.BasePen = guifar[f];
 		switch (stil) {
 		case STIL_DH:
-			gradspec.Direction = DirectionVector(0);
+			gradspec.Direction = IIntuition->DirectionVector(0);
 			gradspec.Specs.Rel.Contrast[0] = 20;
 			gradspec.Specs.Rel.Contrast[1] = 20;
 			break;
 		case STIL_HD:
-			gradspec.Direction = DirectionVector(180);
+			gradspec.Direction = IIntuition->DirectionVector(180);
 			gradspec.Specs.Rel.Contrast[0] = 20;
 			gradspec.Specs.Rel.Contrast[1] = 20;
 			break;
 		case STIL_DN:
-			gradspec.Direction = DirectionVector(0);
+			gradspec.Direction = IIntuition->DirectionVector(0);
 			gradspec.Specs.Rel.Contrast[0] = 40;
 			gradspec.Specs.Rel.Contrast[1] = 0;
 			break;
 		case STIL_ND:
-			gradspec.Direction = DirectionVector(180);
+			gradspec.Direction = IIntuition->DirectionVector(180);
 			gradspec.Specs.Rel.Contrast[0] = 40;
 			gradspec.Specs.Rel.Contrast[1] = 0;
 			break;
 		}
 
-		DrawGradient(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop, x2 - x1 + 1, y2 - y1 + 1, NULL, 0L, &gradspec, drinfo);
+		IIntuition->DrawGradient(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop, x2 - x1 + 1, y2 - y1 + 1, NULL, 0L, &gradspec, drinfo);
 	}
 }
-#endif
 
-void Balken(UBYTE f, WORD x1, WORD y1, WORD x2, WORD y2) {
-	SetAPen(aktfenster->RPort, guifar[f]);
-	RectFill(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop, x2 + aktfenster->BorderLeft, y2 + aktfenster->BorderTop);
+void Balken(uint8 f, int16 x1, int16 y1, int16 x2, int16 y2) {
+	IGraphics->SetAPen(aktfenster->RPort, guifar[f]);
+	IGraphics->RectFill(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop, x2 + aktfenster->BorderLeft, y2 + aktfenster->BorderTop);
 }
 
-void Rahmen(UBYTE f1, UBYTE f2, WORD x1, WORD y1, WORD x2, WORD y2) {
+void Rahmen(uint8 f1, uint8 f2, int16 x1, int16 y1, int16 x2, int16 y2) {
 	x1 = x1 + aktfenster->BorderLeft; x2 = x2 + aktfenster->BorderLeft;
 	y1 = y1 + aktfenster->BorderTop; y2 = y2 + aktfenster->BorderTop;
-	SetAPen(aktfenster->RPort, guifar[f2]); Move(aktfenster->RPort, x1, y2);
-	Draw(aktfenster->RPort, x2, y2); Draw(aktfenster->RPort, x2, y1);
-	SetAPen(aktfenster->RPort, guifar[f1]);
-	Draw(aktfenster->RPort, x1, y1); Draw(aktfenster->RPort, x1, y2);
+	IGraphics->SetAPen(aktfenster->RPort, guifar[f2]); IGraphics->Move(aktfenster->RPort, x1, y2);
+	IGraphics->Draw(aktfenster->RPort, x2, y2); IGraphics->Draw(aktfenster->RPort, x2, y1);
+	IGraphics->SetAPen(aktfenster->RPort, guifar[f1]);
+	IGraphics->Draw(aktfenster->RPort, x1, y1); IGraphics->Draw(aktfenster->RPort, x1, y2);
 }
 
-void RahmenEin(WORD f, UBYTE stil, WORD x1, WORD y1, WORD x2, WORD y2) {
+void RahmenEin(int16 f, uint8 stil, int16 x1, int16 y1, int16 x2, int16 y2) {
 	Rahmen(1, 2, x1, y1, x2, y2);
 	if (f >= 0) {
-#ifdef __amigaos4__
 		if (stil)
 			Gradient(f, stil, x1 + 1, y1 + 1, x2 - 1, y2 - 1);
 		else
-#endif
 		Balken(f, x1 + 1, y1 + 1, x2 - 1, y2 - 1);
 	}
 }
 
-void RahmenAus(WORD f, UBYTE stil, WORD x1, WORD y1, WORD x2, WORD y2) {
+void RahmenAus(int16 f, uint8 stil, int16 x1, int16 y1, int16 x2, int16 y2) {
 	Rahmen(2, 1, x1, y1, x2, y2);
 	if (f >= 0) {
-#ifdef __amigaos4__
 		if (stil)
 			Gradient(f, stil, x1 + 1, y1 + 1, x2 - 1, y2 - 1);
 		else
-#endif
 		Balken(f, x1 + 1, y1 + 1, x2 - 1, y2 - 1);
 	}
 }
 
-void RahmenRundungEin(WORD x1, WORD y1, WORD x2, WORD y2) {
+void RahmenRundungEin(int16 x1, int16 y1, int16 x2, int16 y2) {
 	Rahmen(4, 8, x1, y1, x2, y2);
 }
 
-void RahmenRundungAus(WORD x1, WORD y1, WORD x2, WORD y2) {
+void RahmenRundungAus(int16 x1, int16 y1, int16 x2, int16 y2) {
 	Rahmen(8, 4, x1, y1, x2, y2);
 }
 
-void Linie(UBYTE f, WORD x1, WORD y1, WORD x2, WORD y2) {
-	SetAPen(aktfenster->RPort, guifar[f]);
-	Move(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop); Draw(aktfenster->RPort, x2 + aktfenster->BorderLeft, y2 + aktfenster->BorderTop);
+void Linie(uint8 f, int16 x1, int16 y1, int16 x2, int16 y2) {
+	IGraphics->SetAPen(aktfenster->RPort, guifar[f]);
+	IGraphics->Move(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop); IGraphics->Draw(aktfenster->RPort, x2 + aktfenster->BorderLeft, y2 + aktfenster->BorderTop);
 }
 
-void PunktLinie(UBYTE f, WORD x1, WORD y1, WORD x2, WORD y2) {
+void PunktLinie(uint8 f, int16 x1, int16 y1, int16 x2, int16 y2) {
 	hfenster->RPort->LinePtrn = 0x5555;
-	SetAPen(aktfenster->RPort, guifar[f]);
-	Move(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop); Draw(aktfenster->RPort, x2 + aktfenster->BorderLeft, y2 + aktfenster->BorderTop);
+	IGraphics->SetAPen(aktfenster->RPort, guifar[f]);
+	IGraphics->Move(aktfenster->RPort, x1 + aktfenster->BorderLeft, y1 + aktfenster->BorderTop); IGraphics->Draw(aktfenster->RPort, x2 + aktfenster->BorderLeft, y2 + aktfenster->BorderTop);
 	hfenster->RPort->LinePtrn = 0xFFFF;
 }
 
-void Farbe(UBYTE f) {
-	SetAPen(aktfenster->RPort, guifar[f]);
+void Farbe(uint8 f) {
+	IGraphics->SetAPen(aktfenster->RPort, guifar[f]);
 }
 
-void Punkt(WORD x, WORD y) {
-	WritePixel(aktfenster->RPort, x + aktfenster->BorderLeft, y + aktfenster->BorderTop);
+void Punkt(int16 x, int16 y) {
+	IGraphics->WritePixel(aktfenster->RPort, x + aktfenster->BorderLeft, y + aktfenster->BorderTop);
 }
 
 void ZeichnePosition(BOOL edit) {
-	WORD x;
-	WORD uy, rr, lr;
+	int16 x;
+	int16 uy, rr, lr;
 
 	//Hauptfenster
 	aktfenster = hfenster;
-	SetDrMd(hfenster->RPort, COMPLEMENT);
+	IGraphics->SetDrMd(hfenster->RPort, COMPLEMENT);
 	uy = hfenster->Height - randou - 56 - guibox;
 	lr = gui.spalte + 2; rr = hfenster->Width - randlr - 21;
 	x = lr + ((((takt - gui.takt) >> (VIERTEL - 2)) * gui.tab) >> 4);
@@ -842,12 +771,12 @@ void ZeichnePosition(BOOL edit) {
 			hfenster->RPort->LinePtrn = 0xFFFF;
 		}
 	}
-	SetDrMd(hfenster->RPort, JAM1);
+	IGraphics->SetDrMd(hfenster->RPort, JAM1);
 
 	//Editfenster
 	if (edfenster) {
 		aktfenster = edfenster;
-		SetDrMd(edfenster->RPort, COMPLEMENT);
+		IGraphics->SetDrMd(edfenster->RPort, COMPLEMENT);
 		uy = edfenster->Height - edou - edguibox - 59;
 		lr = 72; rr = edfenster->Width - edlr - 21;
 		x = lr + (((takt - edgui.takt) * edgui.taktb) >> (VIERTEL - 2));
@@ -871,16 +800,16 @@ void ZeichnePosition(BOOL edit) {
 				edfenster->RPort->LinePtrn = 0xFFFF;
 			}
 		}
-		SetDrMd(edfenster->RPort, JAM1);
+		IGraphics->SetDrMd(edfenster->RPort, JAM1);
 	}
 }
 
 void KeinePosition(void) {
-	WORD uy;
+	int16 uy;
 
 	//Hauptfenster
 	aktfenster = hfenster;
-	SetDrMd(hfenster->RPort, COMPLEMENT);
+	IGraphics->SetDrMd(hfenster->RPort, COMPLEMENT);
 	uy = hfenster->Height - randou - 56 - guibox;
 	if (altposx >= 0) {
 		Balken(1, altposx, guileiste + 19, altposx + 1, uy);
@@ -892,12 +821,12 @@ void KeinePosition(void) {
 		alteditx = -1;
 		hfenster->RPort->LinePtrn = 0xFFFF;
 	}
-	SetDrMd(hfenster->RPort, JAM1);
+	IGraphics->SetDrMd(hfenster->RPort, JAM1);
 
 	//Editfenster
 	if (edfenster) {
 		aktfenster = edfenster;
-		SetDrMd(edfenster->RPort, COMPLEMENT);
+		IGraphics->SetDrMd(edfenster->RPort, COMPLEMENT);
 		uy = edfenster->Height - edou - edguibox - 59;
 		if (edaltposx >= 0) {
 			Balken(1, edaltposx, 44, edaltposx + 1, uy);
@@ -909,15 +838,15 @@ void KeinePosition(void) {
 			edalteditx = -1;
 			edfenster->RPort->LinePtrn = 0xFFFF;
 		}
-		SetDrMd(edfenster->RPort, JAM1);
+		IGraphics->SetDrMd(edfenster->RPort, JAM1);
 	}
 }
 
-void ZeichneProjektion(LONG start, LONG ende) {
-	WORD lr, rr;
-	WORD xs, xe;
+void ZeichneProjektion(int32 start, int32 ende) {
+	int16 lr, rr;
+	int16 xs, xe;
 
-	SetDrMd(hfenster->RPort, COMPLEMENT);
+	IGraphics->SetDrMd(hfenster->RPort, COMPLEMENT);
 	aktfenster = hfenster;
 	lr = gui.spalte + 2;
 	rr = hfenster->Width - randlr - 20;
@@ -932,44 +861,44 @@ void ZeichneProjektion(LONG start, LONG ende) {
 		altprjstart = xs;
 		altprjende = xe;
 	}
-	SetDrMd(hfenster->RPort, JAM1);
+	IGraphics->SetDrMd(hfenster->RPort, JAM1);
 }
 
 void KeineProjektion(void) {
-	SetDrMd(hfenster->RPort, COMPLEMENT);
+	IGraphics->SetDrMd(hfenster->RPort, COMPLEMENT);
 	aktfenster = hfenster;
 	if (altprjstart != -1) Balken(6, altprjstart, guileiste + 10, altprjende, guileiste + 14);
 	altprjstart = -1;
-	SetDrMd(hfenster->RPort, JAM1);
+	IGraphics->SetDrMd(hfenster->RPort, JAM1);
 }
 
-void Lasso(WORD x1, WORD y1, WORD x2, WORD y2) {
-	SetDrMd(aktfenster->RPort, COMPLEMENT);
+void Lasso(int16 x1, int16 y1, int16 x2, int16 y2) {
+	IGraphics->SetDrMd(aktfenster->RPort, COMPLEMENT);
 
-	Move(aktfenster->RPort, x1, y1);
-	Draw(aktfenster->RPort, x2, y1);
-	Draw(aktfenster->RPort, x2, y2);
-	Draw(aktfenster->RPort, x1, y2);
-	Draw(aktfenster->RPort, x1, y1 + 1);
+	IGraphics->Move(aktfenster->RPort, x1, y1);
+	IGraphics->Draw(aktfenster->RPort, x2, y1);
+	IGraphics->Draw(aktfenster->RPort, x2, y2);
+	IGraphics->Draw(aktfenster->RPort, x1, y2);
+	IGraphics->Draw(aktfenster->RPort, x1, y1 + 1);
 
 	x1++; x2--; y1++; y2--;
-	Move(aktfenster->RPort, x1, y1);
-	Draw(aktfenster->RPort, x2, y1);
-	Draw(aktfenster->RPort, x2, y2);
-	Draw(aktfenster->RPort, x1, y2);
-	Draw(aktfenster->RPort, x1, y1 + 1);
+	IGraphics->Move(aktfenster->RPort, x1, y1);
+	IGraphics->Draw(aktfenster->RPort, x2, y1);
+	IGraphics->Draw(aktfenster->RPort, x2, y2);
+	IGraphics->Draw(aktfenster->RPort, x1, y2);
+	IGraphics->Draw(aktfenster->RPort, x1, y1 + 1);
 
-	SetDrMd(aktfenster->RPort, JAM1);
+	IGraphics->SetDrMd(aktfenster->RPort, JAM1);
 }
 
-BOOL LassoWahl(WORD mx1, WORD my1, WORD *mx2, WORD *my2) {
+BOOL LassoWahl(int16 mx1, int16 my1, int16 *mx2, int16 *my2) {
 	BOOL verlassen = FALSE;
 	struct IntuiMessage *mes;
 
 	*mx2 = -1;
 	do {
-		WaitPort(aktfenster->UserPort);
-		while (mes = (struct IntuiMessage *)GetMsg(aktfenster->UserPort)) {
+		IExec->WaitPort(aktfenster->UserPort);
+		while ((mes = (struct IntuiMessage *)IExec->GetMsg(aktfenster->UserPort))) {
 			switch (mes->Class) {
 				case IDCMP_MOUSEMOVE:
 				if (*mx2 >= 0) Lasso(mx1, my1, *mx2, *my2);
@@ -980,7 +909,7 @@ BOOL LassoWahl(WORD mx1, WORD my1, WORD *mx2, WORD *my2) {
 
 				case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 			}
-			ReplyMsg((struct Message *)mes);
+			IExec->ReplyMsg((struct Message *)mes);
 		}
 	} while (!verlassen);
 	if (*mx2 >= 0) {
@@ -990,7 +919,7 @@ BOOL LassoWahl(WORD mx1, WORD my1, WORD *mx2, WORD *my2) {
 	return(FALSE);
 }
 
-void SchleifeUpdate(struct TagItem *tags, WORD *id, WORD *code) {
+void SchleifeUpdate(struct TagItem *tags, int16 *id, int16 *code) {
 	while (tags->ti_Tag != TAG_DONE) {
 		if (tags->ti_Tag == GA_ID) *id = tags->ti_Data;
 		if (tags->ti_Tag == ICSPECIAL_CODE) *code = tags->ti_Data;

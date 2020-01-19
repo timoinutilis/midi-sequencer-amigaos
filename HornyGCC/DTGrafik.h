@@ -33,6 +33,6 @@
 void OeffneTitel(void);
 void SchliesseTitel();
 void AboutTitel();
-void BlitteBitMap(UWORD id, WORD qx, WORD qy, WORD zx, WORD zy, WORD b, WORD h);
+void BlitteBitMap(uint16 id, int16 qx, int16 qy, int16 zx, int16 zy, int16 b, int16 h);
 void OeffneAlleGfx(void);
 void SchliesseAlleGfx(void);

@@ -1,0 +1,26 @@
+
+1.4 (2.19.2020) <kas1e>
+
+ - modify makefile:
+    make it smaller
+    make it compiles natively and on cross-compiler
+    added "clean" target
+
+1.4 (2.18.2020) <Lyle Hazelwood>
+
+ - First edit of HornyOS4 since the release of source code.  
+ - removed key requirement
+ - fixed an unfreed signal
+ - expanded CAMD cluster selection
+ - Changed variable types to int/uint
+ - removed #ifdef OS4 conditions
+ - added library pointers
+ - removed #libauto from makefile
+ - added warnings to makefile
+ - replaced deprecated functions
+ - bumped version to 1.4
+ - And likely more I have forgotten.
+
+BIG thanks to Timo Kloss for releasing the code.
+
+

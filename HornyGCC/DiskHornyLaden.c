@@ -22,7 +22,7 @@
 #include "dateiformat.h"
 
 extern struct LIED lied;
-extern WORD snum;
+extern int16 snum;
 extern struct GUI gui;
 extern struct EDGUI edgui;
 extern struct LOOP loop;
@@ -40,144 +40,145 @@ extern struct SYSEXUNIT *wahlsexunit;
 void newPhonolithProject(STRPTR datei); //Start.c
 
 
-UWORD *LeseTag(UWORD *adr, UWORD *tag, LONG *ergebnis, LONG *len) {
-	UBYTE typ;
-	LONG *l;
+uint16 *LeseTag(uint16 *adr, uint16 *tag, int32 *ergebnis, int32 *len) {
+	uint8 typ;
+	int32 *l;
 	
 	*tag = *adr++;
-	typ = (UBYTE)(*tag & 0x000F);
+	typ = (uint8)(*tag & 0x000F);
 	if (typ == 0) { // Word
-		*ergebnis = (LONG)*adr++;
+		*ergebnis = (int32)*adr++;
 		return(adr);
 	}
 	if (typ == 1) { // Long
-		l = (LONG *)adr;
+		l = (int32 *)adr;
 		*ergebnis = *l++;
-		return((UWORD *)l);
+		return((uint16 *)l);
 	}
 	if (typ == 2) { // String
 		*len = *adr++;
-		*ergebnis = (LONG)adr; adr = (UWORD *)((ULONG)adr + *len);
+		*ergebnis = (int32)adr; adr = (uint16 *)((uint32)adr + *len);
 		return(adr);
 	}
 	if (typ == 3) { // Data
-		l = (LONG *)adr;
+		l = (int32 *)adr;
 		*len = *l++;
-		*ergebnis = (LONG)l; l = (LONG *)((ULONG)l + *len);
-		return((UWORD *)l);
+		*ergebnis = (int32)l; l = (int32 *)((uint32)l + *len);
+		return((uint16 *)l);
 	}
+	return(NULL);
 }
 
-void LeseAreaINFO(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaINFO(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
 			case TAG_INFO_NAME: strncpy(lied.name, (STRPTR)ergebnis, 128); break;
 			case TAG_INFO_SPURANZ:
-			lied.spuranz = (UBYTE)ergebnis;
+			lied.spuranz = (uint8)ergebnis;
 			if (lied.spuranz > verSPUREN) lied.spuranz = verSPUREN;
 			break;
-			case TAG_INFO_TAKTANZ: lied.taktanz = (WORD)ergebnis; break;
-			case TAG_INFO_AKTSPUR: snum = (WORD)ergebnis; break;
+			case TAG_INFO_TAKTANZ: lied.taktanz = (int16)ergebnis; break;
+			case TAG_INFO_AKTSPUR: snum = (int16)ergebnis; break;
 		}
 	}
 }
 
-void LeseAreaMAINGUI(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaMAINGUI(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
-			case TAG_MAINGUI_SPUR: gui.spur = (WORD)ergebnis; break;
-			case TAG_MAINGUI_SPURH: gui.sph = (WORD)ergebnis; break;
-			case TAG_MAINGUI_TAKT: gui.takt = (LONG)ergebnis; break;
-			case TAG_MAINGUI_TAKTB: gui.tab = (WORD)ergebnis; break;
-			case TAG_MAINGUI_SPALTEX: gui.spalte = (WORD)ergebnis; break;
+			case TAG_MAINGUI_SPUR: gui.spur = (int16)ergebnis; break;
+			case TAG_MAINGUI_SPURH: gui.sph = (int16)ergebnis; break;
+			case TAG_MAINGUI_TAKT: gui.takt = (int32)ergebnis; break;
+			case TAG_MAINGUI_TAKTB: gui.tab = (int16)ergebnis; break;
+			case TAG_MAINGUI_SPALTEX: gui.spalte = (int16)ergebnis; break;
 			case TAG_MAINGUI_FOLGEN: gui.folgen = (BOOL)ergebnis; break;
 		}
 	}
 }
 
-void LeseAreaEDGUI(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaEDGUI(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
-			case TAG_EDGUI_MODUS: edgui.modus = (BYTE)ergebnis; break;
-			case TAG_EDGUI_TASTE: edgui.taste = (WORD)ergebnis; break;
-			case TAG_EDGUI_TASTEH: edgui.tasth = (WORD)ergebnis; break;
-			case TAG_EDGUI_CONTR: edgui.contr = (WORD)ergebnis; break;
-			case TAG_EDGUI_CONTRH: edgui.contrh = (WORD)ergebnis; break;
-			case TAG_EDGUI_TAKT: edgui.takt = (LONG)ergebnis; break;
-			case TAG_EDGUI_TAKTB: edgui.taktb = (WORD)ergebnis; break;
-			case TAG_EDGUI_RASTER: edgui.raster = (UBYTE)ergebnis; break;
-			case TAG_EDGUI_NEULEN: edgui.neulen = (BYTE)ergebnis; break;
+			case TAG_EDGUI_MODUS: edgui.modus = (int8)ergebnis; break;
+			case TAG_EDGUI_TASTE: edgui.taste = (int16)ergebnis; break;
+			case TAG_EDGUI_TASTEH: edgui.tasth = (int16)ergebnis; break;
+			case TAG_EDGUI_CONTR: edgui.contr = (int16)ergebnis; break;
+			case TAG_EDGUI_CONTRH: edgui.contrh = (int16)ergebnis; break;
+			case TAG_EDGUI_TAKT: edgui.takt = (int32)ergebnis; break;
+			case TAG_EDGUI_TAKTB: edgui.taktb = (int16)ergebnis; break;
+			case TAG_EDGUI_RASTER: edgui.raster = (uint8)ergebnis; break;
+			case TAG_EDGUI_NEULEN: edgui.neulen = (int8)ergebnis; break;
 		}
 	}
 }
 
-void LeseAreaLOOP(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaLOOP(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
-			case TAG_LOOP_START: loop.start = (LONG)ergebnis; break;
-			case TAG_LOOP_ENDE: loop.ende = (LONG)ergebnis; break;
+			case TAG_LOOP_START: loop.start = (int32)ergebnis; break;
+			case TAG_LOOP_ENDE: loop.ende = (int32)ergebnis; break;
 			case TAG_LOOP_AKTIV: loop.aktiv = (BOOL)ergebnis; break;
 		}
 	}
 }
 
-void LeseAreaMETRONOM(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaMETRONOM(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
-			case TAG_METRONOM_PORT: metro.port = (UBYTE)ergebnis; break;
-			case TAG_METRONOM_CHANNEL: metro.channel = (UBYTE)ergebnis; break;
-			case TAG_METRONOM_TASTE1: metro.taste1 = (BYTE)ergebnis; break;
-			case TAG_METRONOM_TASTE2: metro.taste2 = (BYTE)ergebnis; break;
-			case TAG_METRONOM_VELO1: metro.velo1 = (BYTE)ergebnis; break;
-			case TAG_METRONOM_VELO2: metro.velo2 = (BYTE)ergebnis; break;
-			case TAG_METRONOM_RASTER: metro.raster = (WORD)ergebnis; break;
+			case TAG_METRONOM_PORT: metro.port = (uint8)ergebnis; break;
+			case TAG_METRONOM_CHANNEL: metro.channel = (uint8)ergebnis; break;
+			case TAG_METRONOM_TASTE1: metro.taste1 = (int8)ergebnis; break;
+			case TAG_METRONOM_TASTE2: metro.taste2 = (int8)ergebnis; break;
+			case TAG_METRONOM_VELO1: metro.velo1 = (int8)ergebnis; break;
+			case TAG_METRONOM_VELO2: metro.velo2 = (int8)ergebnis; break;
+			case TAG_METRONOM_RASTER: metro.raster = (int16)ergebnis; break;
 			case TAG_METRONOM_REC: metro.rec = (BOOL)ergebnis; break;
 			case TAG_METRONOM_PLAY: metro.play = (BOOL)ergebnis; break;
 		}
 	}
 }
 
-void LeseAreaSMPTE(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaSMPTE(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
-			case TAG_SMPTE_STARTTICKS: smpte.startticks = (LONG)ergebnis; break;
-			case TAG_SMPTE_FORMAT: smpte.format = (BYTE)ergebnis; break;
+			case TAG_SMPTE_STARTTICKS: smpte.startticks = (int32)ergebnis; break;
+			case TAG_SMPTE_FORMAT: smpte.format = (int8)ergebnis; break;
 			case TAG_SMPTE_SYNC:
 			if ((BOOL)ergebnis) {
 				AktiviereExtreamSync();
@@ -187,10 +188,10 @@ void LeseAreaSMPTE(APTR *area, LONG len) {
 	}
 }
 
-void LeseAreaMARKER(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaMARKER(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 	struct MARKER marker = {
 		NULL, NULL, // prev, next
 		0, // takt
@@ -201,8 +202,8 @@ void LeseAreaMARKER(APTR *area, LONG len) {
 	char text[128];
 	struct MARKER *neu;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		
 		switch (tag) {
@@ -213,11 +214,11 @@ void LeseAreaMARKER(APTR *area, LONG len) {
 					if (marker.typ == M_TEXT) strncpy(&neu->text, text, 128);
 				}
 			}
-			marker.typ = (BYTE)ergebnis;
+			marker.typ = (int8)ergebnis;
 			break;
-			case TAG_MARKER_TAKT: marker.takt = (LONG)ergebnis; break;
-			case TAG_MARKER_DATA1: marker.d1 = (WORD)ergebnis; break;
-			case TAG_MARKER_DATA2: marker.d2 = (WORD)ergebnis; break;
+			case TAG_MARKER_TAKT: marker.takt = (int32)ergebnis; break;
+			case TAG_MARKER_DATA1: marker.d1 = (int16)ergebnis; break;
+			case TAG_MARKER_DATA2: marker.d2 = (int16)ergebnis; break;
 			case TAG_MARKER_TEXT: strncpy(text, (STRPTR)ergebnis, 128); break;
 		}
 	}
@@ -229,15 +230,15 @@ void LeseAreaMARKER(APTR *area, LONG len) {
 	}
 }
 
-void LeseAreaOUTPORTS(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
-	BYTE n = -1;
+void LeseAreaOUTPORTS(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
+	int8 n = -1;
 	BOOL linktest = FALSE;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		if (tag == TAG_OUTPORTS_NEUNAME) {
 			n++;
@@ -253,28 +254,28 @@ void LeseAreaOUTPORTS(APTR *area, LONG len) {
 		if (n >= 0) {
 			switch (tag) {
 				case TAG_OUTPORTS_THRU: outport[n].thru = (BOOL)ergebnis; break;
-				case TAG_OUTPORTS_LATENZ: outport[n].latenz = (WORD)ergebnis; break;
+				case TAG_OUTPORTS_LATENZ: outport[n].latenz = (int16)ergebnis; break;
 				case TAG_OUTPORTS_INSTR1_NAME: strncpy(outport[n].outinstr[0].name, (STRPTR)ergebnis, 128); break;
-				case TAG_OUTPORTS_INSTR1_UNTEN: outport[n].outinstr[0].unten = (BYTE)ergebnis; break;
+				case TAG_OUTPORTS_INSTR1_UNTEN: outport[n].outinstr[0].unten = (int8)ergebnis; break;
 				case TAG_OUTPORTS_INSTR2_NAME: strncpy(outport[n].outinstr[1].name, (STRPTR)ergebnis, 128); break;
-				case TAG_OUTPORTS_INSTR2_UNTEN: outport[n].outinstr[1].unten = (BYTE)ergebnis; break;
+				case TAG_OUTPORTS_INSTR2_UNTEN: outport[n].outinstr[1].unten = (int8)ergebnis; break;
 				case TAG_OUTPORTS_INSTR3_NAME: strncpy(outport[n].outinstr[2].name, (STRPTR)ergebnis, 128); break;
-				case TAG_OUTPORTS_INSTR3_UNTEN: outport[n].outinstr[2].unten = (BYTE)ergebnis; break;
+				case TAG_OUTPORTS_INSTR3_UNTEN: outport[n].outinstr[2].unten = (int8)ergebnis; break;
 				case TAG_OUTPORTS_INSTR4_NAME: strncpy(outport[n].outinstr[3].name, (STRPTR)ergebnis, 128); break;
-				case TAG_OUTPORTS_INSTR4_UNTEN: outport[n].outinstr[3].unten = (BYTE)ergebnis; break;
+				case TAG_OUTPORTS_INSTR4_UNTEN: outport[n].outinstr[3].unten = (int8)ergebnis; break;
 			}
 		}
 	}
 }
 
-void LeseAreaINPORTS(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
-	BYTE n = -1;
+void LeseAreaINPORTS(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
+	int8 n = -1;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		if (tag == TAG_INPORTS_NEUNAME) {
 			n++;
@@ -284,15 +285,14 @@ void LeseAreaINPORTS(APTR *area, LONG len) {
 	}
 }
 
-#ifdef __amigaos4__
-void LeseAreaPHONOLITH(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaPHONOLITH(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 	STRPTR str = NULL;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
 			case TAG_PHONOLITH_PROJEKT: str = (STRPTR)ergebnis; break;
@@ -304,28 +304,27 @@ void LeseAreaPHONOLITH(APTR *area, LONG len) {
 		newPhonolithProject(lied.phonolithprojekt);
 	}
 }
-#endif
 
-void LeseAreaSYSEX(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaSYSEX(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 	struct SYSEXUNIT *unit = NULL;
 	struct SYSEXMSG *msg = NULL;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		
 		if (tag == TAG_SYSEX_NEUNAME) wahlsexunit = unit = NeueSysExUnit((STRPTR)ergebnis);
 		if (unit) {
-			if (tag == TAG_SYSEX_PORT) unit->port = (UBYTE)ergebnis;
+			if (tag == TAG_SYSEX_PORT) unit->port = (uint8)ergebnis;
 			if (tag == TAG_SYSEX_GESPERRT) unit->gesperrt = (BOOL)ergebnis;
 			if (tag == TAG_SYSEX_MSG_NEUNAME) msg = NeuesSysEx(unit, (STRPTR)ergebnis, 0, NULL);
 			if (msg) {
 				if (tag == TAG_SYSEX_MSG_DATA) {
 					if (!msg->data) {
-						msg->data = (UBYTE *)AllocVec(taglen, 0);
+						msg->data = (uint8 *)IExec->AllocVecTags(taglen, TAG_END);
 						if (msg->data) memcpy(msg->data, (APTR)ergebnis, taglen);
 						else Meldung(CAT(MSG_0550, "Not enough memory for SysEx data\n<DiskHornyLaden.c>"));
 						msg->len = taglen;
@@ -336,41 +335,41 @@ void LeseAreaSYSEX(APTR *area, LONG len) {
 	}
 }
 
-void LeseAreaMIXER(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
-	BYTE p = 0, c = 0;
-	BYTE poti = 0;
+void LeseAreaMIXER(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
+	int8 p = 0, c = 0;
+	int8 poti = 0;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
-			case TAG_MIXER_NEUPORT: p = (BYTE)ergebnis; break;
-			case TAG_MIXER_CHANNEL: c = (BYTE)ergebnis; break;
+			case TAG_MIXER_NEUPORT: p = (int8)ergebnis; break;
+			case TAG_MIXER_CHANNEL: c = (int8)ergebnis; break;
 		}
 		if (p < verOUTPORTS) {
 			switch (tag) {
-				case TAG_MIXER_PAN: mpkanal[p][c].pan = (BYTE)ergebnis; break;
-				case TAG_MIXER_FADER: mpkanal[p][c].fader = (BYTE)ergebnis; break;
+				case TAG_MIXER_PAN: mpkanal[p][c].pan = (int8)ergebnis; break;
+				case TAG_MIXER_FADER: mpkanal[p][c].fader = (int8)ergebnis; break;
 				case TAG_MIXER_MUTE: mpkanal[p][c].mute = (BOOL)ergebnis; break;
-				case TAG_MIXER_NEUPOTI: poti = (BYTE)ergebnis; break;
-				case TAG_MIXER_CONTR: mpkanal[p][c].contr[poti] = (BYTE)ergebnis; break;
-				case TAG_MIXER_CONTRWERT: mpkanal[p][c].contrwert[poti] = (BYTE)ergebnis; break;
+				case TAG_MIXER_NEUPOTI: poti = (int8)ergebnis; break;
+				case TAG_MIXER_CONTR: mpkanal[p][c].contr[poti] = (int8)ergebnis; break;
+				case TAG_MIXER_CONTRWERT: mpkanal[p][c].contrwert[poti] = (int8)ergebnis; break;
 			}		
 		}
 	}
 }
 
-void LeseAreaCTRLCHANGE(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
+void LeseAreaCTRLCHANGE(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
 	struct CTRLCHANGE *cc = NULL;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		
 		if (tag == TAG_CTRLCHANGE_NEUNAME)
@@ -378,56 +377,56 @@ void LeseAreaCTRLCHANGE(APTR *area, LONG len) {
 			
 		if (cc) {
 			switch (tag) {
-				case TAG_CTRLCHANGE_ORIGINAL: cc->original = (BYTE)ergebnis; break;
-				case TAG_CTRLCHANGE_ZIEL: cc->ziel = (BYTE)ergebnis; break;
+				case TAG_CTRLCHANGE_ORIGINAL: cc->original = (int8)ergebnis; break;
+				case TAG_CTRLCHANGE_ZIEL: cc->ziel = (int8)ergebnis; break;
 				case TAG_CTRLCHANGE_AKTIV: cc->aktiv = (BOOL)ergebnis; break;
 			}
 		}
 	}
 }
 
-void LeseAreaAUTOMATION(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
-	BYTE p = 0, c = 0;
-	BYTE num = -1;
+void LeseAreaAUTOMATION(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
+	int8 p = 0, c = 0;
+	int8 num = -1;
 	struct AUTOPUNKT *punkt = NULL;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		switch (tag) {
-			case TAG_AUTOMATION_NEUNUM: num = (BYTE)ergebnis; break;
-			case TAG_AUTOMATION_PORT: p = (BYTE)ergebnis; break;
-			case TAG_AUTOMATION_CHANNEL: c = (BYTE)ergebnis; break;
+			case TAG_AUTOMATION_NEUNUM: num = (int8)ergebnis; break;
+			case TAG_AUTOMATION_PORT: p = (int8)ergebnis; break;
+			case TAG_AUTOMATION_CHANNEL: c = (int8)ergebnis; break;
 			case TAG_AUTOMATION_NEUPUNKT_TAKT:
-			punkt = NeuerAutoPunkt(p, c, num, (LONG)ergebnis, 0);
+			punkt = NeuerAutoPunkt(p, c, num, (int32)ergebnis, 0);
 			break;
 		}
 		if (punkt) {
 			switch (tag) {
 				case TAG_AUTOMATION_PUNKT_WERT: 
-				punkt->wert = (BYTE)ergebnis;
+				punkt->wert = (int8)ergebnis;
 				break;
 			}
 		}
 	}
 }
 
-void HoleSequenzEvents(APTR *adr, LONG len, struct SEQUENZ *seq) {
+void HoleSequenzEvents(APTR *adr, int32 len, struct SEQUENZ *seq) {
 	struct FEVENT *fevent;
 	struct EVENTBLOCK *evbl;
-	UWORD evnum;
+	uint16 evnum;
 	struct EVENT *ev;
 	
-	seq->eventblock = (struct EVENTBLOCK *)AllocVec(sizeof(struct EVENTBLOCK), MEMF_CLEAR);
+	seq->eventblock = (struct EVENTBLOCK *)IExec->AllocVecTags(sizeof(struct EVENTBLOCK), AVT_ClearWithValue,0,TAG_END);
 	if (seq->eventblock) {
 	
 		fevent = (struct FEVENT *)adr;
 		evbl = seq->eventblock;
 		evnum = 0;
-		while ((ULONG)fevent < (ULONG)adr + len) {
+		while ((uint32)fevent < (uint32)adr + len) {
 			ev = &evbl->event[evnum];
 			
 			ev->zeit = fevent->zeit;
@@ -447,43 +446,43 @@ void HoleSequenzEvents(APTR *adr, LONG len, struct SEQUENZ *seq) {
 	} else Meldung(CAT(MSG_0551, "Not enough memory for event block\n<DiskHornyLaden.c>"));
 }
 
-void LeseAreaMIDITRACK(APTR *area, LONG len) {
-	UWORD *adr;
-	UWORD tag;
-	LONG ergebnis, taglen;
-	WORD s = 0;
+void LeseAreaMIDITRACK(APTR *area, int32 len) {
+	uint16 *adr;
+	uint16 tag;
+	int32 ergebnis, taglen;
+	int16 s = 0;
 	struct SEQUENZ *seq = NULL;
 
-	adr = (UWORD *)area;
-	while ((ULONG)adr - (ULONG)area < len) {
+	adr = (uint16 *)area;
+	while ((uint32)adr - (uint32)area < len) {
 		adr = LeseTag(adr, &tag, &ergebnis, &taglen);
 		if (tag == TAG_MIDITRACK_SPUR) {
-			s = (WORD)ergebnis;
+			s = (int16)ergebnis;
 			if (s >= verSPUREN) break;
 		}
 		switch (tag) {
 			case TAG_MIDITRACK_NAME: strncpy(spur[s].name, (STRPTR)ergebnis, 128); break;
-			case TAG_MIDITRACK_PORT: spur[s].port = (UBYTE)ergebnis; break;
-			case TAG_MIDITRACK_CHANNEL: spur[s].channel = (UBYTE)ergebnis; break;
-			case TAG_MIDITRACK_BANK0: spur[s].bank0 = (BYTE)ergebnis; break;
-			case TAG_MIDITRACK_BANK32: spur[s].bank32 = (BYTE)ergebnis; break;
-			case TAG_MIDITRACK_PROG: spur[s].prog = (BYTE)ergebnis; break;
-			case TAG_MIDITRACK_SHIFT: spur[s].shift = (WORD)ergebnis; break;
+			case TAG_MIDITRACK_PORT: spur[s].port = (uint8)ergebnis; break;
+			case TAG_MIDITRACK_CHANNEL: spur[s].channel = (uint8)ergebnis; break;
+			case TAG_MIDITRACK_BANK0: spur[s].bank0 = (int8)ergebnis; break;
+			case TAG_MIDITRACK_BANK32: spur[s].bank32 = (int8)ergebnis; break;
+			case TAG_MIDITRACK_PROG: spur[s].prog = (int8)ergebnis; break;
+			case TAG_MIDITRACK_SHIFT: spur[s].shift = (int16)ergebnis; break;
 			case TAG_MIDITRACK_MUTE: spur[s].mute = (BOOL)ergebnis; break;
 			case TAG_MIDITRACK_AUTOSTATUS: spur[s].autostatus = (BOOL)ergebnis; break;
 		}
 		if (tag == TAG_MIDITRACK_SEQ_NEUSTART) {
-			seq = ErstelleSequenz(s, (LONG)ergebnis, FALSE);
+			seq = ErstelleSequenz(s, (int32)ergebnis, FALSE);
 			sp[s].neuseq = seq;
 			NeueSequenzEinordnen(s);
 		}
 		if (seq) {
 			switch (tag) {
-				case TAG_MIDITRACK_SEQ_ENDE: seq->ende = (LONG)ergebnis; break;
+				case TAG_MIDITRACK_SEQ_ENDE: seq->ende = (int32)ergebnis; break;
 				case TAG_MIDITRACK_SEQ_NAME: strncpy(seq->name, (STRPTR)ergebnis, 128); break;
-				case TAG_MIDITRACK_SEQ_TRANS: seq->trans = (BYTE)ergebnis; break;
+				case TAG_MIDITRACK_SEQ_TRANS: seq->trans = (int8)ergebnis; break;
 				case TAG_MIDITRACK_SEQ_MARKIERT: seq->markiert = (BOOL)ergebnis; break;
-				case TAG_MIDITRACK_SEQ_ALIASANZ: seq->aliasanz = (WORD)ergebnis; break;
+				case TAG_MIDITRACK_SEQ_ALIASANZ: seq->aliasanz = (int16)ergebnis; break;
 				case TAG_MIDITRACK_SEQ_ALIASORIG: seq->aliasorig = (struct SEQUENZ *)ergebnis; break;
 				case TAG_MIDITRACK_SEQ_SPEICHERADR: seq->speicheradr = (struct SEQUENZ *)ergebnis; break;
 				case TAG_MIDITRACK_SEQ_EVENTS: HoleSequenzEvents((APTR)ergebnis, taglen, seq); break;
@@ -498,14 +497,14 @@ BOOL LadenHorny(STRPTR datei) {
 	struct HEAD head;
 	struct AREA areahead;
 	APTR area;
-	LONG test;
+	int32 test;
 	//char *t;
 	
 	//printf("'%s'\n", datei);
-	file = Open(datei, MODE_OLDFILE);
+	file = IDOS->Open(datei, MODE_OLDFILE);
 	if (file) {
-		Read(file, &head.hornyid, sizeof(head.hornyid));
-		Read(file, &head.version, sizeof(head.version));
+		IDOS->Read(file, &head.hornyid, sizeof(head.hornyid));
+		IDOS->Read(file, &head.version, sizeof(head.version));
 		if (head.hornyid == HORNYID) {
 			if (head.version >= TAGFORMAT) {
 
@@ -515,13 +514,13 @@ BOOL LadenHorny(STRPTR datei) {
 				InitOutportLatenzen();
 
 			    // FAREAS laden...
-				while (Read(file, &areahead, sizeof(struct AREA))) {
+				while (IDOS->Read(file, &areahead, sizeof(struct AREA))) {
 					//t = (char *)&areahead.id;
 					//printf("area: %c%c%c%c\n", t[0], t[1], t[2], t[3]);
 					if (areahead.len > 0) {
-						area = (APTR)AllocVec(areahead.len, 0);
+						area = (APTR)IExec->AllocVecTags(areahead.len, TAG_END);
 						if (area) {
-							test = Read(file, area, areahead.len);
+							test = IDOS->Read(file, area, areahead.len);
 							if (test == areahead.len) {
 							
 								switch (areahead.id) {
@@ -532,9 +531,7 @@ BOOL LadenHorny(STRPTR datei) {
 									case FAREA_METRONOM: LeseAreaMETRONOM(area, areahead.len); break;
 									case FAREA_SMPTE: LeseAreaSMPTE(area, areahead.len); break;
 									case FAREA_MARKER: LeseAreaMARKER(area, areahead.len); break;
-									#ifdef __amigaos4__
 									case FAREA_PHONOLITH: LeseAreaPHONOLITH(area, areahead.len); break;
-									#endif
 									case FAREA_OUTPORTS: LeseAreaOUTPORTS(area, areahead.len); break;
 									case FAREA_INPORTS: LeseAreaINPORTS(area, areahead.len); break;
 									case FAREA_SYSEX: LeseAreaSYSEX(area, areahead.len); break;
@@ -546,9 +543,10 @@ BOOL LadenHorny(STRPTR datei) {
 							
 							} else Meldung(CAT(MSG_0552, "Incorrect file"));
 							
-							FreeVec(area);
+							IExec->FreeVec(area);
 						} else {
-							Seek(file, areahead.len, OFFSET_CURRENT);
+//							Seek(file, areahead.len, OFFSET_CURRENT);
+							IDOS->ChangeFilePosition(file, areahead.len, OFFSET_CURRENT);
 							Meldung(CAT(MSG_0553, "Not enough memory for area\n<DiskHornyLaden.c>"));
 						}
 					}
@@ -561,9 +559,9 @@ BOOL LadenHorny(STRPTR datei) {
 			} else Meldung(CAT(MSG_0554, "Obsolete Horny file format\nis not supported anymore"));
 		} else Meldung(CAT(MSG_0555, "Not a Horny file"));
 	
-		Close(file);
+		IDOS->Close(file);
 	} else {
-		Fault(IoErr(), CAT(MSG_0556, "Could not load project"), meldung, 120);
+		IDOS->Fault(IDOS->IoErr(), CAT(MSG_0556, "Could not load project"), meldung, 120);
 		Meldung(meldung);
 	}
 	return(TRUE);

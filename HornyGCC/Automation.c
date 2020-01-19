@@ -23,8 +23,8 @@ extern struct MPKANAL mpkanal[OUTPORTS][16];
 struct AUTOPUNKT *autocopy = NULL;
 
 void InitAutokanaele(void) {
-	BYTE p, c;
-	BYTE n;
+	int8 p, c;
+	int8 n;
 	
 	for (p = 0; p < verOUTPORTS; p++) {
 		for (c = 0; c < 16; c++) {
@@ -37,8 +37,8 @@ void InitAutokanaele(void) {
 	}
 }
 
-void KanalSpurenBearbeitet(BYTE p, BYTE c) {
-	WORD s;
+void KanalSpurenBearbeitet(int8 p, int8 c) {
+	int16 s;
 	
 	for (s = 0; s < lied.spuranz; s++) {
 		if ((spur[s].port == p) && (spur[s].channel == c)) {
@@ -53,7 +53,7 @@ void EntferneAutoPunkte(struct AUTOPUNKT *akt) {
 	
 	while (akt) {
 		next = akt->next;
-		FreeVec(akt);
+		IExec->FreeVec(akt);
 		akt = next;
 	}
 }
@@ -64,7 +64,7 @@ struct AUTOPUNKT *AutomationDuplizieren(struct AUTOPUNKT *quelle) {
 	struct AUTOPUNKT *last = NULL;	
 	
 	while (quelle) {
-		neu = (struct AUTOPUNKT *)AllocVec(sizeof(struct AUTOPUNKT), 0);
+		neu = (struct AUTOPUNKT *)IExec->AllocVecTags(sizeof(struct AUTOPUNKT), TAG_END);
 		if (neu) {
 			neu->takt = quelle->takt;
 			neu->wert = quelle->wert;
@@ -79,12 +79,12 @@ struct AUTOPUNKT *AutomationDuplizieren(struct AUTOPUNKT *quelle) {
 	return(anf);
 }
 
-void AutomationKopieren(BYTE p, BYTE c, BYTE num) {
+void AutomationKopieren(int8 p, int8 c, int8 num) {
 	if (autocopy) EntferneAutoPunkte(autocopy);
 	autocopy = AutomationDuplizieren(autokanal[p][c].liste[num]);
 }
 
-void AutomationEinfuegen(BYTE p, BYTE c, BYTE num) {
+void AutomationEinfuegen(int8 p, int8 c, int8 num) {
 	if (autocopy) {
 		if (autokanal[p][c].liste[num]) EntferneAutoPunkte(autokanal[p][c].liste[num]);
 		autokanal[p][c].liste[num] = AutomationDuplizieren(autocopy);
@@ -98,11 +98,11 @@ void EntferneAutomationsKopie(void) {
 	}
 }
 
-struct AUTOPUNKT *NeuerAutoPunkt(BYTE p, BYTE c, BYTE num, LONG t, BYTE wert) {
+struct AUTOPUNKT *NeuerAutoPunkt(int8 p, int8 c, int8 num, int32 t, int8 wert) {
 	struct AUTOPUNKT *neu;
 	struct AUTOPUNKT *akt;
 
-	neu = (struct AUTOPUNKT *)AllocVec(sizeof(struct AUTOPUNKT), 0);
+	neu = (struct AUTOPUNKT *)IExec->AllocVecTags(sizeof(struct AUTOPUNKT), TAG_END);
 	if (neu) {
 		neu->takt = t;
 		neu->wert = wert;
@@ -134,7 +134,7 @@ struct AUTOPUNKT *NeuerAutoPunkt(BYTE p, BYTE c, BYTE num, LONG t, BYTE wert) {
 	return(neu);
 }
 
-void EntferneAutoPunkt(BYTE p, BYTE c, BYTE num, struct AUTOPUNKT *punkt) {
+void EntferneAutoPunkt(int8 p, int8 c, int8 num, struct AUTOPUNKT *punkt) {
 	if (punkt != autokanal[p][c].liste[num]) {
 		punkt->prev->next = punkt->next;
 		if (punkt->next) punkt->next->prev = punkt->prev;
@@ -142,15 +142,15 @@ void EntferneAutoPunkt(BYTE p, BYTE c, BYTE num, struct AUTOPUNKT *punkt) {
 		if (punkt->next) punkt->next->prev = NULL;
 		autokanal[p][c].liste[num] = punkt->next;
 	}
-	FreeVec(punkt);
+	IExec->FreeVec(punkt);
 }
 
-void EntferneAlleAutoPunkte(BYTE p, BYTE c, BYTE num) {
+void EntferneAlleAutoPunkte(int8 p, int8 c, int8 num) {
 	EntferneAutoPunkte(autokanal[p][c].liste[num]);
 	autokanal[p][c].liste[num] = NULL;
 }
 
-struct AUTOPUNKT *TaktAutoPunkt(BYTE p, BYTE c, BYTE num, LONG t) {
+struct AUTOPUNKT *TaktAutoPunkt(int8 p, int8 c, int8 num, int32 t) {
 	struct AUTOPUNKT *akt;
 	
 	akt = autokanal[p][c].liste[num];
@@ -161,7 +161,7 @@ struct AUTOPUNKT *TaktAutoPunkt(BYTE p, BYTE c, BYTE num, LONG t) {
 	return(NULL);
 }
 
-void AutoAnpassen(BYTE p, BYTE c, BYTE num, BYTE wert) {
+void AutoAnpassen(int8 p, int8 c, int8 num, int8 wert) {
 	if (num == 0) {
 		if (wert != mpkanal[p][c].fader) {
 			SendeKanalEvent(p, c, MS_Ctrl, MC_Volume, wert);
@@ -188,8 +188,8 @@ void AutoAnpassen(BYTE p, BYTE c, BYTE num, BYTE wert) {
 	}
 }
 
-void AutomationVorbereiten(BYTE p, BYTE c, LONG t) {
-	BYTE num;
+void AutomationVorbereiten(int8 p, int8 c, int32 t) {
+	int8 num;
 	struct AUTOPUNKT *akt;
 
 	t = vorgeschobenerPortTakt(p, t);
@@ -205,8 +205,8 @@ void AutomationVorbereiten(BYTE p, BYTE c, LONG t) {
 	}
 }
 
-void LoopAutomationVorbereiten(BYTE p, BYTE c, LONG t) {
-	BYTE num;
+void LoopAutomationVorbereiten(int8 p, int8 c, int32 t) {
+	int8 num;
 	struct AUTOPUNKT *akt;
 	
 	t = vorgeschobenerPortTakt(p, t);
@@ -222,18 +222,18 @@ void LoopAutomationVorbereiten(BYTE p, BYTE c, LONG t) {
 	}
 }
 
-void LoopAutomationResetten(BYTE p, BYTE c) {
-	BYTE num;
+void LoopAutomationResetten(int8 p, int8 c) {
+	int8 num;
 	
 	for (num = 0; num < 8; num++) {
 		autokanal[p][c].aktpunkt[num] = autokanal[p][c].looppunkt[num];
 	}
 }
 
-void SpieleAutomation(BYTE p, BYTE c, LONG t) {
-	BYTE num;
+void SpieleAutomation(int8 p, int8 c, int32 t) {
+	int8 num;
 	struct AUTOPUNKT *akt;
-	LONG wert;
+	int32 wert;
 	
 	t = vorgeschobenerPortTakt(p, t);
 
@@ -251,10 +251,10 @@ void SpieleAutomation(BYTE p, BYTE c, LONG t) {
 
 				if (akt->next) {
 					if (akt->wert != akt->next->wert) {
-						wert = ((LONG)akt->next->wert * (t - akt->takt)) + ((LONG)akt->wert * (akt->next->takt - t));
+						wert = ((int32)akt->next->wert * (t - akt->takt)) + ((int32)akt->wert * (akt->next->takt - t));
 						wert = wert / (akt->next->takt - akt->takt);
 					} else wert = akt->wert;
-					AutoAnpassen(p, c, num, (BYTE)wert);
+					AutoAnpassen(p, c, num, (int8)wert);
 
 				} else {
 					AutoAnpassen(p, c, num, akt->wert);
@@ -265,7 +265,7 @@ void SpieleAutomation(BYTE p, BYTE c, LONG t) {
 	}
 }
 
-void LoescheAutoBereich(BYTE p, BYTE c, BYTE num, LONG von, LONG bis) {
+void LoescheAutoBereich(int8 p, int8 c, int8 num, int32 von, int32 bis) {
 	struct AUTOPUNKT *punkt;
 	struct AUTOPUNKT *next;
 	
@@ -283,28 +283,28 @@ void LoescheAutoBereich(BYTE p, BYTE c, BYTE num, LONG von, LONG bis) {
 				if (punkt->next) punkt->next->prev = NULL;
 				autokanal[p][c].liste[num] = punkt->next;
 			}
-			FreeVec(punkt);
+			IExec->FreeVec(punkt);
 		}
 		
 		punkt = next;
 	}
 }
 
-void KonvertiereContrZuAuto(WORD s) {
-	BYTE p, c;
-	BYTE num;
-	BYTE data1;
+void KonvertiereContrZuAuto(int16 s) {
+	int8 p, c;
+	int8 num;
+	int8 data1;
 	struct SEQUENZ *seq;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
-	BYTE data2 = 0;
-	BYTE altdata2 = -1;
-	LONG zeit;
-	LONG altzeit = -1;
+	int8 data2 = 0;
+	int8 altdata2 = -1;
+	int32 zeit;
+	int32 altzeit = -1;
 	struct AUTOPUNKT *lastpunkt;
-	WORD delta1, delta2;
-	LONG deltat1, deltat2;
+	int16 delta1, delta2;
+	int32 deltat1, deltat2;
 	BOOL neuerpunkt;
 
 	if (spur[s].autostatus) {
@@ -376,14 +376,14 @@ void KonvertiereContrZuAuto(WORD s) {
 	} else Meldung(CAT(MSG_0001, "The automation you want to convert to must be selected"));
 }
 
-void KonvertiereAutoZuContr(WORD s) {
-	BYTE p, c;
-	BYTE num;
-	BYTE data1;
+void KonvertiereAutoZuContr(int16 s) {
+	int8 p, c;
+	int8 num;
+	int8 data1;
 	struct AUTOPUNKT *akt;
-	LONG wert;
-	LONG altwert = -1;
-	LONG zeit;
+	int32 wert;
+	int32 altwert = -1;
+	int32 zeit;
 	
 	if (spur[s].autostatus) {
 		p = spur[s].port;
@@ -407,12 +407,12 @@ void KonvertiereAutoZuContr(WORD s) {
 	
 				if (akt->next) {
 					if (akt->wert != akt->next->wert) {
-						wert = ((LONG)akt->next->wert * (zeit - akt->takt)) + ((LONG)akt->wert * (akt->next->takt - zeit));
+						wert = ((int32)akt->next->wert * (zeit - akt->takt)) + ((int32)akt->wert * (akt->next->takt - zeit));
 						wert = wert / (akt->next->takt - akt->takt);
 					} else wert = akt->wert;
 					
 					if (wert != altwert) {
-						AddEvent(s, zeit, MS_Ctrl, data1, (BYTE)wert);
+						AddEvent(s, zeit, MS_Ctrl, data1, (int8)wert);
 						altwert = wert;
 					}
 				} else break;

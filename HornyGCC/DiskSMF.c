@@ -29,19 +29,19 @@ extern struct SYSEXUNIT *rootsexunit;
 extern struct SMPTE smpte;
 
 
-UBYTE *pb;
-LONG chunkrest;
-BYTE lastStatus;
+uint8 *pb;
+int32 chunkrest;
+int8 lastStatus;
 
 BOOL readerror = FALSE;
 
-void SetzeLeser(APTR mem, LONG len) {
-	pb = (UBYTE *)mem;
+void SetzeLeser(APTR mem, int32 len) {
+	pb = (uint8 *)mem;
 	chunkrest = len;
 }
 
-UBYTE LeseByte(void) {
-	UBYTE b = 0;
+uint8 LeseByte(void) {
+	uint8 b = 0;
 	if (chunkrest > 0) {
 		b = *pb++;
 		chunkrest--;
@@ -49,9 +49,9 @@ UBYTE LeseByte(void) {
 	return(b);
 }
 
-LONG LeseVarLen(void) {
-	LONG wert;
-	BYTE c;
+int32 LeseVarLen(void) {
+	int32 wert;
+	int8 c;
 	
 	if ((wert = LeseByte()) & 0x80) {
 		wert &= 0x7F;
@@ -62,9 +62,9 @@ LONG LeseVarLen(void) {
 	return(wert);
 }
 
-void SpringeBytes(LONG l) {
+void SpringeBytes(int32 l) {
 	if (chunkrest >= l) {
-		pb = (BYTE *)((ULONG)pb + l);
+		pb = (uint8 *)((uint32)pb + l);
 		chunkrest -= l;
 	} else readerror = TRUE;
 }
@@ -74,46 +74,46 @@ BOOL ImportSMF(STRPTR name) {
 	APTR mem;
 	BPTR file;
 	struct CHUNK {
-		ULONG type;
-		ULONG len;
+		uint32 type;
+		uint32 len;
 	} chunk;
 	struct MTHEADER {
-		WORD format;
-		WORD tracks;
-		WORD division;
+		int16 format;
+		int16 tracks;
+		int16 division;
 	} mth;
-	WORD n;
-	WORD s;
-	LONG l;
-	UBYTE event;
-	UBYTE meta;
-	UBYTE status;
-	UBYTE data1;
-	UBYTE data2;
-	LONG zpos;
-	LONG use;
+	int16 n;
+	int16 s;
+	int32 l;
+	uint8 event;
+	uint8 meta;
+	uint8 status;
+	uint8 data1;
+	uint8 data2;
+	int32 zpos;
+	int32 use;
 	struct MARKER *mark;
 	char *nullbyte;
-	BYTE spurkanal;
-	UBYTE vbyte[4];
-	UBYTE *data;
+	int8 spurkanal;
+	uint8 vbyte[4];
+	uint8 *data;
 	BOOL SysExGelesen = FALSE;
 	
 	BOOL testmodus = FALSE;
 	
 	readerror = FALSE;
 
-	file = Open(name, MODE_OLDFILE);
+	file = IDOS->Open(name, MODE_OLDFILE);
 	if (file) {
 
-		Read(file, &chunk, sizeof(struct CHUNK));
+		IDOS->Read(file, &chunk, sizeof(struct CHUNK));
 		if (chunk.type == MTHD) {
 
 			EntferneLied();
 			NeuesLied();
 
 			// Header
-			Read(file, &mth, sizeof(struct MTHEADER));
+			IDOS->Read(file, &mth, sizeof(struct MTHEADER));
 
 			if (testmodus) {
 				printf("Format %d\n", mth.format);
@@ -136,14 +136,14 @@ BOOL ImportSMF(STRPTR name) {
 			n = 0;
 			do {
 			
-				if (Read(file, &chunk, sizeof(struct CHUNK)) == 0) break; // EOF?
+				if (IDOS->Read(file, &chunk, sizeof(struct CHUNK)) == 0) break; // EOF?
 				
 				if (chunk.type == MTRK) {
 					if (testmodus) printf("Midispur %d\n", n);
 
-					mem = (APTR)AllocVec(chunk.len, MEMF_ANY);
+					mem = (APTR)IExec->AllocVecTags(chunk.len, TAG_END);
 					if (mem) {
-						Read(file, mem, chunk.len);
+						IDOS->Read(file, mem, chunk.len);
 						SetzeLeser(mem, chunk.len);
 
 						if (mth.format == 1) s = n - 1;
@@ -160,7 +160,7 @@ BOOL ImportSMF(STRPTR name) {
 									status = 0;
 									meta = LeseByte();
 									l = LeseVarLen();
-									if (testmodus) printf("Meta %X (L%d): ", meta, l);
+									if (testmodus) printf("Meta %X (L%ld): ", meta, l);
 									
 									switch (meta) {
 										case 0x01: // Text Event
@@ -186,7 +186,7 @@ BOOL ImportSMF(STRPTR name) {
 										if (mark) {
 											use = l; if (use > 127) use = 127;
 											memcpy(&mark->text, pb, use);
-											nullbyte = &mark->text; nullbyte = (char *)((ULONG)nullbyte + use);
+											nullbyte = &mark->text; nullbyte = (char *)((uint32)nullbyte + use);
 											*nullbyte = 0;
 										}
 										break;
@@ -199,7 +199,7 @@ BOOL ImportSMF(STRPTR name) {
 										case 0x51: //Tempo
 										if (testmodus) printf("Tempo");
 										memcpy(&use, pb, 3); use = use >> 8; use = 60000000 / use;
-										NeuerMarker(M_TEMPO, ((zpos << VIERTEL) / mth.division) & VIERTELMASKE, (WORD)use, 0);
+										NeuerMarker(M_TEMPO, ((zpos << VIERTEL) / mth.division) & VIERTELMASKE, (int16)use, 0);
 										break;
 										
 										case 0x54: // SMPTE Offset
@@ -222,10 +222,10 @@ BOOL ImportSMF(STRPTR name) {
 									l = LeseVarLen();
 									if (testmodus) printf("SysEx F0\n");
 									
-									data = (UBYTE *)AllocVec(l + 1, 0);
+									data = (uint8 *)IExec->AllocVecTags(l + 1, TAG_END);
 									*data = 0xF0;
-									memcpy((void*)((ULONG)data + 1), (void*)pb, l);
-									NeuesSysEx(rootsexunit, "SysEx", l + 1, data);
+									memcpy((void*)((uint32)data + 1), (void*)pb, l);
+									NeuesSysEx(rootsexunit, (STRPTR)"SysEx", l + 1, data);
 									
 									SpringeBytes(l);
 									
@@ -270,7 +270,7 @@ BOOL ImportSMF(STRPTR name) {
 								}
 							}
 							
-							if (readerror || (ULONG)pb > (ULONG)mem + chunk.len) {
+							if (readerror || (uint32)pb > (uint32)mem + chunk.len) {
 								Meldung(CAT(MSG_0437, "Error while importing"));
 								break;
 							}
@@ -279,7 +279,7 @@ BOOL ImportSMF(STRPTR name) {
 						
 						if ((spurkanal >= 0) && (spur[s].channel == 16)) spur[s].channel = spurkanal;
 						
-						FreeVec(mem);
+						IExec->FreeVec(mem);
 					} else {
 						Meldung(CAT(MSG_0438, "Not enough memory for SMF chunk\n<DiskSMF.c>"));
 						break;
@@ -288,7 +288,8 @@ BOOL ImportSMF(STRPTR name) {
 
 				} else {
 					printf("Unbekannter Chunk %lX\n", chunk.type);
-					Seek(file, chunk.len, OFFSET_CURRENT);
+//					Seek(file, chunk.len, OFFSET_CURRENT);
+					IDOS->ChangeFilePosition(file, chunk.len, OFFSET_CURRENT);
 				}
 			} while (n < mth.tracks);
 			
@@ -301,13 +302,13 @@ BOOL ImportSMF(STRPTR name) {
 		} else {
 			Meldung(CAT(MSG_0439, "Not a SMF file"));
 		}
-		Close(file);
+		IDOS->Close(file);
 	}
 	return(TRUE);
 }
 
-void SchreibeVarLen(LONG wert) {
-	LONG b;
+void SchreibeVarLen(int32 wert) {
+	int32 b;
 	
 	b = wert & 0x7F;
 	while ((wert >>= 7)>0) {
@@ -317,12 +318,12 @@ void SchreibeVarLen(LONG wert) {
 	}
 	
 	while (TRUE) {
-		*pb = (BYTE)(b & 0x000000FF); pb++;
+		*pb = (int8)(b & 0x000000FF); pb++;
 		if (b & 0x80) b >>= 8; else break;
 	}
 }
 
-void SchreibeMidiEvent(LONG delta, WORD s, BYTE status, BYTE data1, BYTE data2) {
+void SchreibeMidiEvent(int32 delta, int16 s, int8 status, int8 data1, int8 data2) {
 	SchreibeVarLen(delta);
 	
 	if (spur[s].channel < 16) {
@@ -352,17 +353,17 @@ void SchreibeMidiEvent(LONG delta, WORD s, BYTE status, BYTE data1, BYTE data2) 
 	}
 }
 
-void SchreibeSysEx(UBYTE *data, LONG len) {
+void SchreibeSysEx(uint8 *data, int32 len) {
 	SchreibeVarLen(0);
 	
 	*pb++ = 0xF0;
 	SchreibeVarLen(len - 1);
-	memcpy(pb, (void *)((ULONG)data + 1), len - 1);
-	pb = (UBYTE*)((LONG)pb + len - 1);
+	memcpy(pb, (void *)((uint32)data + 1), len - 1);
+	pb = (uint8*)((int32)pb + len - 1);
 }
 
-void SchreibeMetaEvent(LONG delta, BYTE type, LONG len, BYTE *bytes) {
-	WORD n;
+void SchreibeMetaEvent(int32 delta, int8 type, int32 len, int8 *bytes) {
+	int16 n;
 	
 	SchreibeVarLen(delta);
 	*pb++ = 0xFF;
@@ -375,46 +376,46 @@ void ExportSMF(STRPTR name) {
 	APTR mem;
 	BPTR file;
 	struct CHUNK {
-		ULONG type;
-		ULONG len;
+		uint32 type;
+		uint32 len;
 	} chunk;
 	struct MTHEADER {
-		WORD format;
-		WORD tracks;
-		WORD division;
+		int16 format;
+		int16 tracks;
+		int16 division;
 	} mth;
-	LONG use;
-	BYTE useb[4];
-	WORD n;
+	int32 use;
+	int8 useb[4];
+	int16 n;
 	struct MARKER *mark;
 	struct SEQUENZ *seq;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *event;
-	LONG zpos;
-	LONG altzpos;
-	BYTE p, c;
+	int32 zpos;
+	int32 altzpos;
+	int8 p, c;
 	struct SYSEXUNIT *unit;
 	struct SYSEXMSG *sysex;
 
 	
-	mem = (APTR)AllocVec(300000, MEMF_ANY|MEMF_CLEAR);
+	mem = IExec->AllocVecTags(300000, AVT_ClearWithValue,0,TAG_END);
 	if (mem) {
 
-		file = Open(name, MODE_NEWFILE);
+		file = IDOS->Open(name, MODE_NEWFILE);
 		if (file) {
 			chunk.type = MTHD;
 			chunk.len = 6;
-			Write(file, &chunk, sizeof(struct CHUNK));
+			IDOS->Write(file, &chunk, sizeof(struct CHUNK));
 			mth.format = 1;
 			mth.tracks = lied.spuranz + 1;
 			mth.division = 256;
-			Write(file, &mth, sizeof(struct MTHEADER));
+			IDOS->Write(file, &mth, sizeof(struct MTHEADER));
 		
-			pb = (BYTE *)mem;
+			pb = (uint8 *)mem;
 
 			//Liedname
-			SchreibeMetaEvent(0, 0x03, strlen(lied.name), lied.name);
+			SchreibeMetaEvent(0, 0x03, strlen(lied.name), (int8 *)lied.name);
 			
 			//Marker
 			altzpos = 0;
@@ -430,13 +431,13 @@ void ExportSMF(STRPTR name) {
 					break;
 					
 					case M_TEMPO:
-					use = 60000000 / (LONG)mark->m_bpm;
+					use = 60000000 / (int32)mark->m_bpm;
 					use = use << 8;
-					SchreibeMetaEvent(mark->takt - altzpos, 0x51, 3, (BYTE *)&use);
+					SchreibeMetaEvent(mark->takt - altzpos, 0x51, 3, (int8 *)&use);
 					break;
 					
 					case M_TEXT:
-					SchreibeMetaEvent(mark->takt - altzpos, 0x06, strlen(&mark->text), &mark->text);
+					SchreibeMetaEvent(mark->takt - altzpos, 0x06, strlen(&mark->text), (int8*)&mark->text);
 					break;
 				}
 				altzpos = mark->takt;
@@ -447,20 +448,20 @@ void ExportSMF(STRPTR name) {
 			SchreibeMetaEvent(0, 0x2F, 0, NULL);
 
 			chunk.type = MTRK;
-			chunk.len = (ULONG)pb - (ULONG)mem;
-			Write(file, &chunk, sizeof(struct CHUNK));
-			Write(file, mem, chunk.len);
+			chunk.len = (uint32)pb - (uint32)mem;
+			IDOS->Write(file, &chunk, sizeof(struct CHUNK));
+			IDOS->Write(file, mem, chunk.len);
 
 
 			for(n = 0; n < lied.spuranz; n++) {
-				pb = (BYTE *)mem;
+				pb = (uint8 *)mem;
 				lastStatus = -1;
 				
 				//Spurname
-				SchreibeMetaEvent(0, 0x03, strlen(spur[n].name), spur[n].name);
+				SchreibeMetaEvent(0, 0x03, strlen(spur[n].name), (int8 *)spur[n].name);
 				
 				//Midi Channel
-				if (spur[n].channel < 16) SchreibeMetaEvent(0, 0x20, 1, &spur[n].channel);
+				if (spur[n].channel < 16) SchreibeMetaEvent(0, 0x20, 1, (int8 *)&spur[n].channel);
 				
 				//Programm
 				if (spur[n].prog >= 0) {
@@ -521,18 +522,18 @@ void ExportSMF(STRPTR name) {
 				SchreibeMetaEvent(0, 0x2F, 0, NULL);
 
 				chunk.type = MTRK;
-				chunk.len = (ULONG)pb - (ULONG)mem;
-				Write(file, &chunk, sizeof(struct CHUNK));
-				Write(file, mem, chunk.len);
+				chunk.len = (uint32)pb - (uint32)mem;
+				IDOS->Write(file, &chunk, sizeof(struct CHUNK));
+				IDOS->Write(file, mem, chunk.len);
 			}
 			
-			Close(file);
+			IDOS->Close(file);
 		
 		} else {
 			Meldung(CAT(MSG_0440, "Could not save file"));
 		}
 		
-		FreeVec(mem);
+		IExec->FreeVec(mem);
 
 	} else {
 		Meldung(CAT(MSG_0441, "Not enough memory for write buffer\n<DiskSMF.c>"));

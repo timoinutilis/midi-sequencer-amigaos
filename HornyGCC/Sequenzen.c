@@ -29,16 +29,16 @@ struct SEQUENZINFO seqinfo = {
 };
 
 
-struct SEQUENZ *ErstelleSequenz(WORD s, LONG t, BOOL allocevents) {
+struct SEQUENZ *ErstelleSequenz(int16 s, int32 t, BOOL allocevents) {
 	struct SEQUENZ *seq;
 
-	seq = AllocVec(sizeof(struct SEQUENZ), 0);
+	seq = IExec->AllocVecTags(sizeof(struct SEQUENZ), TAG_END);
 	if (seq) {
 		strncpy(seq->name, spur[s].name, 128);
 		seq->start = t & VIERTELMASKE;
 		seq->ende = seq->start + (VIERTELWERT << 2);
 		seq->trans = 0;
-		if (allocevents) seq->eventblock = AllocVec(sizeof(struct EVENTBLOCK), MEMF_CLEAR);
+		if (allocevents) seq->eventblock = IExec->AllocVecTags(sizeof(struct EVENTBLOCK), AVT_ClearWithValue,0,TAG_END);
 		else seq->eventblock = NULL;
 		seq->markiert = FALSE;
 		seq->aliasorig = NULL;
@@ -50,7 +50,7 @@ struct SEQUENZ *ErstelleSequenz(WORD s, LONG t, BOOL allocevents) {
 }
 
 BOOL AddEvbl(struct EVENTBLOCK *evbl) {
-	evbl->next = AllocVec(sizeof(struct EVENTBLOCK), MEMF_ANY | MEMF_CLEAR);
+	evbl->next = IExec->AllocVecTags(sizeof(struct EVENTBLOCK), AVT_ClearWithValue,0,TAG_END);
 	if (evbl->next) {
 		evbl->next->prev = evbl;
 		return(TRUE);
@@ -67,19 +67,19 @@ void EvblsAbschneiden(struct EVENTBLOCK *evbl) {
 		evbl = evbl->next; evbl->prev->next = NULL;
 		while (evbl) {
 			next = evbl->next;
-			FreeVec(evbl);
+			IExec->FreeVec(evbl);
 			evbl = next;
 		}
 	}
 }
 
-void SequenzenOrdnen(WORD s) {
+void SequenzenOrdnen(int16 s) {
 	struct SEQUENZ *aktseq;
 	struct SEQUENZ *altseq;
 	struct SEQUENZ *startseq;
 
 	if (spur[s].seq) {
-		startseq = AllocVec(sizeof(struct SEQUENZ), MEMF_ANY | MEMF_CLEAR);
+		startseq = IExec->AllocVecTags(sizeof(struct SEQUENZ), AVT_ClearWithValue,0,TAG_END);
 		if (startseq) {
 			startseq->start = -1;
 			startseq->next = spur[s].seq;
@@ -100,12 +100,12 @@ void SequenzenOrdnen(WORD s) {
 			if ((aktseq->ende >> VIERTEL) > lied.taktanz) lied.taktanz = (aktseq->ende >> VIERTEL) + 30;
 
 			spur[s].seq = startseq->next;
-			FreeVec(startseq);
+			IExec->FreeVec(startseq);
 		} else Meldung(CAT(MSG_0413, "Not enough memory for sequence\n<Sequenzen.c>"));
 	}
 }
 
-struct SEQUENZ *NeueSequenzEinordnen(WORD s) {
+struct SEQUENZ *NeueSequenzEinordnen(int16 s) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *altseq;
 
@@ -154,17 +154,17 @@ void SequenzEntfernen(struct SEQUENZ *seq) {
 			aktevbl = seq->eventblock;
 			while (aktevbl) {
 				nextevbl = aktevbl->next;
-				FreeVec(aktevbl);
+				IExec->FreeVec(aktevbl);
 				aktevbl = nextevbl;
 			}
 		} else {
 			seq->aliasorig->aliasanz--;
 		}
-		FreeVec(seq);
+		IExec->FreeVec(seq);
 	}
 }
 
-void SpurSequenzenEntfernen(WORD s) {
+void SpurSequenzenEntfernen(int16 s) {
 	struct SEQUENZ *aktseq;
 	struct SEQUENZ *nextseq;
 	struct EVENTBLOCK *aktevbl;
@@ -177,12 +177,12 @@ void SpurSequenzenEntfernen(WORD s) {
 			aktevbl = aktseq->eventblock;
 			while (aktevbl) {
 				nextevbl = aktevbl->next;
-				FreeVec(aktevbl);
+				IExec->FreeVec(aktevbl);
 				aktevbl = nextevbl;
 			}
 		}
 		nextseq = aktseq->next;
-		FreeVec(aktseq);
+		IExec->FreeVec(aktseq);
 		aktseq = nextseq;
 	}
 	spur[s].seq = NULL;
@@ -191,7 +191,7 @@ void SpurSequenzenEntfernen(WORD s) {
 void SequenzAusSpurEntfernen(struct SEQUENZ *seq) {
 	struct SEQUENZ *aktseq;
 	struct SEQUENZ *altseq;
-	WORD s;
+	int16 s;
 
 	if (seq == edseq) EntferneEditorNotenFenster();
 	s = seq->spur;
@@ -212,7 +212,7 @@ void SequenzAusSpurEntfernen(struct SEQUENZ *seq) {
 }
 
 
-struct SEQUENZ *TaktSequenz(WORD s, LONG t, BYTE *p) {
+struct SEQUENZ *TaktSequenz(int16 s, int32 t, int8 *p) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *wahl;
 
@@ -228,9 +228,9 @@ struct SEQUENZ *TaktSequenz(WORD s, LONG t, BYTE *p) {
 	return(wahl);
 }
 
-BOOL HoleMarkSequenzenRahmen(LONG *start, LONG *ende) {
+BOOL HoleMarkSequenzenRahmen(int32 *start, int32 *ende) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 	
 	*start = 0x7FFFFFFF;
 	*ende = 0;
@@ -249,9 +249,9 @@ BOOL HoleMarkSequenzenRahmen(LONG *start, LONG *ende) {
 	return (*ende != 0);
 }
 
-void MarkSequenzenVerschiebenTest(WORD *sd, LONG *d) {
+void MarkSequenzenVerschiebenTest(int16 *sd, int32 *d) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -266,7 +266,7 @@ void MarkSequenzenVerschiebenTest(WORD *sd, LONG *d) {
 	}
 }
 
-void MarkSequenzenVerschieben(WORD s, WORD sd, LONG d) {
+void MarkSequenzenVerschieben(int16 s, int16 sd, int32 d) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *nextseq;
 	BOOL anders = FALSE;
@@ -304,7 +304,7 @@ void MarkSequenzenVerschieben(WORD s, WORD sd, LONG d) {
 void MarkSequenzenEntfernen(void) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *nextseq;
-	WORD s;
+	int16 s;
 	BOOL hindernis = FALSE;
 
 	for (s = 0; s < lied.spuranz; s++) {
@@ -327,7 +327,7 @@ void MarkSequenzenEntfernen(void) {
 struct SEQUENZ *NeuesAlias(struct SEQUENZ *original) {
 	struct SEQUENZ *seq;
 
-	seq = AllocVec(sizeof(struct SEQUENZ), 0);
+	seq = IExec->AllocVecTags(sizeof(struct SEQUENZ), TAG_END);
 	if (seq) {
 		seq->name[0] = 0;
 		seq->start = original->start;
@@ -354,7 +354,7 @@ struct SEQUENZ *MarkSequenzenAlias(void) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *nextseq;
 	struct SEQUENZ *erstesalias = NULL;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -379,7 +379,7 @@ struct SEQUENZ *NeueKopie(struct SEQUENZ *original) {
 	struct EVENTBLOCK *neuevbl;
 	struct EVENTBLOCK *altevbl;
 
-	seq = AllocVec(sizeof(struct SEQUENZ), 0);
+	seq = IExec->AllocVecTags(sizeof(struct SEQUENZ), TAG_END);
 	if (seq) {
 		if (original->aliasorig) {
 			strncpy(seq->name, original->aliasorig->name, 128);
@@ -398,7 +398,7 @@ struct SEQUENZ *NeueKopie(struct SEQUENZ *original) {
 
 		evbl = original->eventblock; altevbl = NULL;
 		while (evbl) {
-			neuevbl = AllocVec(sizeof(struct EVENTBLOCK), 0);
+			neuevbl = IExec->AllocVecTags(sizeof(struct EVENTBLOCK), TAG_END);
 			if (neuevbl) {
 				memcpy(neuevbl, evbl, sizeof(struct EVENTBLOCK));
 				neuevbl->prev = altevbl;
@@ -415,7 +415,7 @@ struct SEQUENZ *MarkSequenzenKopieren(void) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *nextseq;
 	struct SEQUENZ *erstekopie = NULL;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -437,7 +437,7 @@ struct SEQUENZ *MarkSequenzenKopieren(void) {
 void MarkSequenzenAliasZuReal(void) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *nextseq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -455,7 +455,7 @@ void MarkSequenzenAliasZuReal(void) {
 	}
 }
 
-void SequenzenInSpurMarkieren(WORD s) {
+void SequenzenInSpurMarkieren(int16 s) {
 	struct SEQUENZ *seq;
 
 	seq = spur[s].seq;
@@ -467,9 +467,9 @@ void SequenzenInSpurMarkieren(WORD s) {
 	}
 }
 
-void SequenzenAbXMarkieren(LONG t) {
+void SequenzenAbXMarkieren(int32 t) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -485,7 +485,7 @@ void SequenzenAbXMarkieren(LONG t) {
 
 void NichtsMarkieren(void) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -498,10 +498,10 @@ void NichtsMarkieren(void) {
 	}
 }
 
-void BereichMarkieren(WORD vs, WORD bs, LONG vt, LONG bt) {
+void BereichMarkieren(int16 vs, int16 bs, int32 vt, int32 bt) {
 	struct SEQUENZ *seq;
-	WORD s;
-	LONG tausch;
+	int16 s;
+	int32 tausch;
 
 	if (vs > bs) {tausch = vs; vs = bs; bs = tausch;}
 	if (vt > bt) {tausch = vt; vt = bt; bt = tausch;}
@@ -518,7 +518,7 @@ void BereichMarkieren(WORD vs, WORD bs, LONG vt, LONG bt) {
 	}
 }
 
-void SequenzenSpuren(WORD s) {
+void SequenzenSpuren(int16 s) {
 	struct SEQUENZ *seq;
 
 	seq = spur[s].seq;
@@ -528,17 +528,17 @@ void SequenzenSpuren(WORD s) {
 	}
 }
 
-BOOL SequenzZerschneiden(struct SEQUENZ *seq, LONG tp, BYTE *trennart) {
+BOOL SequenzZerschneiden(struct SEQUENZ *seq, int32 tp, int8 *trennart) {
 	struct EVENTBLOCK *evbl;
 	struct EVENTBLOCK *killevbl;
-	WORD evnum;
-	WORD killevnum;
-	LONG ende;
+	int16 evnum;
+	int16 killevnum;
+	int32 ende;
 	struct EVENTBLOCK *neuevbl;
 	struct EVENTBLOCK *prevneuevbl;
-	WORD neuevnum;
-	LONG d;
-	WORD s;
+	int16 neuevnum;
+	int32 d;
+	int16 s;
 
 	if (!seq->aliasorig) {
 
@@ -560,13 +560,13 @@ BOOL SequenzZerschneiden(struct SEQUENZ *seq, LONG tp, BYTE *trennart) {
 			s = seq->spur;
 			killevbl = evbl; killevnum = evnum;
 
-			sp[s].neuseq = AllocVec(sizeof(struct SEQUENZ), 0);
+			sp[s].neuseq = IExec->AllocVecTags(sizeof(struct SEQUENZ), TAG_END);
 			if (sp[s].neuseq) {
 				strncpy(sp[s].neuseq->name, seq->name, 128);
 				sp[s].neuseq->start = (seq->start + evbl->event[evnum].zeit) & VIERTELMASKE;
 				sp[s].neuseq->ende = seq->ende;
 				sp[s].neuseq->trans = seq->trans;
-				sp[s].neuseq->eventblock = AllocVec(sizeof(struct EVENTBLOCK), MEMF_CLEAR);
+				sp[s].neuseq->eventblock = IExec->AllocVecTags(sizeof(struct EVENTBLOCK), AVT_ClearWithValue,0,TAG_END);
 				sp[s].neuseq->markiert = TRUE;
 				sp[s].neuseq->aliasorig = NULL;
 				sp[s].neuseq->aliasanz = 0;
@@ -591,7 +591,7 @@ BOOL SequenzZerschneiden(struct SEQUENZ *seq, LONG tp, BYTE *trennart) {
 						neuevnum++;
 						if (neuevnum == EVENTS) {
 							prevneuevbl = neuevbl;
-							neuevbl = AllocVec(sizeof(struct EVENTBLOCK), MEMF_CLEAR);
+							neuevbl = IExec->AllocVecTags(sizeof(struct EVENTBLOCK), AVT_ClearWithValue, 0, TAG_END);
 							if (neuevbl) {
 								neuevbl->prev = prevneuevbl;
 							} else Meldung(CAT(MSG_0412, "Not enough memory for event block\n<Sequenzen.c>"));
@@ -625,10 +625,10 @@ BOOL SequenzZerschneiden(struct SEQUENZ *seq, LONG tp, BYTE *trennart) {
 	return(FALSE);
 }
 
-void MarkSequenzenZerschneiden(LONG tp) {
+void MarkSequenzenZerschneiden(int32 tp) {
 	struct SEQUENZ *seq;
-	WORD s;
-	BYTE trennart = 0;
+	int16 s;
+	int8 trennart = 0;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -643,10 +643,10 @@ void MarkSequenzenZerschneiden(LONG tp) {
 	}
 }
 
-void SequenzUnterteilen(struct SEQUENZ *seq, LONG tp) {
-	LONG d;
-	LONG e;
-	BYTE trennart = 0;
+void SequenzUnterteilen(struct SEQUENZ *seq, int32 tp) {
+	int32 d;
+	int32 e;
+	int8 trennart = 0;
 
 	if (seq) {
 		if ((seq->start < tp) && (seq->ende > tp)) {
@@ -665,10 +665,10 @@ void SequenzUnterteilen(struct SEQUENZ *seq, LONG tp) {
 
 BOOL SequenzenVerbinden(struct SEQUENZ *seq1, struct SEQUENZ *seq2) {
 	struct EVENTBLOCK *evbl1;
-	WORD evnum1;
+	int16 evnum1;
 	struct EVENTBLOCK *evbl2;
-	WORD evnum2;
-	LONG d;
+	int16 evnum2;
+	int32 d;
 
 	if (!seq1->aliasorig && !seq2->aliasorig) {
 		evbl1 = seq1->eventblock; evnum1 = 0;
@@ -710,7 +710,7 @@ BOOL SequenzenVerbinden(struct SEQUENZ *seq1, struct SEQUENZ *seq2) {
 
 void MarkSequenzenVerbinden(void) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -729,10 +729,10 @@ void MarkSequenzenVerbinden(void) {
 	}
 }
 
-void MarkSequenzenStartVerschieben(WORD d) {
+void MarkSequenzenStartVerschieben(int16 d) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *orig;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -754,10 +754,10 @@ void MarkSequenzenStartVerschieben(WORD d) {
 	}
 }
 
-void MarkSequenzenEndeVerschieben(WORD d) {
+void MarkSequenzenEndeVerschieben(int16 d) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *orig;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -776,7 +776,7 @@ void MarkSequenzenEndeVerschieben(WORD d) {
 }
 
 void AlleAliaseZuweisen(void) {
-	WORD s, n;
+	int16 s, n;
 	struct SEQUENZ *seq;
 	struct SEQUENZ *seq2;
 
@@ -814,7 +814,7 @@ void InitSequenzInfo(void) {
 }
 
 void MarkSequenzInfo(void) {
-	WORD s;
+	int16 s;
 	struct SEQUENZ *seq;
 	STRPTR name;
 	BOOL ns = FALSE, ts = FALSE, ms = FALSE;
@@ -852,7 +852,7 @@ void MarkSequenzInfo(void) {
 
 void MarkSequenzenSetzeName(STRPTR name) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -866,9 +866,9 @@ void MarkSequenzenSetzeName(STRPTR name) {
 	}
 }
 
-void MarkSequenzenSetzeTrans(BYTE trans) {
+void MarkSequenzenSetzeTrans(int8 trans) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;
@@ -884,7 +884,7 @@ void MarkSequenzenSetzeTrans(BYTE trans) {
 
 void MarkSequenzenSetzeMute(BOOL mute) {
 	struct SEQUENZ *seq;
-	WORD s;
+	int16 s;
 
 	for (s = 0; s < lied.spuranz; s++) {
 		seq = spur[s].seq;

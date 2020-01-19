@@ -21,10 +21,10 @@
 #define STATUS_ENDE -1
 
 struct EVENT {
-	LONG zeit;
-	UBYTE status;
-	UBYTE data1;
-	UBYTE data2;
+	int32 zeit;
+	uint8 status;
+	uint8 data1;
+	uint8 data2;
 	BOOL markiert;
 };
 
@@ -36,14 +36,14 @@ struct EVENTBLOCK {
 
 struct SEQUENZ {
 	char name[128];
-	LONG start;
-	LONG ende;
-	BYTE trans;
+	int32 start;
+	int32 ende;
+	int8 trans;
 	struct EVENTBLOCK *eventblock;
 	BOOL markiert;
 	struct SEQUENZ *aliasorig;
-	WORD aliasanz;
-	WORD spur;
+	int16 aliasanz;
+	int16 spur;
 	BOOL mute;
 	struct SEQUENZ *next;
 	struct SEQUENZ *speicheradr;
@@ -51,47 +51,47 @@ struct SEQUENZ {
 
 struct SPUR {
 	char name[128];
-	UBYTE port;
-	UBYTE channel;
-	BYTE bank0;
-	BYTE bank32;
-	BYTE prog;
-	WORD shift;
+	uint8 port;
+	uint8 channel;
+	int8 bank0;
+	int8 bank32;
+	int8 prog;
+	int16 shift;
 	BOOL mute;
 	struct SEQUENZ *seq;
 	struct SEQUENZ *aktseq;
 	struct EVENTBLOCK *aktevbl;
-	WORD aktevnum;
-	UBYTE autostatus; // 0=Nichts 1=Vol 2=Pan 3=Contr0...
+	int16 aktevnum;
+	uint8 autostatus; // 0=Nichts 1=Vol 2=Pan 3=Contr0...
 };
 
 struct SPURTEMP {
-	BYTE anders;
+	int8 anders;
 	struct SEQUENZ *loopseq;
 	struct EVENTBLOCK *loopevbl;
-	WORD loopevnum;
+	int16 loopevnum;
 	struct SEQUENZ *neuseq;
 };
 
 struct KANALTEMP {
-	UBYTE note[128];
-	BYTE aktbank0;
-	BYTE aktbank32;
-	BYTE aktprog;
+	uint8 note[128];
+	int8 aktbank0;
+	int8 aktbank32;
+	int8 aktprog;
 };
 
 struct LIED {
 	char name[128];
-	UBYTE spuranz;
-	WORD taktanz;
+	uint8 spuranz;
+	int16 taktanz;
 	char phonolithprojekt[1024];
 };
 
 struct AUTOPUNKT {
 	struct AUTOPUNKT *prev;
 	struct AUTOPUNKT *next;
-	LONG takt;
-	BYTE wert;
+	int32 takt;
+	int8 wert;
 };
 
 struct AUTOKANAL {
@@ -101,30 +101,30 @@ struct AUTOKANAL {
 };
 
 struct GUI {
-	WORD spur;
-	WORD spsicht;
-	WORD sph;
-	LONG takt;
-	WORD tasicht;
-	WORD tab;
-	WORD spalte;
+	int16 spur;
+	int16 spsicht;
+	int16 sph;
+	int32 takt;
+	int16 tasicht;
+	int16 tab;
+	int16 spalte;
 	BOOL folgen;
 };
 
 struct LOOP {
-	LONG start;
-	LONG ende;
+	int32 start;
+	int32 ende;
 	BOOL aktiv;
 };
 
 struct METRONOM {
-	UBYTE port;
-	UBYTE channel;
-	BYTE taste1;
-	BYTE taste2;
-	BYTE velo1;
-	BYTE velo2;
-	WORD raster;
+	uint8 port;
+	uint8 channel;
+	int8 taste1;
+	int8 taste2;
+	int8 velo1;
+	int8 velo2;
+	int16 raster;
 	BOOL rec;
 	BOOL play;
 };
@@ -134,8 +134,8 @@ struct METRONOM {
 #define FPS_30   2
 
 struct SMPTE {
-	LONG startticks;
-	BYTE format;
+	int32 startticks;
+	int8 format;
 };
 
 #define M_TEMPO	0
@@ -148,11 +148,11 @@ struct SMPTE {
 struct MARKER {
 	struct MARKER *prev;
 	struct MARKER *next;
-	ULONG takt;
-	BYTE typ;
-	UWORD d1;
-	UWORD d2;
-	ULONG ticks;
+	uint32 takt;
+	int8 typ;
+	uint16 d1;
+	uint16 d2;
+	uint32 ticks;
 	char text;
 };
 
@@ -160,8 +160,8 @@ struct LOOPZEIT {
 	struct MARKER *ltmark;
 	struct MARKER *lkmark;
 	struct MARKER *lxmark;
-	LONG starttakt;
-	LONG delay;
+	int32 starttakt;
+	int32 delay;
 };
 
 #define TASTATUR_AMIGA 0
@@ -169,10 +169,10 @@ struct LOOPZEIT {
 
 struct UMGEBUNG {
 	BOOL wbscreen;
-	ULONG screenmode;
-	WORD scrbreite;
-	WORD scrhoehe;
-	UBYTE scrtiefe;
+	uint32 screenmode;
+	int16 scrbreite;
+	int16 scrhoehe;
+	uint8 scrtiefe;
 	BOOL backdrop;
 	STRPTR pfadproj;
 	STRPTR pfadsmf;
@@ -180,10 +180,10 @@ struct UMGEBUNG {
 	STRPTR pfadphonolith;
 	STRPTR startproj;
 	BOOL startaktiv;
-	UBYTE tastatur;
-	BYTE playerPri;
-	BYTE thruPri;
-	WORD sysexpuffer;
+	uint8 tastatur;
+	int8 playerPri;
+	int8 thruPri;
+	int16 sysexpuffer;
 	BOOL mausradtauschen;
 };
 
@@ -191,32 +191,32 @@ struct UMGEBUNG {
 #define EDMODUS_CONTR 1
 
 struct EDGUI {
-	BYTE modus;
-	WORD taste;
-	WORD tasth;
-	WORD tastsicht;
-	WORD contr;
-	WORD contrh;
-	WORD contrsicht;
-	WORD contranz;
-	LONG takt;
-	WORD taktb;
-	WORD taktsicht;
-	UBYTE raster;
-	BYTE neulen;
+	int8 modus;
+	int16 taste;
+	int16 tasth;
+	int16 tastsicht;
+	int16 contr;
+	int16 contrh;
+	int16 contrsicht;
+	int16 contranz;
+	int32 takt;
+	int16 taktb;
+	int16 taktsicht;
+	uint8 raster;
+	int8 neulen;
 	BOOL tripled;
 };
 
 struct OUTINSTR {
 	char name[128];
-	BYTE unten;
+	int8 unten;
 };
 
 struct OUTPORT {
 	char name[128];
 	struct OUTINSTR outinstr[4];
 	BOOL thru;
-	WORD latenz;
+	int16 latenz;
 };
 
 struct INPORT {
@@ -225,15 +225,15 @@ struct INPORT {
 
 struct SYSEXMSG {
 	char name[128];
-	ULONG len;
-	UBYTE *data;
+	uint32 len;
+	uint8 *data;
 	struct SYSEXMSG *prev;
 	struct SYSEXMSG *next;
 };
 
 struct SYSEXUNIT {
 	char name[128];
-	UBYTE port;
+	uint8 port;
 	BOOL gesperrt;
 	struct SYSEXMSG *sysex;
 	struct SYSEXUNIT *prev;
@@ -242,17 +242,17 @@ struct SYSEXUNIT {
 
 struct PROGRAMM {
 	char name[128];
-	BYTE bank0;
-	BYTE bank32;
-	BYTE prog;
+	int8 bank0;
+	int8 bank32;
+	int8 prog;
 	struct PROGRAMM *next;
 };
 
 struct KATEGORIE {
 	char name[128];
 	struct PROGRAMM *programm;
-	BYTE chanvon;
-	BYTE chanbis;
+	int8 chanvon;
+	int8 chanbis;
 	struct KATEGORIE *next;
 };
 
@@ -261,7 +261,7 @@ struct KATEGORIE {
 #define CONTR_SET   0x04
 struct INSTRCONTR {
 	char name[128][128];
-	UBYTE flags[128];
+	uint8 flags[128];
 };
 
 struct INSTRUMENT {
@@ -275,32 +275,32 @@ struct SEQUENZINFO {
 	BOOL benutzt;
 	char name[128];
 	BOOL namemulti;
-	BYTE trans;
+	int8 trans;
 	BOOL transmulti;
 	BOOL mute;
 	BOOL mutemulti;
-	WORD aliasanz;
+	int16 aliasanz;
 };
 
 struct MPDATA {
-	WORD kanalanz;
-	WORD kanalerst;
-	WORD kanalsicht;
+	int16 kanalanz;
+	int16 kanalerst;
+	int16 kanalsicht;
 };
 
 struct MPKANALNUM {
-	BYTE port;
-	BYTE channel;
+	int8 port;
+	int8 channel;
 };
 
 struct MPKANAL {
-	BYTE contr[6];
-	BYTE contrwert[6];
-	BYTE pan;
-	BYTE fader;
+	int8 contr[6];
+	int8 contrwert[6];
+	int8 pan;
+	int8 fader;
 	BOOL mute;
-	BYTE meter;
-	WORD bezspur[3];
+	int8 meter;
+	int16 bezspur[3];
 	BOOL autoupdate; // Automation GUI Update
-	UBYTE updateflags;
+	uint8 updateflags;
 };

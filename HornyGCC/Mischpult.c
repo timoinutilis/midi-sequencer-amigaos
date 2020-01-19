@@ -30,6 +30,8 @@
 #include "Dynamic_Strings.h"
 #include "DTGrafik.h"
 
+#include "oca.h"
+
 #define QUALIFIER_SHIFT 0x03
 #define QUALIFIER_ALT 0x30
 #define QUALIFIER_CTRL 0x08
@@ -43,13 +45,13 @@ extern struct Window *hfenster;
 extern struct Window *aktfenster;
 extern struct FENSTERPOS fenp[];
 
-BYTE mpmauskanal = 0;
-BYTE mpmausdata = 0;
-BYTE mpmausaktion = 0;
+int8 mpmauskanal = 0;
+int8 mpmausdata = 0;
+int8 mpmausaktion = 0;
 #define MPAKTION_PAN 1
 #define MPAKTION_POTI 2
-WORD mpmausalty = 0;
-WORD mpmausaltx = 0;
+int16 mpmausalty = 0;
+int16 mpmausaltx = 0;
 
 struct Window *mpfenster = NULL;
 
@@ -81,14 +83,14 @@ struct MPDATA mpdata = {
 struct MPKANAL mpkanal[OUTPORTS][16];
 struct MPKANALNUM mpkanalnum[SPUREN];
 
-struct TagItem mixmapfader[] = {SLIDER_Level, ICSPECIAL_CODE, TAG_DONE};
+struct TagItem mixmapfader[] = {{SLIDER_Level, ICSPECIAL_CODE}, {TAG_DONE,TAG_DONE}};
 struct TextAttr mixfentextattr = {"helvetica.font", 11, FS_NORMAL, 0};
 
 #define MUTE_SOLO 1
 #define MUTE_OFF 2
 
 void InitMPKanaele(void) {
-	BYTE p, c, n;
+	int8 p, c, n;
 	
 	for (p = 0; p < verOUTPORTS; p++) {
 		for (c = 0; c < 16; c++) {
@@ -111,10 +113,10 @@ void InitMPKanaele(void) {
 }
 
 void SammleMPKanaele(void) {
-	WORD s;
-	BYTE p, c;
+	int16 s;
+	int8 p, c;
 	BOOL benutzt[OUTPORTS][16];
-	BYTE n;
+	int8 n;
 	
 	for (p = 0; p < verOUTPORTS; p++) {
 		for (c = 0; c < 16; c++) {
@@ -148,10 +150,10 @@ void SammleMPKanaele(void) {
 	mpdata.kanalanz = s;
 }
 
-void ErstelleMPKanalGadgets(UBYTE n) {
-	WORD x, y;
-	BYTE i;
-	BYTE max;
+void ErstelleMPKanalGadgets(uint8 n) {
+	int16 x, y;
+	int8 i;
+	int8 max;
 	
 	x = mpfenster->BorderLeft + (n * 60);
 	y = mpfenster->BorderTop;
@@ -160,7 +162,7 @@ void ErstelleMPKanalGadgets(UBYTE n) {
 	if (verLITE) max = 3;
 	else max = 6;
 	for (i = 0; i < max; i++) {
-		mpguikanal[n].contrgad[i] = NewObject(BUTTON_GetClass(), NULL,
+		mpguikanal[n].contrgad[i] = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 			GA_Top, y + 2 + (i * 16), GA_Left, x + 2,
 			GA_Width, 40, GA_Height, 16, GA_RelVerify, TRUE,
 			GA_ID, (MPGAD_ANZ * n) + GAD_CONTR + i, GA_UserData, n,
@@ -169,7 +171,7 @@ void ErstelleMPKanalGadgets(UBYTE n) {
 			TAG_DONE);
 	}
 	// Fader...
-	mpguikanal[n].fadergad = NewObject(SLIDER_GetClass(), NULL,
+	mpguikanal[n].fadergad = (struct Gadget *)IIntuition->NewObject(SliderClass, NULL,
 		GA_BackFill, backfill,
 		GA_Top, y + 150, GA_Left, x + 25,
 		GA_Width, 30, GA_Height, 140,
@@ -179,16 +181,14 @@ void ErstelleMPKanalGadgets(UBYTE n) {
 		SLIDER_Level, 100,
 		SLIDER_Orientation, SORIENT_VERT,
 		SLIDER_Invert, TRUE,
-#ifdef __amigaos4__
 		SLIDER_LevelPlace, PLACETEXT_IN,
 		SLIDER_LevelJustify, SLJ_CENTER,
 		SLIDER_LevelFormat, "%ld",
-#endif
 		ICA_TARGET, ICTARGET_IDCMP,
 		ICA_MAP, mixmapfader,
 		TAG_DONE);
 	// Mute...
-	mpguikanal[n].mutegad = NewObject(BUTTON_GetClass(), NULL,
+	mpguikanal[n].mutegad = (struct Gadget *)IIntuition->NewObject(ButtonClass, NULL,
 		GA_Top, y + 294, GA_Left, x + 6,
 		GA_Width, 50, GA_Height, 16, GA_RelVerify, TRUE,
 		GA_ID, (MPGAD_ANZ * n) + GAD_MUTE, GA_UserData, n,
@@ -198,23 +198,23 @@ void ErstelleMPKanalGadgets(UBYTE n) {
 	
 }
 
-void EntferneMPKanalGadgets(UBYTE n) {
-	UBYTE i;
-	BYTE max;
+void EntferneMPKanalGadgets(uint8 n) {
+	uint8 i;
+	int8 max;
 	
 	if (verLITE) max = 3;
 	else max = 6;
 	
-	for (i = 0; i < max; i++) DisposeObject(mpguikanal[n].contrgad[i]);
-	DisposeObject(mpguikanal[n].fadergad);
-	DisposeObject(mpguikanal[n].mutegad);
+	for (i = 0; i < max; i++) IIntuition->DisposeObject((Object *)mpguikanal[n].contrgad[i]);
+	IIntuition->DisposeObject((Object *)mpguikanal[n].fadergad);
+	IIntuition->DisposeObject((Object *)mpguikanal[n].mutegad);
 }
 
 void MPKanaeleEinsetzen(void) {
-	UBYTE i;
-	WORD x;
-	UBYTE n;
-	BYTE max;
+	uint8 i;
+	int16 x;
+	uint8 n;
+	int8 max;
 	
 	aktfenster = mpfenster;
 	
@@ -225,10 +225,10 @@ void MPKanaeleEinsetzen(void) {
 	for (n = 0; n < mpdata.kanalsicht; n++) {
 		x = n * 60;
 		
-		for (i = 0; i < max; i++) AddGadget(mpfenster, mpguikanal[n].contrgad[i], -1);
+		for (i = 0; i < max; i++) IIntuition->AddGadget(mpfenster, mpguikanal[n].contrgad[i], -1);
 
-		AddGadget(mpfenster, mpguikanal[n].fadergad, -1);
-		AddGadget(mpfenster, mpguikanal[n].mutegad, -1);
+		IIntuition->AddGadget(mpfenster, mpguikanal[n].fadergad, -1);
+		IIntuition->AddGadget(mpfenster, mpguikanal[n].mutegad, -1);
 	
 		RahmenAus(0, 0, x, 0, x + 59, 367);
 		Linie(1, x + 1, 312, x + 58, 312);
@@ -236,13 +236,13 @@ void MPKanaeleEinsetzen(void) {
 		RahmenRundungAus(x + 1, 1, x + 58, 311);
 		BlitteBitMap(BMAP_PAN_BG, 0, 0, x + 1, 126, 58, 19);
 	}
-	RefreshGadgets(mpguikanal[0].contrgad[0], mpfenster, NULL);
+	IIntuition->RefreshGadgets(mpguikanal[0].contrgad[0], mpfenster, NULL);
 }
 
 void MPKanaeleWegnehmen(void) {
-	UBYTE i;
-	UBYTE n;
-	BYTE max;
+	uint8 i;
+	uint8 n;
+	int8 max;
 	
 	aktfenster = mpfenster;
 	BildFrei();
@@ -251,28 +251,28 @@ void MPKanaeleWegnehmen(void) {
 	else max = 6;
 	
 	for (n = 0; n < mpdata.kanalsicht; n++) {
-		for (i = 0; i < max; i++) RemoveGadget(mpfenster, mpguikanal[n].contrgad[i]);
-		RemoveGadget(mpfenster, mpguikanal[n].fadergad);
-		RemoveGadget(mpfenster, mpguikanal[n].mutegad);
+		for (i = 0; i < max; i++) IIntuition->RemoveGadget(mpfenster, mpguikanal[n].contrgad[i]);
+		IIntuition->RemoveGadget(mpfenster, mpguikanal[n].fadergad);
+		IIntuition->RemoveGadget(mpfenster, mpguikanal[n].mutegad);
 	}
 	mpdata.kanalsicht = 0;
 }
 
-void ZeichnePanorama(WORD x, BYTE pan) {
-	BYTE y[] = {8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 0};
-	WORD xp;
+void ZeichnePanorama(int16 x, int8 pan) {
+	int8 y[] = {8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 0};
+	int16 xp;
 	
 	aktfenster = mpfenster;
 	BlitteBitMap(BMAP_PAN_BG, 0, 0, x + 1, 126, 58, 19);
-	xp = (WORD)(pan * 0.37);
+	xp = (int16)(pan * 0.37);
 	if (xp < 23) BlitteBitMap(BMAP_PAN_BG_ACTIVE, xp + 7, 0, x + 7 + xp, 126, 23 - xp, 19);
 	if (xp > 23) BlitteBitMap(BMAP_PAN_BG_ACTIVE, 29, 0, x + 30, 126, xp - 23, 19);
 	BlitteBitMap(BMAP_PAN_POINTER, 0, 0, x + 5 + xp, 136 - y[abs(xp - 23)], 5, 9);
 }
 
-void BewegePanorama(BYTE guikanal, WORD delta) {
-	BYTE p, c;
-	WORD pan;
+void BewegePanorama(int8 guikanal, int16 delta) {
+	int8 p, c;
+	int16 pan;
 	
 	p = mpkanalnum[guikanal + mpdata.kanalerst].port;
 	c = mpkanalnum[guikanal + mpdata.kanalerst].channel;
@@ -285,8 +285,8 @@ void BewegePanorama(BYTE guikanal, WORD delta) {
 	ZeichnePanorama(guikanal * 60, pan);
 }
 
-void PanoramaMitte(BYTE guikanal) {
-	BYTE p, c;
+void PanoramaMitte(int8 guikanal) {
+	int8 p, c;
 	
 	p = mpkanalnum[guikanal + mpdata.kanalerst].port;
 	c = mpkanalnum[guikanal + mpdata.kanalerst].channel;
@@ -296,18 +296,18 @@ void PanoramaMitte(BYTE guikanal) {
 	ZeichnePanorama(guikanal * 60, mpkanal[p][c].pan);
 }
 
-void ZeichneContrPoti(WORD x, WORD y, BYTE wert) {
+void ZeichneContrPoti(int16 x, int16 y, int8 wert) {
 	FLOAT w;
 	
 	aktfenster = mpfenster;
 	w = 3.1415926535 / 180.0 * (20 + ((FLOAT)wert * 2.5));
 	BlitteBitMap(BMAP_POTI, 0, 0, x, y, 15, 15);
-	Linie(1, x + 7, y + 7, x + 7 - (WORD)(sin(w) * 7), y + 7 + (WORD)(cos(w) * 7));
+	Linie(1, x + 7, y + 7, x + 7 - (int16)(sin(w) * 7), y + 7 + (int16)(cos(w) * 7));
 }
 
-void BewegeContrPoti(BYTE guikanal, BYTE n, WORD delta) {
-	BYTE p, c;
-	WORD neuwert;
+void BewegeContrPoti(int8 guikanal, int8 n, int16 delta) {
+	int8 p, c;
+	int16 neuwert;
 	
 	p = mpkanalnum[guikanal + mpdata.kanalerst].port;
 	c = mpkanalnum[guikanal + mpdata.kanalerst].channel;
@@ -322,8 +322,8 @@ void BewegeContrPoti(BYTE guikanal, BYTE n, WORD delta) {
 	}
 }
 
-void ContrPotiReset(BYTE guikanal, BYTE n) {
-	BYTE p, c;
+void ContrPotiReset(int8 guikanal, int8 n) {
+	int8 p, c;
 	
 	p = mpkanalnum[guikanal + mpdata.kanalerst].port;
 	c = mpkanalnum[guikanal + mpdata.kanalerst].channel;
@@ -335,13 +335,13 @@ void ContrPotiReset(BYTE guikanal, BYTE n) {
 	}
 }
 
-void MPKanalContrAktualisieren(UBYTE k) {
-	BYTE p, c;
-	BYTE guikanal;
+void MPKanalContrAktualisieren(uint8 k) {
+	int8 p, c;
+	int8 guikanal;
 	struct INSTRUMENT *instr;
-	BYTE n;
-	WORD x;
-	BYTE max;
+	int8 n;
+	int16 x;
+	int8 max;
 	
 	p = mpkanalnum[k].port;
 	c = mpkanalnum[k].channel;
@@ -354,22 +354,22 @@ void MPKanalContrAktualisieren(UBYTE k) {
 	
 	for (n = 0; n < max; n++) {
 		if (mpkanal[p][c].contr[n] != -1) {
-			SetGadgetAttrs(mpguikanal[guikanal].contrgad[n], mpfenster, NULL,
+			IIntuition->SetGadgetAttrs(mpguikanal[guikanal].contrgad[n], mpfenster, NULL,
 				GA_Text, instr->contr->name[mpkanal[p][c].contr[n]], TAG_DONE);
 			ZeichneContrPoti(x + 43, 2 + (n * 16), mpkanal[p][c].contrwert[n]);
 		} else {
-			SetGadgetAttrs(mpguikanal[guikanal].contrgad[n], mpfenster, NULL,
+			IIntuition->SetGadgetAttrs(mpguikanal[guikanal].contrgad[n], mpfenster, NULL,
 				GA_Text, "", TAG_DONE);
 			Balken(0, x + 43, 2 + (n * 16), x + 57, 16 + (n * 16));
 		}
 	}
 }
 
-void MPKanalAktualisieren(UBYTE k) {
-	BYTE p, c;
-	WORD x;
-	BYTE guikanal;
-	BYTE n;
+void MPKanalAktualisieren(uint8 k) {
+	int8 p, c;
+	int16 x;
+	int8 guikanal;
+	int8 n;
 	
 	aktfenster = mpfenster;
 	
@@ -379,30 +379,22 @@ void MPKanalAktualisieren(UBYTE k) {
 		p = mpkanalnum[k].port;
 		c = mpkanalnum[k].channel;
 		BlitteBitMap(BMAP_METER_OFF, 0, 0, x + 6, 150, 15, 140); // Meter
-#ifdef __amigaos4__
 		Gradient(26, STIL_ND, x + 1, 313, x + 58, 354);
-#else
-		Balken(26, x + 1, 313, x + 58, 354);
-#endif
 		
 		for (n = 0; n < 3; n++) {
 			if (mpkanal[p][c].bezspur[n] != -1)
 				Schreibe(1, x + 3, 323 + (n * 11), spur[mpkanal[p][c].bezspur[n]].name, x + 58);
 		}
 		
-#ifdef __amigaos4__
 		Gradient(9 + c, STIL_DH, x + 1, 356, x + 58, 366);
-#else
-		Balken(9 + c, x + 1, 356, x + 58, 366);
-#endif
 		Fett(TRUE);
 		SchreibeZahl(1, x + 3, 364, c + 1);
 		Fett(FALSE);
 
 		ZeichnePanorama(x, mpkanal[p][c].pan);
-		SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
+		IIntuition->SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
 			SLIDER_Level, mpkanal[p][c].fader, TAG_DONE);
-		SetGadgetAttrs(mpguikanal[guikanal].mutegad, mpfenster, NULL,
+		IIntuition->SetGadgetAttrs(mpguikanal[guikanal].mutegad, mpfenster, NULL,
 			GA_Selected, mpkanal[p][c].mute, TAG_DONE);
 		MPKanalContrAktualisieren(k);
 		
@@ -412,17 +404,17 @@ void MPKanalAktualisieren(UBYTE k) {
 		Balken(0, x + 1, 313, x + 58, 354);
 		Balken(0, x + 1, 356, x + 58, 366);
 
-		SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
+		IIntuition->SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
 			SLIDER_Level, 0, TAG_DONE);
-		SetGadgetAttrs(mpguikanal[guikanal].mutegad, mpfenster, NULL,
+		IIntuition->SetGadgetAttrs(mpguikanal[guikanal].mutegad, mpfenster, NULL,
 			GA_Selected, FALSE, TAG_DONE);
 	}
 }
 
 void MPZeichnePorts(void) {
-	WORD k;
-	WORD x;
-	BYTE p;
+	int16 k;
+	int16 x;
+	int8 p;
 	BOOL zeige;
 	
 	aktfenster = mpfenster;
@@ -431,11 +423,7 @@ void MPZeichnePorts(void) {
 		x = k * 60;
 		if (k < mpdata.kanalanz) {
 			p = mpkanalnum[k + mpdata.kanalerst].port;
-#ifdef __amigaos4__
 			Gradient(27 - (p % 2), STIL_DN, x, 369, x + 59, 382);
-#else
-			Balken(27 - (p % 2), x, 369, x + 59, 382);
-#endif
 
 			if (k == 0) zeige = TRUE;
 			else if (p != mpkanalnum[k + mpdata.kanalerst - 1].port) zeige = TRUE;
@@ -450,13 +438,13 @@ void MPZeichnePorts(void) {
 }
 
 void AktualisiereMischpult(void) {
-	WORD k;
+	int16 k;
 	
 	SammleMPKanaele();
 	if (mpfenster) {
 		for (k = 0; k < mpdata.kanalsicht; k++) MPKanalAktualisieren(k + mpdata.kanalerst);
 		MPZeichnePorts();
-		SetGadgetAttrs(mpscrollgad, mpfenster, NULL,
+		IIntuition->SetGadgetAttrs(mpscrollgad, mpfenster, NULL,
 			SCROLLER_Top, mpdata.kanalerst,
 			SCROLLER_Visible, mpdata.kanalsicht,
 			SCROLLER_Total, mpdata.kanalanz,
@@ -464,14 +452,14 @@ void AktualisiereMischpult(void) {
 	}
 }
 
-void SetzeMeter(UBYTE p, UBYTE c, BYTE velo) {
-	if (mpkanal[p][c].meter < ((WORD)velo * (WORD)mpkanal[p][c].fader / 128))
-		mpkanal[p][c].meter = (BYTE)((WORD)velo * (WORD)mpkanal[p][c].fader / 128);
+void SetzeMeter(uint8 p, uint8 c, int8 velo) {
+	if (mpkanal[p][c].meter < ((int16)velo * (int16)mpkanal[p][c].fader / 128))
+		mpkanal[p][c].meter = (int8)((int16)velo * (int16)mpkanal[p][c].fader / 128);
 }
 
-void ErniedrigeMeter(BYTE wert) {
-	WORD n;
-	BYTE p, c;
+void ErniedrigeMeter(int8 wert) {
+	int16 n;
+	int8 p, c;
 	
 	for (n = 0; n < mpdata.kanalanz; n++) {
 		p = mpkanalnum[n].port;
@@ -482,12 +470,12 @@ void ErniedrigeMeter(BYTE wert) {
 }
 
 void ZeichneMeter(void) {
-	WORD x;
-	WORD n;
-	WORD k;
-	BYTE p, c;
-	BYTE m;
-	WORD h;
+	int16 x;
+	int16 n;
+	int16 k;
+	int8 p, c;
+	int8 m;
+	int16 h;
 	
 	aktfenster = mpfenster;
 	for (n = 0; n < mpdata.kanalsicht; n++) {
@@ -498,7 +486,7 @@ void ZeichneMeter(void) {
 		c = mpkanalnum[k].channel;
 		m = mpkanal[p][c].meter;
 		
-		h = (WORD)(m * 1.102362204724);
+		h = (int16)(m * 1.102362204724);
 		BlitteBitMap(BMAP_METER_OFF, 0, 0, x + 6, 150, 15, 140 - h);
 		if (m > 0) BlitteBitMap(BMAP_METER_ON, 0, 139 - h, x + 6, 289 - h, 15, h);
 		
@@ -506,10 +494,10 @@ void ZeichneMeter(void) {
 }
 
 void SendeMischpult(void) {
-	WORD n;
-	BYTE cn;
-	BYTE p, c;
-	BYTE max;
+	int16 n;
+	int8 cn;
+	int8 p, c;
+	int8 max;
 	
 	if (verLITE) max = 3;
 	else max = 6;
@@ -527,8 +515,8 @@ void SendeMischpult(void) {
 }
 
 void ErstelleMPFenster(void) {
-	UBYTE n;
-	WORD borderbr;
+	uint8 n;
+	int16 borderbr;
 
 	if (hschirm) borderbr = hschirm->WBorLeft;
 	else borderbr = hfenster->BorderLeft;
@@ -539,7 +527,7 @@ void ErstelleMPFenster(void) {
 		fenp[MISCHER].b = 8 * 60 + (2 * borderbr);
 	}
 	
-	mpfenster = OpenWindowTags(NULL,
+	mpfenster = IIntuition->OpenWindowTags(NULL,
 		WA_PubScreen, hschirm,
 		WA_Left, fenp[MISCHER].x,
 		WA_Top, fenp[MISCHER].y,
@@ -567,9 +555,9 @@ void ErstelleMPFenster(void) {
 	
 	aktfenster = mpfenster;
 	SetzeFont();
-	SetMenuStrip(mpfenster, minmenu);
+	IIntuition->SetMenuStrip(mpfenster, minmenu);
 	
-	mpscrollgad = NewObject(SCROLLER_GetClass(), NULL,
+	mpscrollgad = (struct Gadget *)IIntuition->NewObject(ScrollerClass, NULL,
 		GA_RelBottom, -(mpfenster->BorderBottom) + 3, GA_Left, mpfenster->BorderLeft - 1,
 		GA_RelWidth, -23, GA_Height, mpfenster->BorderBottom - 4,
 		GA_RelVerify, TRUE,
@@ -581,7 +569,7 @@ void ErstelleMPFenster(void) {
 		SCROLLER_Orientation, SORIENT_HORIZ,
 		SCROLLER_Arrows, FALSE,
 		TAG_DONE);
-	AddGadget(mpfenster, mpscrollgad, -1);
+	IIntuition->AddGadget(mpfenster, mpscrollgad, -1);
 
 	for (n = 0; n < GUIKANALANZ; n++) ErstelleMPKanalGadgets(n);
 	MPKanaeleEinsetzen();
@@ -589,25 +577,25 @@ void ErstelleMPFenster(void) {
 }
 
 void EntferneMPFenster(void) {
-	UBYTE n;
+	uint8 n;
 	
 	if (mpfenster) {
 		HoleFensterWinpos(mpfenster, MISCHER);
 		
 		MPKanaeleWegnehmen();
 		for (n = 0; n < GUIKANALANZ; n++) EntferneMPKanalGadgets(n);
-		RemoveGadget(mpfenster, mpscrollgad);
+		IIntuition->RemoveGadget(mpfenster, mpscrollgad);
 		
-		ClearMenuStrip(mpfenster);
-		CloseWindow(mpfenster);
+		IIntuition->ClearMenuStrip(mpfenster);
+		IIntuition->CloseWindow(mpfenster);
 		mpfenster = NULL;
 	}
 }
 
-void SetzeAlleFader(BYTE wert) {
-	WORD k;
-	BYTE p, c;
-	WORD guikanal;
+void SetzeAlleFader(int8 wert) {
+	int16 k;
+	int8 p, c;
+	int16 guikanal;
 	
 	for (k = 0; k < mpdata.kanalanz; k++) {
 		p = mpkanalnum[k].port;
@@ -616,16 +604,16 @@ void SetzeAlleFader(BYTE wert) {
 		SendeKanalEvent(p, c, MS_Ctrl, MC_Volume, wert);
 		if ((k >= mpdata.kanalerst) && (k < mpdata.kanalerst + mpdata.kanalsicht)) {
 			guikanal = k - mpdata.kanalerst;
-			SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
+			IIntuition->SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
 				SLIDER_Level, wert, TAG_DONE);
 		}
 	}
 }
 
-void SetzeAlleMutes(BYTE wp, BYTE wc, BYTE modus) {
-	WORD k;
-	BYTE p, c;
-	WORD guikanal;
+void SetzeAlleMutes(int8 wp, int8 wc, int8 modus) {
+	int16 k;
+	int8 p, c;
+	int16 guikanal;
 	BOOL mute;
 
 	for (k = 0; k < mpdata.kanalanz; k++) {
@@ -647,7 +635,7 @@ void SetzeAlleMutes(BYTE wp, BYTE wc, BYTE modus) {
 
 		if ((k >= mpdata.kanalerst) && (k < mpdata.kanalerst + mpdata.kanalsicht)) {
 			guikanal = k - mpdata.kanalerst;
-			SetGadgetAttrs(mpguikanal[guikanal].mutegad, mpfenster, NULL,
+			IIntuition->SetGadgetAttrs(mpguikanal[guikanal].mutegad, mpfenster, NULL,
 				GA_Selected, mute, TAG_DONE);
 		}
 	}
@@ -656,18 +644,18 @@ void SetzeAlleMutes(BYTE wp, BYTE wc, BYTE modus) {
 void KontrolleMischpultFenster(void) {
 	struct IntuiMessage *mes;
 	struct Gadget *gad;
-	WORD gadid;
-	UBYTE kanal;
-	BYTE p, c;
+	int16 gadid;
+	uint8 kanal;
+	int8 p, c;
 	BOOL schliessen = FALSE;
-	WORD updateid, updatecode;
-	WORD xmaus, ymaus;
-	WORD yrand;
+	int16 updateid, updatecode;
+	int16 xmaus, ymaus;
+	int16 yrand;
 
 	if (verLITE) yrand = 50;
 	else yrand = 98;
 
-	while (mes = (struct IntuiMessage *)GetMsg(mpfenster->UserPort)) {
+	while ((mes = (struct IntuiMessage *)IExec->GetMsg(mpfenster->UserPort))) {
 		
 		switch (mes->Class) {
 			case IDCMP_CLOSEWINDOW: schliessen = TRUE; break;
@@ -675,7 +663,7 @@ void KontrolleMischpultFenster(void) {
 			case IDCMP_NEWSIZE:
 			if (mpdata.kanalsicht != (mpfenster->Width - mpfenster->BorderLeft - mpfenster->BorderRight) / 60) {
 				MPKanaeleWegnehmen();
-				RefreshWindowFrame(mpfenster);
+				IIntuition->RefreshWindowFrame(mpfenster);
 				MPKanaeleEinsetzen();
 				AktualisiereMischpult();
 			}
@@ -731,8 +719,8 @@ void KontrolleMischpultFenster(void) {
 				if (gadid == GAD_FADER) {
 					p = mpkanalnum[kanal].port;
 					c = mpkanalnum[kanal].channel;
-					mpkanal[p][c].fader = (BYTE)mes->Code;
-					SendeKanalEvent(p, c, MS_Ctrl, MC_Volume, (BYTE)mes->Code);
+					mpkanal[p][c].fader = (int8)mes->Code;
+					SendeKanalEvent(p, c, MS_Ctrl, MC_Volume, (int8)mes->Code);
 				}
 			}
 			break;
@@ -751,10 +739,10 @@ void KontrolleMischpultFenster(void) {
 				switch (gadid) {
 					case GAD_FADER:
 					if (mes->Qualifier & QUALIFIER_SHIFT) {
-						SetzeAlleFader((BYTE)mes->Code);
+						SetzeAlleFader((int8)mes->Code);
 					} else {
-						mpkanal[p][c].fader = (BYTE)mes->Code;
-						SendeKanalEvent(p, c, MS_Ctrl, MC_Volume, (BYTE)mes->Code);
+						mpkanal[p][c].fader = (int8)mes->Code;
+						SendeKanalEvent(p, c, MS_Ctrl, MC_Volume, (int8)mes->Code);
 					}
 					break;
 	
@@ -778,20 +766,20 @@ void KontrolleMischpultFenster(void) {
 			break;
 
 		}
-		ReplyMsg((struct Message *)mes);
+		IExec->ReplyMsg((struct Message *)mes);
 	}
 	
 	if (schliessen) EntferneMPFenster();
 }
 
 void AutoUpdateMischpult(void) {
-	WORD k;
-	BYTE p, c;
-	UBYTE flags;
-	UBYTE guikanal;
-	WORD x;
-	BYTE n;
-	BYTE max;
+	int16 k;
+	int8 p, c;
+	uint8 flags;
+	uint8 guikanal;
+	int16 x;
+	int8 n;
+	int8 max;
 	
 	if (verLITE) max = 3;
 	else max = 6;
@@ -806,7 +794,7 @@ void AutoUpdateMischpult(void) {
 				flags = mpkanal[p][c].updateflags;
 				
 				if (flags & 0x01) { // Fader
-					SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
+					IIntuition->SetGadgetAttrs(mpguikanal[guikanal].fadergad, mpfenster, NULL,
 						SLIDER_Level, mpkanal[p][c].fader, TAG_DONE);
 				}
 				if (flags & 0x02) ZeichnePanorama(x, mpkanal[p][c].pan); // Panorama
@@ -820,9 +808,9 @@ void AutoUpdateMischpult(void) {
 	}
 }
 
-void ControllerAnpassen(BYTE p, BYTE c, BYTE data1, BYTE data2) {
-	BYTE n;
-	BYTE max;
+void ControllerAnpassen(int8 p, int8 c, int8 data1, int8 data2) {
+	int8 n;
+	int8 max;
 		
 	if (data1 == MC_Volume) {
 		if (data2 != mpkanal[p][c].fader) {

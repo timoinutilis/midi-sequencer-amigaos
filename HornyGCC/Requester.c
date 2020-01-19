@@ -22,16 +22,16 @@ extern struct Window *hfenster;
 extern struct Window *aktfenster;
 
 
-LONG Frage(STRPTR text, STRPTR knopf) {
+int32 Frage(STRPTR text, STRPTR knopf) {
 	struct EasyStruct struk;
-	LONG answ;
+	int32 answ;
 
 	struk.es_StructSize = sizeof(struct EasyStruct);
 	struk.es_Flags = 0;
 	struk.es_Title = CAT(MSG_0444, "Message");
 	struk.es_TextFormat = text;
 	struk.es_GadgetFormat = knopf;
-	answ = EasyRequestArgs(aktfenster, &struk, NULL, NULL);
+	answ = IIntuition->EasyRequestArgs(aktfenster, &struk, NULL, NULL);
 	return(answ);
 }
 
@@ -43,12 +43,12 @@ void Meldung(STRPTR text) {
 	struk.es_Title = CAT(MSG_0444, "Message");
 	struk.es_TextFormat = text;
 	struk.es_GadgetFormat = CAT(MSG_0446, "Okay");
-	EasyRequestArgs(aktfenster, &struk, NULL, NULL);
+	IIntuition->EasyRequestArgs(aktfenster, &struk, NULL, NULL);
 }
 
 
 void ErstelleAslReqs(void) {
-	projreq = (struct FileRequester *)AllocAslRequestTags(ASL_FileRequest,
+	projreq = (struct FileRequester *)IAsl->AllocAslRequestTags(ASL_FileRequest,
 		ASLFR_Window, hfenster,
 		ASLFR_SleepWindow, TRUE,
 		ASLFR_InitialPattern, "#?.horny",
@@ -56,7 +56,7 @@ void ErstelleAslReqs(void) {
 		ASLFR_RejectIcons, TRUE,
 		ASLFR_InitialDrawer, umgebung.pfadproj,
 		TAG_DONE);
-	smfreq = (struct FileRequester *)AllocAslRequestTags(ASL_FileRequest,
+	smfreq = (struct FileRequester *)IAsl->AllocAslRequestTags(ASL_FileRequest,
 		ASLFR_Window, hfenster,
 		ASLFR_SleepWindow, TRUE,
 		ASLFR_InitialPattern, "#?.(mid|midi)",
@@ -64,7 +64,7 @@ void ErstelleAslReqs(void) {
 		ASLFR_RejectIcons, TRUE,
 		ASLFR_InitialDrawer, umgebung.pfadsmf,
 		TAG_DONE);
-	sysexreq = (struct FileRequester *)AllocAslRequestTags(ASL_FileRequest,
+	sysexreq = (struct FileRequester *)IAsl->AllocAslRequestTags(ASL_FileRequest,
 		ASLFR_Window, hfenster,
 		ASLFR_SleepWindow, TRUE,
 		ASLFR_InitialPattern, "#?.(sysex|syx)",
@@ -75,9 +75,9 @@ void ErstelleAslReqs(void) {
 }
 
 void EntferneAslReqs(void) {
-	FreeAslRequest((APTR)projreq);
-	FreeAslRequest((APTR)smfreq);
-	FreeAslRequest((APTR)sysexreq);
+	IAsl->FreeAslRequest((APTR)projreq);
+	IAsl->FreeAslRequest((APTR)smfreq);
+	IAsl->FreeAslRequest((APTR)sysexreq);
 }
 
 void EndungAnfuegen(STRPTR datei, STRPTR end) {
@@ -92,13 +92,13 @@ void EndungAnfuegen(STRPTR datei, STRPTR end) {
 }
 
 BOOL AslProjLaden(void) {
-	if (AslRequestTags((APTR)projreq,
+	if (IAsl->AslRequestTags((APTR)projreq,
 		ASLFR_TitleText, CAT(MSG_0449, "Load Horny Project"),
 		ASLFR_DoSaveMode, FALSE,
 		TAG_DONE)) {
 		
 		strncpy(projdatei, projreq->fr_Drawer, 1024);
-		AddPart(projdatei, projreq->fr_File, 1024);
+		IDOS->AddPart(projdatei, projreq->fr_File, 1024);
 		return(TRUE);
 	} else {
 		return(FALSE);
@@ -108,19 +108,19 @@ BOOL AslProjLaden(void) {
 BOOL AslProjSpeichern(void) {
 	BPTR file;
 	
-	if (AslRequestTags((APTR)projreq,
+	if (IAsl->AslRequestTags((APTR)projreq,
 		ASLFR_TitleText, CAT(MSG_0450, "Save Horny Project"),
 		ASLFR_DoSaveMode, TRUE,
 		TAG_DONE)) {
 		
 		strncpy(projdatei, projreq->fr_Drawer, 1024);
-		AddPart(projdatei, projreq->fr_File, 1024);
+		IDOS->AddPart(projdatei, projreq->fr_File, 1024);
 		
-		EndungAnfuegen(projdatei, ".horny");
+		EndungAnfuegen(projdatei, (STRPTR)".horny");
 
-		file = Open(projdatei, MODE_OLDFILE);
+		file = IDOS->Open(projdatei, MODE_OLDFILE);
 		if (file) {
-			Close(file);
+			IDOS->Close(file);
 			if (!Frage(CAT(MSG_0452, "File with this name already exists"), CAT(MSG_0453, "Overwrite|Cancel"))) return(FALSE);
 		}
 		return(TRUE);
@@ -130,13 +130,13 @@ BOOL AslProjSpeichern(void) {
 }
 
 BOOL AslSMFLaden(void) {
-	if (AslRequestTags((APTR)smfreq,
+	if (IAsl->AslRequestTags((APTR)smfreq,
 		ASLFR_TitleText, CAT(MSG_0454, "Load MIDI Project"),
 		ASLFR_DoSaveMode, FALSE,
 		TAG_DONE)) {
 		
 		strncpy(smfdatei, smfreq->fr_Drawer, 1024);
-		AddPart(smfdatei, smfreq->fr_File, 1024);
+		IDOS->AddPart(smfdatei, smfreq->fr_File, 1024);
 		return(TRUE);
 	} else {
 		return(FALSE);
@@ -146,19 +146,19 @@ BOOL AslSMFLaden(void) {
 BOOL AslSMFSpeichern(void) {
 	BPTR file;
 	
-	if (AslRequestTags((APTR)smfreq,
+	if (IAsl->AslRequestTags((APTR)smfreq,
 		ASLFR_TitleText, CAT(MSG_0455, "Save MIDI Project"),
 		ASLFR_DoSaveMode, TRUE,
 		TAG_DONE)) {
 		
 		strncpy(smfdatei, smfreq->fr_Drawer, 1024);
-		AddPart(smfdatei, smfreq->fr_File, 1024);
+		IDOS->AddPart(smfdatei, smfreq->fr_File, 1024);
 		
-		EndungAnfuegen(smfdatei, ".mid");
+		EndungAnfuegen(smfdatei, (STRPTR)".mid");
 
-		file = Open(smfdatei, MODE_OLDFILE);
+		file = IDOS->Open(smfdatei, MODE_OLDFILE);
 		if (file) {
-			Close(file);
+			IDOS->Close(file);
 			if (!Frage(CAT(MSG_0452, "File with this name already exists"), CAT(MSG_0453, "Overwrite|Cancel"))) return(FALSE);
 		}
 		return(TRUE);
@@ -168,13 +168,13 @@ BOOL AslSMFSpeichern(void) {
 }
 
 BOOL AslSysExLaden(void) {
-	if (AslRequestTags((APTR)sysexreq,
+	if (IAsl->AslRequestTags((APTR)sysexreq,
 		ASLFR_TitleText, CAT(MSG_0456, "Load SysEx File"),
 		ASLFR_DoSaveMode, FALSE,
 		TAG_DONE)) {
 		
 		strncpy(sysexdatei, sysexreq->fr_Drawer, 1024);
-		AddPart(sysexdatei, sysexreq->fr_File, 1024);
+		IDOS->AddPart(sysexdatei, sysexreq->fr_File, 1024);
 		return(TRUE);
 	} else {
 		return(FALSE);
@@ -184,19 +184,19 @@ BOOL AslSysExLaden(void) {
 BOOL AslSysExSpeichern(void) {
 	BPTR file;
 	
-	if (AslRequestTags((APTR)sysexreq,
+	if (IAsl->AslRequestTags((APTR)sysexreq,
 		ASLFR_TitleText, CAT(MSG_0457, "Save SysEx File"),
 		ASLFR_DoSaveMode, TRUE,
 		TAG_DONE)) {
 		
 		strncpy(sysexdatei, sysexreq->fr_Drawer, 1024);
-		AddPart(sysexdatei, sysexreq->fr_File, 1024);
+		IDOS->AddPart(sysexdatei, sysexreq->fr_File, 1024);
 		
-		EndungAnfuegen(sysexdatei, ".syx");
+		EndungAnfuegen(sysexdatei, (STRPTR)".syx");
 
-		file = Open(sysexdatei, MODE_OLDFILE);
+		file = IDOS->Open(sysexdatei, MODE_OLDFILE);
 		if (file) {
-			Close(file);
+			IDOS->Close(file);
 			if (!Frage(CAT(MSG_0452, "File with this name already exists"), CAT(MSG_0453, "Overwrite|Cancel"))) return(FALSE);
 		}
 		return(TRUE);

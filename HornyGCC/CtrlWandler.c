@@ -48,7 +48,7 @@ extern struct Screen *hschirm;
 extern struct Menu *minmenu;
 extern struct FENSTERPOS fenp[];
 extern struct SPUR spur[];
-extern WORD snum;
+extern int16 snum;
 
 struct Window *ccfenster = NULL;
 Object *ccfensterobj = NULL;
@@ -61,7 +61,7 @@ struct List cclist = {NULL};
 struct CTRLCHANGE *AddChangeCtrl(STRPTR name) {
 	struct CTRLCHANGE *neu;
 	
-	neu = (struct CTRLCHANGE *)AllocVec(sizeof(struct CTRLCHANGE), 0);
+	neu = (struct CTRLCHANGE *)IExec->AllocVecTags(sizeof(struct CTRLCHANGE), TAG_END);
 	if (neu) {
 		strncpy(neu->name, name, 128);
 		neu->original = 0;
@@ -79,14 +79,14 @@ void EntferneChangeCtrl(struct CTRLCHANGE *cc) {
 	
 	if (cc == rootctrlchange) {
 		rootctrlchange = rootctrlchange->next;
-		FreeVec(cc);
+		IExec->FreeVec(cc);
 	} else {
 		last = NULL;
 		akt = rootctrlchange;
 		while (akt) {
 			if (akt == cc) {
 				last->next = akt->next;
-				FreeVec(cc);
+				IExec->FreeVec(cc);
 				break;
 			}
 			last = akt;
@@ -102,13 +102,13 @@ void EntferneAlleChangeCtrl(void) {
 	akt = rootctrlchange;
 	while (akt) {
 		next = akt->next;
-		FreeVec(akt);
+		IExec->FreeVec(akt);
 		akt = next;
 	}
 	rootctrlchange = NULL;
 }
 
-BYTE WandleController(BYTE data1) {
+int8 WandleController(int8 data1) {
 	struct CTRLCHANGE *akt;
 	
 	akt = rootctrlchange;
@@ -128,18 +128,22 @@ void AktualisiereCCListe(void) {
 	char original[5];
 	char ziel[5];
 	
-	if (cclist.lh_Head) {
-		SetGadgetAttrs(ccgad[GAD_CCLISTE], ccfenster, NULL,
+	if (cclist.lh_Head)
+	{
+		IIntuition->SetGadgetAttrs(ccgad[GAD_CCLISTE], ccfenster, NULL,
 			LISTBROWSER_Labels, NULL,
 			TAG_DONE);
-		while (node = RemTail(&cclist)) FreeListBrowserNode(node);
+		while ((node = IExec->RemTail(&cclist)))
+		{
+			IListBrowser->FreeListBrowserNode(node);
+		}
 	}
 
 	akt = rootctrlchange;
 	while (akt) {
 		sprintf(original, "%d", akt->original);
 		sprintf(ziel, "%d", akt->ziel);
-		node = AllocListBrowserNode(3,
+		node = IListBrowser->AllocListBrowserNode(3,
 			LBNA_CheckBox, TRUE,
 			LBNA_Checked, akt->aktiv,
 			LBNA_Column, 0,
@@ -153,10 +157,13 @@ void AktualisiereCCListe(void) {
 			LBNCA_Text, ziel,
 			LBNCA_Justification, LCJ_RIGHT,
 			TAG_DONE);
-		if (node) AddTail(&cclist, node);
+		if (node)
+		{
+			IExec->AddTail(&cclist, node);
+		}
 		akt = akt->next;
 	}
-	SetGadgetAttrs(ccgad[GAD_CCLISTE], ccfenster, NULL,
+	IIntuition->SetGadgetAttrs(ccgad[GAD_CCLISTE], ccfenster, NULL,
 		LISTBROWSER_Labels, &cclist,
 		LISTBROWSER_Selected, -1,
 		TAG_DONE);
@@ -165,7 +172,7 @@ void AktualisiereCCListe(void) {
 void ErstelleChangeCtrlFenster(void) {
 	if (!ccfensterobj) {
 	
-		NewList(&cclist);
+		IExec->NewList(&cclist);
 		cccolinfo[0].ci_Title = CAT(MSG_0005, "Name");
 		cccolinfo[1].ci_Title = CAT(MSG_0005A, "Original");
 		cccolinfo[2].ci_Title = CAT(MSG_0005B, "Destination");
@@ -183,7 +190,7 @@ void ErstelleChangeCtrlFenster(void) {
 			WINDOW_ParentGroup, VLayoutObject,
 				LAYOUT_SpaceOuter, TRUE,
 				
-				LAYOUT_AddChild, ccgad[GAD_CCLISTE] = ListBrowserObject,
+				LAYOUT_AddChild, ccgad[GAD_CCLISTE] = (struct Gadget *)ListBrowserObject,
 					GA_ID, 0, GA_RelVerify, TRUE,
 					LISTBROWSER_Labels, NULL,
 					LISTBROWSER_ShowSelected, TRUE,
@@ -200,7 +207,7 @@ void ErstelleChangeCtrlFenster(void) {
 				LAYOUT_AddChild, VLayoutObject,
 					LAYOUT_Label, CAT(MSG_0005F, "Adjust Transformer"), LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 
-					LAYOUT_AddChild, ccgad[GAD_NAME] = StringObject,
+					LAYOUT_AddChild, ccgad[GAD_NAME] = (struct Gadget *)StringObject,
 						GA_ID, GAD_NAME, GA_RelVerify, TRUE,
 						STRINGA_MaxChars, 127,
 					End,
@@ -217,14 +224,14 @@ void ErstelleChangeCtrlFenster(void) {
 	
 	if (ccfensterobj) {
 		if (fenp[CC].b>0) {
-			SetAttrs(ccfensterobj,
+			IIntuition->SetAttrs(ccfensterobj,
 				WA_Left, fenp[CC].x, WA_Top, fenp[CC].y,
 				WA_InnerWidth, fenp[CC].b, WA_InnerHeight, fenp[CC].h,
 				TAG_DONE);
 		}
 
 		ccfenster=(struct Window *)RA_OpenWindow(ccfensterobj);
-		SetMenuStrip(ccfenster, minmenu);
+		IIntuition->SetMenuStrip(ccfenster, minmenu);
 		AktualisiereCCListe();
 	}
 }
@@ -235,17 +242,20 @@ void EntferneChangeCtrlFenster(void) {
 	if (ccfensterobj) {
 		if (ccfenster) {
 			HoleFensterObjpos(ccfensterobj, CC);
-			ClearMenuStrip(ccfenster);
+			IIntuition->ClearMenuStrip(ccfenster);
 		}
-		DisposeObject(ccfensterobj);
+		IIntuition->DisposeObject(ccfensterobj);
 		ccfensterobj = NULL;
 		ccfenster = NULL;
-		while (node = RemTail(&cclist)) FreeListBrowserNode(node);
+		while ((node = IExec->RemTail(&cclist)))
+		{
+			IListBrowser->FreeListBrowserNode(node);
+		}
 	}
 }
 
-struct CTRLCHANGE *SucheCC(WORD n) {
-	WORD i;
+struct CTRLCHANGE *SucheCC(int16 n) {
+	int16 i;
 	struct CTRLCHANGE *cc;
 
 	cc = rootctrlchange;
@@ -259,11 +269,11 @@ struct CTRLCHANGE *SucheCC(WORD n) {
 
 void KontrolleChangeCtrlFenster(void) {
 	BOOL schliessen = FALSE;
-	ULONG result;
-	UWORD code;
+	uint32 result;
+	uint16 code;
 	struct Node *node;
-	LONG var;
-	BYTE wert;
+	int32 var;
+	int8 wert;
 	STRPTR name = NULL;
 	struct CTRLCHANGE *cc;
 	
@@ -280,22 +290,22 @@ void KontrolleChangeCtrlFenster(void) {
 			case WMHI_GADGETUP:
 			switch (result & WMHI_GADGETMASK) {
 				case GAD_CCLISTE:
-				if ((WORD)code >= 0) {
+				if ((int16)code >= 0) {
 					cc = SucheCC(code);
-					SetGadgetAttrs(ccgad[GAD_NAME], ccfenster, NULL,
+					IIntuition->SetGadgetAttrs(ccgad[GAD_NAME], ccfenster, NULL,
 						STRINGA_TextVal, cc->name,
 						TAG_DONE);
-					GetAttr(LISTBROWSER_SelectedNode, ccgad[GAD_CCLISTE], (ULONG *)&node);
-					GetListBrowserNodeAttrs(node, LBNA_Checked, &var, TAG_DONE);
+					IIntuition->GetAttr(LISTBROWSER_SelectedNode, (Object *)ccgad[GAD_CCLISTE], (uint32 *)&node);
+					IListBrowser->GetListBrowserNodeAttrs(node, LBNA_Checked, &var, TAG_DONE);
 					cc->aktiv = (BOOL)var;
 				}
 				break;
 				
 				case GAD_NAME:
-				GetAttr(LISTBROWSER_Selected, ccgad[GAD_CCLISTE], (ULONG *)&var);
+				IIntuition->GetAttr(LISTBROWSER_Selected, (Object *)ccgad[GAD_CCLISTE], (uint32 *)&var);
 				if (var >= 0) {
 					cc = SucheCC(var);
-					GetAttr(STRINGA_TextVal, ccgad[GAD_NAME], (ULONG *)&name);
+					IIntuition->GetAttr(STRINGA_TextVal, (Object *)ccgad[GAD_NAME], (uint32 *)&name);
 					strncpy(cc->name, name, 128);
 					AktualisiereCCListe();
 				}
@@ -305,17 +315,17 @@ void KontrolleChangeCtrlFenster(void) {
 				cc = AddChangeCtrl(CAT(MSG_0005D, "New"));
 				if (cc) {
 					AktualisiereCCListe();
-					SetGadgetAttrs(ccgad[GAD_NAME], ccfenster, NULL,
+					IIntuition->SetGadgetAttrs(ccgad[GAD_NAME], ccfenster, NULL,
 						STRINGA_TextVal, cc->name,
 						TAG_DONE);
-					SetGadgetAttrs(ccgad[GAD_CCLISTE], ccfenster, NULL,
+					IIntuition->SetGadgetAttrs(ccgad[GAD_CCLISTE], ccfenster, NULL,
 						LISTBROWSER_Selected, 0,
 						TAG_DONE);
 				}
 				break;
 				
 				case GAD_DEL:
-				GetAttr(LISTBROWSER_Selected, ccgad[GAD_CCLISTE], (ULONG *)&var);
+				IIntuition->GetAttr(LISTBROWSER_Selected, (Object *)ccgad[GAD_CCLISTE], (uint32 *)&var);
 				if (var >= 0) {
 					cc = SucheCC(var);
 					EntferneChangeCtrl(cc);
@@ -324,7 +334,7 @@ void KontrolleChangeCtrlFenster(void) {
 				break;
 				
 				case GAD_ORIG:
-				GetAttr(LISTBROWSER_Selected, ccgad[GAD_CCLISTE], (ULONG *)&var);
+				IIntuition->GetAttr(LISTBROWSER_Selected, (Object *)ccgad[GAD_CCLISTE], (uint32 *)&var);
 				if (var >= 0) {
 					cc = SucheCC(var);
 					wert = InstrControllerFenster(ccfenster, spur[snum].channel, spur[snum].port, cc->original);
@@ -336,7 +346,7 @@ void KontrolleChangeCtrlFenster(void) {
 				break;
 
 				case GAD_DEST:
-				GetAttr(LISTBROWSER_Selected, ccgad[GAD_CCLISTE], (ULONG *)&var);
+				IIntuition->GetAttr(LISTBROWSER_Selected, (Object *)ccgad[GAD_CCLISTE], (uint32 *)&var);
 				if (var >= 0) {
 					cc = SucheCC(var);
 					wert = InstrControllerFenster(ccfenster, spur[snum].channel, spur[snum].port, cc->ziel);
@@ -352,7 +362,7 @@ void KontrolleChangeCtrlFenster(void) {
 	}
 	if (schliessen) {
 		HoleFensterObjpos(ccfensterobj, CC);
-		ClearMenuStrip(ccfenster);
+		IIntuition->ClearMenuStrip(ccfenster);
 		RA_CloseWindow(ccfensterobj);
 		ccfenster = NULL;
 	}

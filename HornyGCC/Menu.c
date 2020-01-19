@@ -10,15 +10,13 @@
 
 struct Library *GadToolsBase = NULL;
 
-#ifdef __amigaos4__
 struct GadToolsIFace *IGadTools;
-#endif
 
 struct Menu *menu = NULL;
 struct Menu *minmenu = NULL;
 struct Menu *edmenu = NULL;
 APTR vi = NULL;
-UWORD liteignore;
+uint16 liteignore;
 
 extern struct Window *hfenster;
 extern struct Window *edfenster;
@@ -26,21 +24,17 @@ extern struct Window *setfenster;
 extern struct Window *envfenster;
 
 void ErstelleMenuLibs(void) {
-	if (!(GadToolsBase = OpenLibrary("gadtools.library", 0))) Meldung("gadtools.library nicht geöffnet");
+	if (!(GadToolsBase = IExec->OpenLibrary("gadtools.library", 0))) Meldung((STRPTR)"gadtools.library nicht geöffnet");
 
-#ifdef __amigaos4__
-	IGadTools = (struct GadToolsIFace *)GetInterface(GadToolsBase, "main", 1, NULL);
-#endif
+	IGadTools = (struct GadToolsIFace *)IExec->GetInterface(GadToolsBase, "main", 1, NULL);
 
 	if (verLITE) liteignore = NM_ITEMDISABLED;
 	else liteignore = 0;
 }
 
 void EntferneMenuLibs(void) {
-#ifdef __amigaos4__
-	DropInterface(IGadTools);
-#endif
-	CloseLibrary(GadToolsBase);
+	IExec->DropInterface((struct Interface *)IGadTools);
+	IExec->CloseLibrary(GadToolsBase);
 }
 
 void ErstelleMenu(void) {
@@ -217,38 +211,38 @@ void ErstelleMenu(void) {
 	};
 
 
-	vi = GetVisualInfoA(hfenster->WScreen, NULL);
-	menu = CreateMenus(newmenu, GTMN_FullMenu, TAG_DONE);
-	LayoutMenus(menu, vi, GTMN_NewLookMenus, GTMN_FrontPen, 1, TAG_DONE);
-	SetMenuStrip(hfenster, menu);
+	vi = IGadTools->GetVisualInfoA(hfenster->WScreen, NULL);
+	menu = IGadTools->CreateMenus(newmenu, GTMN_FullMenu, TAG_DONE);
+	IGadTools->LayoutMenus(menu, vi, GTMN_NewLookMenus, GTMN_FrontPen, 1, TAG_DONE);
+	IIntuition->SetMenuStrip(hfenster, menu);
 
-	minmenu = CreateMenus(newminmenu, GTMN_FullMenu, TAG_DONE);
-	LayoutMenus(minmenu, vi, GTMN_NewLookMenus, GTMN_FrontPen, 1, TAG_DONE);
+	minmenu = IGadTools->CreateMenus(newminmenu, GTMN_FullMenu, TAG_DONE);
+	IGadTools->LayoutMenus(minmenu, vi, GTMN_NewLookMenus, GTMN_FrontPen, 1, TAG_DONE);
 
-	edmenu = CreateMenus(newedmenu, GTMN_FullMenu, TAG_DONE);
-	LayoutMenus(edmenu, vi, GTMN_NewLookMenus, GTMN_FrontPen, 1, TAG_DONE);
+	edmenu = IGadTools->CreateMenus(newedmenu, GTMN_FullMenu, TAG_DONE);
+	IGadTools->LayoutMenus(edmenu, vi, GTMN_NewLookMenus, GTMN_FrontPen, 1, TAG_DONE);
 }
 
 void EntferneMenu(void) {
-	ClearMenuStrip(hfenster);
-	FreeMenus(menu);
-	FreeMenus(minmenu);
-	FreeMenus(edmenu);
-	FreeVisualInfo(vi);
+	IIntuition->ClearMenuStrip(hfenster);
+	IGadTools->FreeMenus(menu);
+	IGadTools->FreeMenus(minmenu);
+	IGadTools->FreeMenus(edmenu);
+	IGadTools->FreeVisualInfo(vi);
 }
 
-ULONG MenuPunkt(ULONG code) {
+uint32 MenuPunkt(uint32 code) {
 	struct MenuItem *item;
 
-	item = ItemAddress(menu, code);
+	item = IIntuition->ItemAddress(menu, code);
 	if (item) {
-		return((ULONG)GTMENUITEM_USERDATA(item));
+		return((uint32)GTMENUITEM_USERDATA(item));
 	} else return(~0);
 }
 
-void MenuDeaktivieren(BYTE typ, BYTE num, BOOL status) {
+void MenuDeaktivieren(int8 typ, int8 num, BOOL status) {
 	struct Menu *m = NULL;
-	BYTE n;
+	int8 n;
 	
 	if (typ == 0) m = menu; else m = edmenu;
 	if (m) {
@@ -258,13 +252,13 @@ void MenuDeaktivieren(BYTE typ, BYTE num, BOOL status) {
 	}
 }
 
-void MenuItemDeaktivieren(BYTE typ, UWORD code, BOOL status) {
+void MenuItemDeaktivieren(int8 typ, uint16 code, BOOL status) {
 	struct Menu *m = NULL;
 	struct MenuItem *item;
 	
 	if (typ == 0) m = menu; else m = edmenu;
 	if (m) {
-		item = ItemAddress(m, code);
+		item = IIntuition->ItemAddress(m, code);
 		if (item) {
 //			if (status) item->Flags &= !ITEMENABLED;
 //			else item->Flags |= ITEMENABLED;
@@ -272,21 +266,21 @@ void MenuItemDeaktivieren(BYTE typ, UWORD code, BOOL status) {
 	}
 }
 
-ULONG EdMenuPunkt(ULONG code) {
+uint32 EdMenuPunkt(uint32 code) {
 	struct MenuItem *item;
 
-	item = ItemAddress(edmenu, code);
+	item = IIntuition->ItemAddress(edmenu, code);
 	if (item) {
-		return((ULONG)GTMENUITEM_USERDATA(item));
+		return((uint32)GTMENUITEM_USERDATA(item));
 	} else return(~0);
 }
 
-ULONG MinMenuPunkt(ULONG code) {
+uint32 MinMenuPunkt(uint32 code) {
 	struct MenuItem *item;
 
-	item = ItemAddress(minmenu, code);
+	item = IIntuition->ItemAddress(minmenu, code);
 	if (item) {
-		return((ULONG)GTMENUITEM_USERDATA(item));
+		return((uint32)GTMENUITEM_USERDATA(item));
 	} else return(~0);
 }
 

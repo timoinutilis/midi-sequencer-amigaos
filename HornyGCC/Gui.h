@@ -39,33 +39,31 @@ void EntferneGadgets(void);
 void PositioniereGadgets(void);
 void AktualisiereGadgets(void);
 void AktualisiereFunctGadgets(void);
-void HoleFensterWinpos(struct Window *fenster, UBYTE fenid);
-void HoleFensterObjpos(Object *fensterobj, UBYTE fenid);
+void HoleFensterWinpos(struct Window *fenster, uint8 fenid);
+void HoleFensterObjpos(Object *fensterobj, uint8 fenid);
 void HoleAlleFensterpos(void);
 void BildFrei(void);
-void Schreibe(UBYTE f, WORD x, WORD y, STRPTR t, WORD xe);
-void SchreibeSys(UBYTE f, WORD x, WORD y, STRPTR t);
-void SchreibeZahl(UBYTE f, WORD x, WORD y, WORD z);
+void Schreibe(uint8 f, int16 x, int16 y, STRPTR t, int16 xe);
+void SchreibeSys(uint8 f, int16 x, int16 y, STRPTR t);
+void SchreibeZahl(uint8 f, int16 x, int16 y, int16 z);
 #define STIL_DH 1
 #define STIL_HD 2
 #define STIL_ND 3
 #define STIL_DN 4
-#ifdef __amigaos4__
-void Gradient(UBYTE f, UBYTE stil, WORD x1, WORD y1, WORD x2, WORD y2);
-#endif
-void Balken(UBYTE f, WORD x1, WORD y1, WORD x2, WORD y2);
-void RahmenEin(WORD f, UBYTE stil, WORD x1, WORD y1, WORD x2, WORD y2);
-void RahmenAus(WORD f, UBYTE stil, WORD x1, WORD y1, WORD x2, WORD y2);
-void RahmenRundungEin(WORD x1, WORD y1, WORD x2, WORD y2);
-void RahmenRundungAus(WORD x1, WORD y1, WORD x2, WORD y2);
-void Linie(UBYTE f, WORD x1, WORD y1, WORD x2, WORD y2);
-void PunktLinie(UBYTE f, WORD x1, WORD y1, WORD x2, WORD y2);
-void Farbe(UBYTE f);
-void Punkt(WORD x, WORD y);
+void Gradient(uint8 f, uint8 stil, int16 x1, int16 y1, int16 x2, int16 y2);
+void Balken(uint8 f, int16 x1, int16 y1, int16 x2, int16 y2);
+void RahmenEin(int16 f, uint8 stil, int16 x1, int16 y1, int16 x2, int16 y2);
+void RahmenAus(int16 f, uint8 stil, int16 x1, int16 y1, int16 x2, int16 y2);
+void RahmenRundungEin(int16 x1, int16 y1, int16 x2, int16 y2);
+void RahmenRundungAus(int16 x1, int16 y1, int16 x2, int16 y2);
+void Linie(uint8 f, int16 x1, int16 y1, int16 x2, int16 y2);
+void PunktLinie(uint8 f, int16 x1, int16 y1, int16 x2, int16 y2);
+void Farbe(uint8 f);
+void Punkt(int16 x, int16 y);
 void ZeichnePosition(BOOL edit);
 void KeinePosition(void);
-void ZeichneProjektion(LONG start, LONG ende);
+void ZeichneProjektion(int32 start, int32 ende);
 void KeineProjektion(void);
-void Lasso(WORD x1, WORD y1, WORD x2, WORD y2);
-BOOL LassoWahl(WORD mx1, WORD my1, WORD *mx2, WORD *my2);
-void SchleifeUpdate(struct TagItem *tags, WORD *id, WORD *code);
+void Lasso(int16 x1, int16 y1, int16 x2, int16 y2);
+BOOL LassoWahl(int16 mx1, int16 my1, int16 *mx2, int16 *my2);
+void SchleifeUpdate(struct TagItem *tags, int16 *id, int16 *code);

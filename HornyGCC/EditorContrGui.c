@@ -17,26 +17,26 @@ extern struct Window *edfenster;
 extern struct SPUR spur[];
 extern struct OUTPORT outport[];
 
-extern WORD edlr;
-extern WORD edou;
-extern WORD edguibox;
+extern int16 edlr;
+extern int16 edou;
+extern int16 edguibox;
 extern struct EDGUI edgui;
 
 extern struct SEQUENZ *edseq;
 extern struct EVENT *wahlnote;
 
-BYTE contrspur[134];
+int8 contrspur[134];
 struct INSTRCONTR *edinstrcontr = NULL;
-STRPTR statname[] = {"PolyPress", "Ctrl", "Prog", "ChanPress", "PitchBend"};
+STRPTR statname[] = {(STRPTR)"PolyPress", (STRPTR)"Ctrl", (STRPTR)"Prog", (STRPTR)"ChanPress", (STRPTR)"PitchBend"};
 
 void InitController(void) {
 	BOOL sammlungctrl[128];
 	BOOL sammlungstat[5];
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
-	WORD n;
-	UBYTE status;
-	WORD p;
+	int16 evnum;
+	int16 n;
+	uint8 status;
+	int16 p;
 	struct INSTRUMENT *instr;
 	
 	for (n = 0; n < 5; n++) sammlungstat[n] = FALSE;
@@ -78,8 +78,8 @@ void InitController(void) {
 	edinstrcontr = instr->contr;
 }
 
-void ZeichneControllerSpalte(WORD n) {
-	WORD y;
+void ZeichneControllerSpalte(int16 n) {
+	int16 y;
 	STRPTR text;
 	
 	aktfenster = edfenster;
@@ -100,19 +100,19 @@ void ZeichneControllerSpalte(WORD n) {
 }
 
 void ZeichneControllerSpalten(void) {
-	WORD n;
-	WORD uy;
+	int16 n;
+	int16 uy;
 	
 	uy = edfenster->Height - edou - edguibox - 58;
 	edgui.contrsicht = (uy - 43) / (edgui.contrh + 1);
 	for(n = 0; n < edgui.contrsicht; n++) ZeichneControllerSpalte(n + edgui.contr);
 }
 
-void ZeichneContr(WORD n, struct EVENT *lcev, struct EVENT *fcev, BOOL mitte, BOOL del) {
-	WORD uspury, lcy, offsety;
-	WORD fcx, lcx, liniex;
-	WORD lr, rr;
-	UBYTE tfarbe, ffarbe;
+void ZeichneContr(int16 n, struct EVENT *lcev, struct EVENT *fcev, BOOL mitte, BOOL del) {
+	int16 uspury, lcy, offsety;
+	int16 fcx, lcx, liniex;
+	int16 lr, rr;
+	uint8 tfarbe, ffarbe;
 	
 	if (lcev) {
 		lr = 72; rr = edfenster->Width - edlr - 21;
@@ -146,13 +146,8 @@ void ZeichneContr(WORD n, struct EVENT *lcev, struct EVENT *fcev, BOOL mitte, BO
 			}
 			if (liniex != -1) Linie(tfarbe, liniex, offsety, liniex, lcy);
 			
-#ifdef __amigaos4__
 			if (!mitte || (lcy < offsety)) Gradient(ffarbe, STIL_HD, lcx + 1, lcy, fcx, offsety);
 			else Gradient(ffarbe, STIL_DH, lcx + 1, offsety, fcx, lcy);
-#else
-			if (!mitte || (lcy < offsety)) Balken(ffarbe, lcx + 1, lcy, fcx, offsety);
-			else Balken(ffarbe, lcx + 1, offsety, fcx, lcy);
-#endif
 			if (fcx - lcx > 20) {
 				if (mitte)
 					SchreibeZahl(tfarbe, lcx + 3, uspury - 3, lcev->data2 - 64);
@@ -163,10 +158,10 @@ void ZeichneContr(WORD n, struct EVENT *lcev, struct EVENT *fcev, BOOL mitte, BO
 	}
 }
 
-void ZeichneContrVorschau(WORD n, struct EVENT *ev, BOOL mitte) {
-	WORD lr, rr;
-	WORD x, y;
-	WORD uspury, offsety;
+void ZeichneContrVorschau(int16 n, struct EVENT *ev, BOOL mitte) {
+	int16 lr, rr;
+	int16 x, y;
+	int16 uspury, offsety;
 
 	lr = 72; rr = edfenster->Width - edlr - 21;
 	x = lr + (((edseq->start + ev->zeit - edgui.takt) * edgui.taktb) >> (VIERTEL-2));
@@ -182,13 +177,13 @@ void ZeichneContrVorschau(WORD n, struct EVENT *ev, BOOL mitte) {
 	}
 }
 
-void ZeichneControllerSpur(WORD n) {
-	WORD y, my;
+void ZeichneControllerSpur(int16 n) {
+	int16 y, my;
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
+	int16 evnum;
 	struct EVENT *ev;
 	struct EVENT *lev;
-	UBYTE status;
+	uint8 status;
 	BOOL mitte;
 	
 	aktfenster = edfenster;
@@ -235,8 +230,8 @@ void ZeichneControllerSpur(WORD n) {
 }
 
 void ZeichneControllerFeld(BOOL anders) {
-	WORD n;
-	WORD uy;
+	int16 n;
+	int16 uy;
 
 	uy = edfenster->Height - edou - edguibox - 58;
 
@@ -250,8 +245,8 @@ void ZeichneControllerFeld(BOOL anders) {
 }
 
 void ContrSpurenEinpassen(void) {
-	WORD sicht;
-	WORD pixel;
+	int16 sicht;
+	int16 pixel;
 	
 	pixel = edfenster->Height - edou - edguibox - 58 - 43;
 	if (pixel % (edgui.contrh + 1) > edgui.contrh / 2) sicht = pixel / (edgui.contrh + 1) + 1;
@@ -263,17 +258,13 @@ void ContrSpurenEinpassen(void) {
 }
 
 void ZeichneEdContrInfobox(void) {
-	WORD y;
+	int16 y;
 	char puf[30];
-	LONG z;
+	int32 z;
 
 	aktfenster = edfenster;
 	y = edfenster->Height - edou - 37 - edguibox;
-#ifdef __amigaos4__
 	Gradient(4, STIL_DN, 0, y - 1, edfenster->Width - edlr - 1, y + edguibox - 1);
-#else
-	Balken(4, 0, y - 1, edfenster->Width - edlr - 1, y + edguibox - 1);
-#endif
 	Linie(1, 0, y, edfenster->Width - edlr - 1, y);
 	Linie(2, 0, y + edguibox - 2, edfenster->Width - edlr - 1, y + edguibox - 2);
 	Linie(8, 0, y + edguibox - 1, edfenster->Width - edlr - 1, y + edguibox - 1);
@@ -290,13 +281,13 @@ void ZeichneEdContrInfobox(void) {
 }
 
 
-WORD PunktContrSpur(WORD my) {
+int16 PunktContrSpur(int16 my) {
 	my = my - edfenster->BorderTop - 43;
 	return(edgui.contr + (my / (edgui.contrh + 1)));
 }
 
-BYTE PunktContrWert(WORD my, WORD cs, BOOL onoff) {
-	BYTE erg;
+int8 PunktContrWert(int16 my, int16 cs, BOOL onoff) {
+	int8 erg;
 	
 	my = my - edfenster->BorderTop - 43;
 	my = my - ((edgui.contrh + 1) * (cs - edgui.contr));

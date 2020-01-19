@@ -17,6 +17,6 @@ void ZeichneNotenVelos(void);
 void ZeichneNotenanzeige(void);
 void ZeichneEdInfobox(void);
 
-BYTE PunktTaste(WORD y);
-LONG EdPunktPosition(WORD x);
-BYTE TesteEdPunktBereich(WORD x, WORD y);
+int8 PunktTaste(int16 y);
+int32 EdPunktPosition(int16 x);
+int8 TesteEdPunktBereich(int16 x, int16 y);

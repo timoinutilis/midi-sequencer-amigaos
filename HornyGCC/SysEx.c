@@ -54,6 +54,7 @@
 #define GAD_MSGSPEICHERN 12
 #define GAD_MSGREC 13
 
+extern struct CamdIFace *ICamd;
 
 extern struct Screen *hschirm;
 extern struct Menu *minmenu;
@@ -78,27 +79,29 @@ extern struct OUTPORT outport[];
 
 extern char sysexdatei[];
 
-WORD sysexnummer = 1;
+int16 sysexnummer = 1;
 
 void EntfernePortChooserListe(void) {
 	struct Node *node;
 
-	SetGadgetAttrs(sexgad[GAD_UNITPORT], sexfenster, NULL, CHOOSER_Labels, NULL, TAG_DONE);
-	while (node = RemTail(&sexportlist)) FreeChooserNode(node);
+	IIntuition->SetGadgetAttrs(sexgad[GAD_UNITPORT], sexfenster, NULL, CHOOSER_Labels, NULL, TAG_DONE);
+	while ((node = IExec->RemTail(&sexportlist))) {
+		IChooser->FreeChooserNode(node);
+	}
 }
 
 void ErstellePortChooserListe(void) {
 	struct Node *node;
-	UBYTE n;
+	uint8 n;
 
-	NewList(&sexportlist);
+	IExec->NewList(&sexportlist);
 	for (n = 0; n < verOUTPORTS; n++) {
 		if (outport[n].name[0]) {
-			node = AllocChooserNode(CNA_Text, outport[n].name, TAG_DONE);
-			AddTail(&sexportlist, node);
+			node = IChooser->AllocChooserNode(CNA_Text, outport[n].name, TAG_DONE);
+			IExec->AddTail(&sexportlist, node);
 		}
 	}
-	SetGadgetAttrs(sexgad[GAD_UNITPORT], sexfenster, NULL, CHOOSER_Labels, &sexportlist, TAG_DONE);
+	IIntuition->SetGadgetAttrs(sexgad[GAD_UNITPORT], sexfenster, NULL, CHOOSER_Labels, &sexportlist, TAG_DONE);
 }
 
 void AktualisierePortChooserListe(void) {
@@ -110,11 +113,11 @@ void AktualisierePortChooserListe(void) {
 
 
 
-struct SYSEXMSG *NeuesSysEx(struct SYSEXUNIT *unit, STRPTR name, ULONG len, UBYTE *data) {
+struct SYSEXMSG *NeuesSysEx(struct SYSEXUNIT *unit, STRPTR name, uint32 len, uint8 *data) {
 	struct SYSEXMSG *neu;
 	struct SYSEXMSG *akt;
 	
-	neu = AllocVec(sizeof(struct SYSEXMSG), 0);
+	neu = IExec->AllocVecTags(sizeof(struct SYSEXMSG), TAG_END);
 	if (neu) {
 		strncpy(neu->name, name, 128);
 		neu->len = len;
@@ -142,8 +145,8 @@ void EntferneSysEx(struct SYSEXUNIT *unit, struct SYSEXMSG *sysex) {
 		if (sysex->next) sysex->next->prev = NULL;
 		unit->sysex = sysex->next;
 	}
-	FreeVec(sysex->data);
-	FreeVec(sysex);
+	IExec->FreeVec(sysex->data);
+	IExec->FreeVec(sysex);
 }
 
 void EntferneAlleSysEx(struct SYSEXUNIT *unit) {
@@ -153,34 +156,34 @@ void EntferneAlleSysEx(struct SYSEXUNIT *unit) {
 	akt = unit->sysex;
 	while (akt) {
 		next = akt->next;
-		FreeVec(akt->data);
-		FreeVec(akt);
+		IExec->FreeVec(akt->data);
+		IExec->FreeVec(akt);
 		akt = next;
 	}
 	unit->sysex = NULL;
 }
 
 void SysExAufnehmen(void) {
-	ULONG len;
-	UBYTE *data;
+	uint32 len;
+	uint8 *data;
 	char puffer[140];
 	
-	len = QuerySysEx(midi);
+	len = ICamd->QuerySysEx(midi);
 	if (len) {
-		data = AllocVec(len, 0);
+		data = IExec->AllocVecTags(len, TAG_END);
 		if (data) {
-			if (GetSysEx(midi, (UBYTE *)data, len)) {
+			if (ICamd->GetSysEx(midi, (uint8 *)data, len)) {
 				if ((*data == 0xF0) || (*data == 0xF7)) {
 					sprintf(puffer, "%s %d", wahlsexunit->name, sysexnummer++);
 					puffer[127] = 0;
 					NeuesSysEx(wahlsexunit, puffer, len, data);
 				} else {
-					FreeVec(data);
+					IExec->FreeVec(data);
 					Meldung(CAT(MSG_0525, "Incorrect SysEx message received"));
 				}
 			}
 		} else {
-			SkipSysEx(midi);
+			ICamd->SkipSysEx(midi);
 			Meldung(CAT(MSG_0526, "Not enough memory for SysEx\n<SysEx.c>"));
 		}
 	}
@@ -193,7 +196,7 @@ void SendeSysExUnit(void) {
 		if (midiout[wahlsexunit->port]) {
 			sysex = wahlsexunit->sysex;
 			while (sysex) {
-				PutSysEx(midiout[wahlsexunit->port], sysex->data);
+				ICamd->PutSysEx(midiout[wahlsexunit->port], sysex->data);
 				sysex = sysex->next;
 			}
 		}
@@ -209,7 +212,7 @@ void SendeAlleSysEx(void) {
 		if (midiout[unit->port] && !unit->gesperrt) {
 			sysex = unit->sysex;
 			while (sysex) {
-				PutSysEx(midiout[unit->port], sysex->data);
+				ICamd->PutSysEx(midiout[unit->port], sysex->data);
 				sysex = sysex->next;
 			}
 		}
@@ -222,7 +225,7 @@ struct SYSEXUNIT *NeueSysExUnit(STRPTR name) {
 	struct SYSEXUNIT *neu;
 	struct SYSEXUNIT *akt;
 	
-	neu = AllocVec(sizeof(struct SYSEXMSG), 0);
+	neu = IExec->AllocVecTags(sizeof(struct SYSEXMSG), TAG_END);
 	if (neu) {
 		strncpy(neu->name, name, 128);
 		neu->port = 0;
@@ -252,7 +255,7 @@ void EntferneSysExUnit(struct SYSEXUNIT *unit) {
 		rootsexunit = rootsexunit->next;
 	}
 	EntferneAlleSysEx(unit);
-	FreeVec(unit);
+	IExec->FreeVec(unit);
 }
 
 void EntferneAlleSysExUnits(void) {
@@ -263,15 +266,15 @@ void EntferneAlleSysExUnits(void) {
 	while (akt) {
 		next = akt->next;
 		EntferneAlleSysEx(akt);
-		FreeVec(akt);
+		IExec->FreeVec(akt);
 		akt = next;
 	}
 	rootsexunit = NULL;
 }
 
-WORD zaehleSysEx(struct SYSEXUNIT *unit) {
+int16 zaehleSysEx(struct SYSEXUNIT *unit) {
 	struct SYSEXMSG *sysex;
-	WORD anz = 0;
+	int16 anz = 0;
 	
 	sysex = unit->sysex;
 	while (sysex) {
@@ -286,26 +289,27 @@ WORD zaehleSysEx(struct SYSEXUNIT *unit) {
 
 void LadeSysEx(void) {
 	BPTR file;
-	UBYTE *data;
-	ULONG len;
-	UBYTE *start;
-	UBYTE *pos;
-	UBYTE *sysexdata;
-	ULONG sysexlen;
+	uint8 *data;
+	uint32 len;
+	uint8 *start;
+	uint8 *pos;
+	uint8 *sysexdata;
+	uint32 sysexlen;
 	STRPTR name;
 	char puffer[140];
 	
 	if (AslSysExLaden()) {
-		file = Open(sysexdatei, MODE_OLDFILE);
+		file = IDOS->Open(sysexdatei, MODE_OLDFILE);
 		if (file) {
-			Seek(file, 0, OFFSET_END);
-			len = Seek(file, 0, OFFSET_BEGINNING);
+//			Seek(file, 0, OFFSET_END);
+			IDOS->ChangeFilePosition(file, 0, OFFSET_END);
+			len = IDOS->ChangeFilePosition(file, 0, OFFSET_BEGINNING);
 			
-			name = FilePart(sysexdatei);
+			name = (STRPTR)IDOS->FilePart(sysexdatei);
 			
-			data = AllocVec(len, 0);
+			data = IExec->AllocVecTags(len, TAG_END);
 			if (data) {
-				Read(file, data, len);
+				IDOS->Read(file, data, len);
 				
 				start = data;
 				pos = data;
@@ -318,7 +322,7 @@ void LadeSysEx(void) {
 					}
 					pos++;
 					while (*pos != 0xF7) {
-						if ((ULONG)pos < (ULONG)data + len)
+						if ((uint32)pos < (uint32)data + len)
 							pos++;
 						else 
 							break;
@@ -328,8 +332,8 @@ void LadeSysEx(void) {
 						break;
 					}
 					
-					sysexlen = (ULONG)pos - (ULONG)start + 1;
-					sysexdata = AllocVec(sysexlen, 0);
+					sysexlen = (uint32)pos - (uint32)start + 1;
+					sysexdata = IExec->AllocVecTags(sysexlen, TAG_END);
 					if (sysexdata) {
 						memcpy(sysexdata, start, sysexlen);
 						sprintf(puffer, "%s %d", name, sysexnummer++);
@@ -339,19 +343,19 @@ void LadeSysEx(void) {
 					
 					pos++;
 					start = pos;
-				} while ((ULONG)pos < (ULONG)data + len);
+				} while ((uint32)pos < (uint32)data + len);
 				
-				FreeVec(data);
+				IExec->FreeVec(data);
 			}
 			
-			Close(file);
+			IDOS->Close(file);
 		}
 	}
 }
 
 void SpeichereMarkSysEx(void) {
 	struct Node *node;
-	ULONG sel = FALSE;
+	uint32 sel = FALSE;
 	struct SYSEXMSG *sysex = NULL;
 	BPTR file;
 	BOOL ok = FALSE;
@@ -359,7 +363,7 @@ void SpeichereMarkSysEx(void) {
 	if (!IsListEmpty(&sexmsglist)) {
 		node = sexmsglist.lh_Head;
 		while (node) {
-			GetListBrowserNodeAttrs(node,
+			IListBrowser->GetListBrowserNodeAttrs(node,
 				LBNA_Selected, &sel,
 				LBNA_UserData, &sysex,
 				TAG_DONE);
@@ -371,24 +375,24 @@ void SpeichereMarkSysEx(void) {
 
 	if (ok) {
 		if (AslSysExSpeichern()) {
-			file = Open(sysexdatei, MODE_NEWFILE);
+			file = IDOS->Open(sysexdatei, MODE_NEWFILE);
 			if (file) {
 				if (!IsListEmpty(&sexmsglist)) {
 					node = sexmsglist.lh_Head;
 					while (node) {
-						GetListBrowserNodeAttrs(node,
+						IListBrowser->GetListBrowserNodeAttrs(node,
 							LBNA_Selected, &sel,
 							LBNA_UserData, &sysex,
 							TAG_DONE);
 						if (sel && sysex) {
-							if (midiout[wahlsexunit->port]) PutSysEx(midiout[wahlsexunit->port], sysex->data);
-							Write(file, sysex->data, sysex->len);
+							if (midiout[wahlsexunit->port]) ICamd->PutSysEx(midiout[wahlsexunit->port], sysex->data);
+							IDOS->Write(file, sysex->data, sysex->len);
 						}
 						if (node == sexmsglist.lh_TailPred) break;
 						node = node->ln_Succ;
 					}
 				}
-				Close(file);
+				IDOS->Close(file);
 			}
 		}
 	} else Meldung(CAT(MSG_0525B, "At least one SysEx message must be selected for saving"));
@@ -396,18 +400,18 @@ void SpeichereMarkSysEx(void) {
 
 void SendeMarkSysEx(void) {
 	struct Node *node;
-	ULONG sel = FALSE;
+	uint32 sel = FALSE;
 	struct SYSEXMSG *sysex = NULL;
 	
 	if (!IsListEmpty(&sexmsglist)) {
 		node = sexmsglist.lh_Head;
 		while (node) {
-			GetListBrowserNodeAttrs(node,
+			IListBrowser->GetListBrowserNodeAttrs(node,
 				LBNA_Selected, &sel,
 				LBNA_UserData, &sysex,
 				TAG_DONE);
 			if (sel && sysex) {
-				if (midiout[wahlsexunit->port]) PutSysEx(midiout[wahlsexunit->port], sysex->data);
+				if (midiout[wahlsexunit->port]) ICamd->PutSysEx(midiout[wahlsexunit->port], sysex->data);
 			}
 			if (node == sexmsglist.lh_TailPred) break;
 			node = node->ln_Succ;
@@ -417,13 +421,13 @@ void SendeMarkSysEx(void) {
 
 void EntferneMarkSysEx(void) {
 	struct Node *node;
-	ULONG sel = FALSE;
+	uint32 sel = FALSE;
 	struct SYSEXMSG *sysex = NULL;
 	
 	if (!IsListEmpty(&sexmsglist)) {
 		node = sexmsglist.lh_Head;
 		while (node) {
-			GetListBrowserNodeAttrs(node,
+			IListBrowser->GetListBrowserNodeAttrs(node,
 				LBNA_Selected, &sel,
 				LBNA_UserData, &sysex,
 				TAG_DONE);
@@ -436,13 +440,13 @@ void EntferneMarkSysEx(void) {
 
 void BenenneMarkSysEx(STRPTR name) {
 	struct Node *node;
-	ULONG sel = FALSE;
+	uint32 sel = FALSE;
 	struct SYSEXMSG *sysex = NULL;
 	
 	if (!IsListEmpty(&sexmsglist)) {
 		node = sexmsglist.lh_Head;
 		while (node) {
-			GetListBrowserNodeAttrs(node,
+			IListBrowser->GetListBrowserNodeAttrs(node,
 				LBNA_Selected, &sel,
 				LBNA_UserData, &sysex,
 				TAG_DONE);
@@ -457,25 +461,33 @@ void BenenneMarkSysEx(STRPTR name) {
 void EntferneSysExGruppenListe(void) {
 	struct Node *node;
 	
-	if (!sexunitlist.lh_Head) NewList(&sexunitlist);
-	while (node = RemTail(&sexunitlist)) FreeListBrowserNode(node);
+	if (!sexunitlist.lh_Head) {
+		IExec->NewList(&sexunitlist);
+	}
+	while ((node = IExec->RemTail(&sexunitlist))) {
+		IListBrowser->FreeListBrowserNode(node);
+	}
 }
 
 void EntferneSysExMsgListe(void) {
 	struct Node *node;
 	
-	if (!sexmsglist.lh_Head) NewList(&sexmsglist);
-	while (node = RemTail(&sexmsglist)) FreeListBrowserNode(node);
+	if (!sexmsglist.lh_Head) {
+		IExec->NewList(&sexmsglist);
+	}
+	while ((node = IExec->RemTail(&sexmsglist))) {
+		IListBrowser->FreeListBrowserNode(node);
+	}
 }
 
 void AktualisiereSysExGruppenListe(void) {
 	struct SYSEXUNIT *unit;
 	struct Node *node;
 	char puffer[140];
-	WORD anz;
+	int16 anz;
 	
 	if (sexfenster)
-		SetGadgetAttrs(sexgad[GAD_UNITSLIST], sexfenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
+		IIntuition->SetGadgetAttrs(sexgad[GAD_UNITSLIST], sexfenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
 
 	EntferneSysExGruppenListe();
 
@@ -487,19 +499,19 @@ void AktualisiereSysExGruppenListe(void) {
 		} else {
 			strncpy(puffer, unit->name, 140);
 		}
-		node = AllocListBrowserNode(1,
+		node = IListBrowser->AllocListBrowserNode(1,
 			LBNA_UserData, (APTR)unit,
 			LBNA_CheckBox, TRUE,
 			LBNA_Checked, !unit->gesperrt,
 			LBNCA_CopyText, TRUE,
 			LBNCA_Text, puffer,
 			TAG_DONE);
-		if (node) AddTail(&sexunitlist, node);
+		if (node) IExec->AddTail(&sexunitlist, node);
 		unit = unit->next;
 	}
 
 	if (sexfenster)
-		SetGadgetAttrs(sexgad[GAD_UNITSLIST], sexfenster, NULL, LISTBROWSER_Labels, &sexunitlist, TAG_DONE);
+		IIntuition->SetGadgetAttrs(sexgad[GAD_UNITSLIST], sexfenster, NULL, LISTBROWSER_Labels, &sexunitlist, TAG_DONE);
 }
 
 void AktualisiereSysExMsgListe(void) {
@@ -508,7 +520,7 @@ void AktualisiereSysExMsgListe(void) {
 	char lentxt[10];
 	
 	if (sexfenster)
-		SetGadgetAttrs(sexgad[GAD_MSGLIST], sexfenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
+		IIntuition->SetGadgetAttrs(sexgad[GAD_MSGLIST], sexfenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
 
 	EntferneSysExMsgListe();
 
@@ -516,7 +528,7 @@ void AktualisiereSysExMsgListe(void) {
 		sysex = wahlsexunit->sysex;
 		while (sysex) {
 			sprintf(lentxt, "%ld", sysex->len);
-			node = AllocListBrowserNode(2,
+			node = IListBrowser->AllocListBrowserNode(2,
 				LBNA_UserData, (APTR)sysex,
 				LBNA_Column, 0,
 				LBNCA_CopyText, TRUE,
@@ -526,13 +538,13 @@ void AktualisiereSysExMsgListe(void) {
 				LBNCA_Text, lentxt,
 				LBNCA_Justification, LCJ_RIGHT,
 				TAG_DONE);
-			if (node) AddTail(&sexmsglist, node);
+			if (node) IExec->AddTail(&sexmsglist, node);
 			sysex = sysex->next;
 		}
 	}
 
 	if (sexfenster)
-		SetGadgetAttrs(sexgad[GAD_MSGLIST], sexfenster, NULL,
+		IIntuition->SetGadgetAttrs(sexgad[GAD_MSGLIST], sexfenster, NULL,
 			LISTBROWSER_Labels, &sexmsglist,
 			LISTBROWSER_AutoFit, TRUE,
 			TAG_DONE);
@@ -541,8 +553,8 @@ void AktualisiereSysExMsgListe(void) {
 void ErstelleSysExFenster(void) {
 	if (!sexfensterobj) {
 	
-		NewList(&sexunitlist);
-		NewList(&sexmsglist);
+		IExec->NewList(&sexunitlist);
+		IExec->NewList(&sexmsglist);
 		AktualisiereSysExGruppenListe();
 		AktualisiereSysExMsgListe();
 
@@ -562,14 +574,14 @@ void ErstelleSysExFenster(void) {
 				LAYOUT_AddChild, VLayoutObject,
 					LAYOUT_Label, CAT(MSG_0528, "Groups"), LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 					
-					LAYOUT_AddChild, sexgad[GAD_UNITSLIST] = ListBrowserObject,
+					LAYOUT_AddChild, sexgad[GAD_UNITSLIST] = (struct Gadget *)ListBrowserObject,
 						GA_ID, GAD_UNITSLIST, GA_RelVerify, TRUE,
 						LISTBROWSER_Labels, &sexunitlist,
 						LISTBROWSER_ShowSelected, TRUE,
 						LISTBROWSER_Selected, 0,
 					End,
 					
-					LAYOUT_AddChild, sexgad[GAD_UNITNAME] = StringObject,
+					LAYOUT_AddChild, sexgad[GAD_UNITNAME] = (struct Gadget *)StringObject,
 						GA_ID, GAD_UNITNAME, GA_RelVerify, TRUE,
 						STRINGA_MaxChars, 127,
 						STRINGA_TextVal, wahlsexunit->name,
@@ -582,7 +594,7 @@ void ErstelleSysExFenster(void) {
 					End,
 					CHILD_WeightedHeight, 0,
 
-					LAYOUT_AddChild, sexgad[GAD_UNITPORT] = ChooserObject,
+					LAYOUT_AddChild, sexgad[GAD_UNITPORT] = (struct Gadget *)ChooserObject,
 						GA_ID, GAD_UNITPORT, GA_RelVerify, TRUE,
 						CHOOSER_PopUp, TRUE,
 						CHOOSER_Labels, NULL,
@@ -601,7 +613,7 @@ void ErstelleSysExFenster(void) {
 				LAYOUT_AddChild, VLayoutObject,
 					LAYOUT_Label, CAT(MSG_0533, "SysEx Messages"), LAYOUT_BevelStyle, BVS_GROUP, LAYOUT_SpaceOuter, TRUE,
 					
-					LAYOUT_AddChild, sexgad[GAD_MSGLIST] = ListBrowserObject,
+					LAYOUT_AddChild, sexgad[GAD_MSGLIST] = (struct Gadget *)ListBrowserObject,
 						GA_ID, GAD_MSGLIST, GA_RelVerify, TRUE,
 						LISTBROWSER_Labels, &sexmsglist,
 						LISTBROWSER_ColumnInfo, msgcolinfo,
@@ -612,7 +624,7 @@ void ErstelleSysExFenster(void) {
 						LISTBROWSER_Editable, TRUE,
 					End,
 					
-					LAYOUT_AddChild, sexgad[GAD_MSGNAME] = StringObject,
+					LAYOUT_AddChild, sexgad[GAD_MSGNAME] = (struct Gadget *)StringObject,
 						GA_ID, GAD_MSGNAME, GA_RelVerify, TRUE,
 						STRINGA_MaxChars, 127,
 					End,
@@ -630,7 +642,7 @@ void ErstelleSysExFenster(void) {
 					End,
 					CHILD_WeightedHeight, 0,
 
-					LAYOUT_AddChild, sexgad[GAD_MSGREC] = ButtonObject, 
+					LAYOUT_AddChild, sexgad[GAD_MSGREC] = (struct Gadget *)ButtonObject, 
 						GA_RelVerify, TRUE,
 						GA_ID, GAD_MSGREC,
 						GA_Text, CAT(MSG_0536, "Record SysEx"),
@@ -645,14 +657,14 @@ void ErstelleSysExFenster(void) {
 	
 	if (sexfensterobj) {
 		if (fenp[ENV].b>0) {
-			SetAttrs(sexfensterobj,
+			IIntuition->SetAttrs(sexfensterobj,
 				WA_Left, fenp[SEX].x, WA_Top, fenp[SEX].y,
 				WA_InnerWidth, fenp[SEX].b, WA_InnerHeight, fenp[SEX].h,
 				TAG_DONE);
 		}
 
 		sexfenster = (struct Window *)RA_OpenWindow(sexfensterobj);
-		SetMenuStrip(sexfenster, minmenu);
+		IIntuition->SetMenuStrip(sexfenster, minmenu);
 		ErstellePortChooserListe();
 	}
 }
@@ -661,9 +673,9 @@ void EntferneSysExFenster(void) {
 	if (sexfensterobj) {
 		if (sexfenster) {
 			HoleFensterObjpos(sexfensterobj, SEX);
-			ClearMenuStrip(sexfenster);
+			IIntuition->ClearMenuStrip(sexfenster);
 		}
-		DisposeObject(sexfensterobj);
+		IIntuition->DisposeObject(sexfensterobj);
 		EntferneSysExGruppenListe();
 		EntferneSysExMsgListe();
 		sexfensterobj = NULL;
@@ -674,20 +686,20 @@ void EntferneSysExFenster(void) {
 void SysExRecAus(void) {
 	if (sysexrec) {
 		sysexrec = FALSE;
-		SetGadgetAttrs(sexgad[GAD_MSGREC], sexfenster, NULL, GA_Selected, FALSE, TAG_DONE);
+		IIntuition->SetGadgetAttrs(sexgad[GAD_MSGREC], sexfenster, NULL, GA_Selected, FALSE, TAG_DONE);
 	}
 }
 
 
 void KontrolleSysExFenster(void) {
 	BOOL schliessen=FALSE;
-	ULONG result;
-	UWORD code;
+	uint32 result;
+	uint16 code;
 	struct Node *node = NULL;
 	struct SYSEXMSG *sysex;
-	WORD n;
+	int16 n;
 	STRPTR name = NULL;
-	LONG var;
+	int32 var;
 	
 	while ((result = RA_HandleInput(sexfensterobj, &code)) != WMHI_LASTMSG) {
 		switch (result & WMHI_CLASSMASK) {
@@ -702,19 +714,19 @@ void KontrolleSysExFenster(void) {
 			case WMHI_GADGETUP:
 			switch (result & WMHI_GADGETMASK) {
 				case GAD_UNITSLIST:
-				GetAttr(LISTBROWSER_SelectedNode, sexgad[GAD_UNITSLIST], (ULONG *)&node);
-				GetListBrowserNodeAttrs(node, LBNA_UserData, (ULONG *)&wahlsexunit, TAG_DONE);
+				IIntuition->GetAttr(LISTBROWSER_SelectedNode, (Object *)sexgad[GAD_UNITSLIST], (uint32 *)&node);
+				IListBrowser->GetListBrowserNodeAttrs(node, LBNA_UserData, (uint32 *)&wahlsexunit, TAG_DONE);
 
-				GetListBrowserNodeAttrs(node, LBNA_Checked, &var, TAG_DONE);
+				IListBrowser->GetListBrowserNodeAttrs(node, LBNA_Checked, &var, TAG_DONE);
 				wahlsexunit->gesperrt = (BOOL)!var;
 				
 				AktualisiereSysExMsgListe();
-				SetGadgetAttrs(sexgad[GAD_UNITNAME], sexfenster, NULL, STRINGA_TextVal, wahlsexunit->name, TAG_DONE);
-				SetGadgetAttrs(sexgad[GAD_UNITPORT], sexfenster, NULL, CHOOSER_Selected, wahlsexunit->port, TAG_DONE);
+				IIntuition->SetGadgetAttrs(sexgad[GAD_UNITNAME], sexfenster, NULL, STRINGA_TextVal, wahlsexunit->name, TAG_DONE);
+				IIntuition->SetGadgetAttrs(sexgad[GAD_UNITPORT], sexfenster, NULL, CHOOSER_Selected, wahlsexunit->port, TAG_DONE);
 				break;
 				
 				case GAD_UNITNAME:
-				GetAttr(STRINGA_TextVal, sexgad[GAD_UNITNAME], (ULONG *)&name);
+				IIntuition->GetAttr(STRINGA_TextVal, (Object *)sexgad[GAD_UNITNAME], (uint32 *)&name);
 				strncpy(wahlsexunit->name, name, 128);
 				AktualisiereSysExGruppenListe();
 				break;
@@ -726,8 +738,8 @@ void KontrolleSysExFenster(void) {
 				break;
 				
 				case GAD_UNITDEL:
-				GetAttr(LISTBROWSER_SelectedNode, sexgad[GAD_UNITSLIST], (ULONG *)&node);
-				GetListBrowserNodeAttrs(node, LBNA_UserData, (ULONG *)&wahlsexunit, TAG_DONE);
+				IIntuition->GetAttr(LISTBROWSER_SelectedNode, (Object *)sexgad[GAD_UNITSLIST], (uint32 *)&node);
+				IListBrowser->GetListBrowserNodeAttrs(node, LBNA_UserData, (uint32 *)&wahlsexunit, TAG_DONE);
 				EntferneSysExUnit(wahlsexunit);
 				if (!rootsexunit) NeueSysExUnit(CAT(MSG_0538, "Standard"));
 				wahlsexunit = rootsexunit;
@@ -752,11 +764,11 @@ void KontrolleSysExFenster(void) {
 				case GAD_MSGLIST:
 				sysex = wahlsexunit->sysex;
 				for (n = 0; n < code; n++) sysex = sysex->next;
-				SetGadgetAttrs(sexgad[GAD_MSGNAME], sexfenster, NULL, STRINGA_TextVal, sysex->name, TAG_DONE);
+				IIntuition->SetGadgetAttrs(sexgad[GAD_MSGNAME], sexfenster, NULL, STRINGA_TextVal, sysex->name, TAG_DONE);
 				break;
 
 				case GAD_MSGNAME:
-				GetAttr(STRINGA_TextVal, sexgad[GAD_MSGNAME], (ULONG *)&name);
+				IIntuition->GetAttr(STRINGA_TextVal, (Object *)sexgad[GAD_MSGNAME], (uint32 *)&name);
 				BenenneMarkSysEx(name);
 				AktualisiereSysExMsgListe();
 				break;
@@ -793,7 +805,7 @@ void KontrolleSysExFenster(void) {
 	if (schliessen) {
 		HoleFensterObjpos(sexfensterobj, SEX);
 		SysExRecAus();
-		ClearMenuStrip(sexfenster);
+		IIntuition->ClearMenuStrip(sexfenster);
 		EntfernePortChooserListe();
 		RA_CloseWindow(sexfensterobj);
 		sexfenster = NULL;

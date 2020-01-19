@@ -2,8 +2,8 @@
 
 struct CTRLCHANGE {
 	char name[128];
-	BYTE original;
-	BYTE ziel;
+	int8 original;
+	int8 ziel;
 	BOOL aktiv;
 	struct CTRLCHANGE *next;
 };
@@ -11,7 +11,7 @@ struct CTRLCHANGE {
 struct CTRLCHANGE *AddChangeCtrl(STRPTR name);
 void EntferneChangeCtrl(struct CTRLCHANGE *cc);
 void EntferneAlleChangeCtrl(void);
-BYTE WandleController(BYTE data1);
+int8 WandleController(int8 data1);
 
 void ErstelleChangeCtrlFenster(void);
 void EntferneChangeCtrlFenster(void);
