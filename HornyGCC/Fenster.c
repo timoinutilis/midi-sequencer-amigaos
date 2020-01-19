@@ -24,6 +24,8 @@
 #include "Versionen.h"
 #include "Gui.h"
 
+#include "oca.h"
+
 extern struct Hook *backfill;
 extern struct Screen *hschirm;
 extern struct Window *aktfenster;

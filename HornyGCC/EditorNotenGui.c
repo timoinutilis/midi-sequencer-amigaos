@@ -29,6 +29,8 @@
 #include "DTGrafik.h"
 #include "Undo.h"
 
+#include "oca.h"
+
 #define EDGADANZ 18
 
 extern struct TextFont *font;

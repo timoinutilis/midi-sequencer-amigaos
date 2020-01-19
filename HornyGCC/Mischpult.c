@@ -30,6 +30,8 @@
 #include "Dynamic_Strings.h"
 #include "DTGrafik.h"
 
+#include "oca.h"
+
 #define QUALIFIER_SHIFT 0x03
 #define QUALIFIER_ALT 0x30
 #define QUALIFIER_CTRL 0x08

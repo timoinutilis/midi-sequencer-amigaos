@@ -35,6 +35,8 @@
 #include "DTGrafik.h"
 #include "Midi.h"
 
+#include "oca.h"
+
 #define CAT(X,Y) ILocale->GetCatalogStr(catalog,X,Y)
 
 struct TextFont *font = NULL;
