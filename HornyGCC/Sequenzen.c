@@ -191,7 +191,7 @@ void SpurSequenzenEntfernen(int16 s) {
 void SequenzAusSpurEntfernen(struct SEQUENZ *seq) {
 	struct SEQUENZ *aktseq;
 	struct SEQUENZ *altseq;
-	int16 s = 0; // TODO: check line 619
+	int16 s;
 
 	if (seq == edseq) EntferneEditorNotenFenster();
 	s = seq->spur;
@@ -538,7 +538,7 @@ BOOL SequenzZerschneiden(struct SEQUENZ *seq, int32 tp, int8 *trennart) {
 	struct EVENTBLOCK *prevneuevbl;
 	int16 neuevnum;
 	int32 d;
-	int16 s;
+	int16 s = 0; // TODO: check line 619
 
 	if (!seq->aliasorig) {
 
