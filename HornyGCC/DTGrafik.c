@@ -184,8 +184,8 @@ void OeffneImg2(uint16 id, STRPTR datei) {
 	if (hschirm) scr = hschirm;
 	else scr = IIntuition->LockPubScreen(NULL);
 	
-	strncpy(seldatei, datei, 1024);
-	strncat(seldatei, "_S", 1024);
+	snprintf(seldatei, sizeof(seldatei), "%s_S", datei);
+	
 	bmo[id] = IIntuition->NewObject(BitmapClass, NULL,
 		BITMAP_SourceFile, datei,
 		BITMAP_SelectSourceFile, seldatei,

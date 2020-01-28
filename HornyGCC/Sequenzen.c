@@ -191,7 +191,7 @@ void SpurSequenzenEntfernen(int16 s) {
 void SequenzAusSpurEntfernen(struct SEQUENZ *seq) {
 	struct SEQUENZ *aktseq;
 	struct SEQUENZ *altseq;
-	int16 s;
+	int16 s = 0; // TODO: check line 619
 
 	if (seq == edseq) EntferneEditorNotenFenster();
 	s = seq->spur;
