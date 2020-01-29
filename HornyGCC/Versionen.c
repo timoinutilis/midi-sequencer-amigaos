@@ -62,7 +62,6 @@ char loadKey(struct KEY *key, char *n) {
 void TesteKey(void) {
 	struct KEY key;
 	short sum;
-	char keyok = 0;
 	char *end;
 
 	if (loadKey(&key, (STRPTR)"PROGDIR:System/horny.key")) {
@@ -75,7 +74,6 @@ void TesteKey(void) {
 				memcpy(regname, key.nrmtxt, 48);
 				end = strchr(regname, '|');
 				if (end) *end = 0;
-				keyok = 1;
 			}
 		}
 	}

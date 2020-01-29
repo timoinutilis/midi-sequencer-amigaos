@@ -10,8 +10,7 @@ else
 	AMIGADATE = $(shell date LFORMAT "%-d.%-m.%Y")
 endif 
 
-#CFLAGS = -Wall -Werror -Wwrite-strings -gstabs
-CFLAGS = -Wall -Wwrite-strings -gstabs 
+CFLAGS = -Wall -Werror -Wwrite-strings -gstabs
 
 OBJS = 		AppWindow.o \
 			Automation.o \

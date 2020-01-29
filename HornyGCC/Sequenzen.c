@@ -538,7 +538,7 @@ BOOL SequenzZerschneiden(struct SEQUENZ *seq, int32 tp, int8 *trennart) {
 	struct EVENTBLOCK *prevneuevbl;
 	int16 neuevnum;
 	int32 d;
-	int16 s;
+	int16 s = 0; // TODO: check line 619
 
 	if (!seq->aliasorig) {
 

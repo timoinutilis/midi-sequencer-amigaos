@@ -1,12 +1,16 @@
+1.4 (1.28.2020) <Capehill>
 
-1.4 (2.19.2020) <kas1e>
+ - fix a couple of compiler warnings
+ - fix few null-pointer crashes
+
+1.4 (1.19.2020) <kas1e>
 
  - modify makefile:
     make it smaller
     make it compiles natively and on cross-compiler
     added "clean" target
 
-1.4 (2.18.2020) <Lyle Hazelwood>
+1.4 (1.18.2020) <Lyle Hazelwood>
 
  - First edit of HornyOS4 since the release of source code.  
  - removed key requirement

@@ -831,7 +831,8 @@ void KontrolleEinstellungsfenster(void) {
 				}
 				IChooser->GetChooserNodeAttrs(node, CNA_Text, &text, TAG_DONE);
 				IIntuition->GetAttr(LISTBROWSER_Selected, (Object *)setgad[GAD_OPLIST], (uint32 *)&var);
-				strncpy(outport[var].name, text, 128); AktualisiereOutPortListe();
+				if(text) snprintf(outport[var].name,sizeof(outport[var].name), "%s", text);
+				AktualisiereOutPortListe();
 				break;
 				
 				case GAD_OPENTF:
@@ -926,7 +927,7 @@ void KontrolleEinstellungsfenster(void) {
 	if (schliessen) {
 		STRPTR str = NULL;
 		IIntuition->GetAttr(GETFILE_FullFile, (Object *)setgad[GAD_PHONOLITHPROJ], (uint32 *)&str);
-		strncpy(lied.phonolithprojekt, str, 1024);
+		if (str) snprintf(lied.phonolithprojekt, sizeof(lied.phonolithprojekt), "%s", str);
 
 		ErneuereLinks();
 		HoleFensterObjpos(setfensterobj, SET);

@@ -162,8 +162,8 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 		neu->next = NULL;
 		
 		
-		strcpy(datei, "PROGDIR:System/Instruments/");
-		strncat(datei, name, 512);
+		snprintf(datei, sizeof(datei), "PROGDIR:System/Instruments/%s", name);
+		
 		file = IDOS->Open(datei, MODE_OLDFILE);
 		if (file) {
 			IDOS->FGets(file, zeile, 256);
@@ -216,7 +216,8 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 	
 			IDOS->Close(file);
 			
-			strncat(datei, ".controller", 512);
+			snprintf(datei, sizeof(datei), "PROGDIR:System/Instruments/%s.controller", name);
+			
 			neu->contr = LadeInstrContr(datei);
 			if (!neu->contr) neu->contr = LadeInstrContr((STRPTR)"PROGDIR:System/Instruments/GM.controller");
 
