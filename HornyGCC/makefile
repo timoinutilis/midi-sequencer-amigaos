@@ -1,11 +1,9 @@
 ifneq ($(shell uname), AmigaOS)
 	CC 		= ppc-amigaos-gcc
-	DELETE		= rm -f
 	STRIP = ppc-amigaos-strip
 	AMIGADATE = $(shell date +"%-d.%-m.%Y")
 else
 	CC 		= gcc
-	DELETE		= delete
 	STRIP = strip
 	AMIGADATE = $(shell date LFORMAT "%-d.%-m.%Y")
 endif 
@@ -56,4 +54,4 @@ HornyOS4:  $(OBJS) makefile
 	$(CC) -o $@ -c $< $(CFLAGS) 
 	
 clean: 
-	$(DELETE)  $(OBJS) HornyOS4.debug HornyOS4
+	$(RM) $(OBJS) HornyOS4.debug HornyOS4
