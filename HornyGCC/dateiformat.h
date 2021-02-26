@@ -1,8 +1,8 @@
 #include <exec/types.h>
 
 struct HEAD {
-	ULONG hornyid;
-	UWORD version;
+	uint32 hornyid;
+	uint16 version;
 };
 
 #define HORNYID 0x48524E59
@@ -12,8 +12,8 @@ struct HEAD {
 // 1xxx Horny-Version xx.x
 
 struct AREA {
-	ULONG id;
-	ULONG len;
+	uint32 id;
+	uint32 len;
 };
 
 #define FAREA_INFO       0x494E464F // INFO
@@ -34,10 +34,10 @@ struct AREA {
 
 
 // TAGS
-// xxx0: WORD wert
-// xxx1: LONG wert
-// xxx2: WORD len string
-// xxx3: LONG len data
+// xxx0: int16 wert
+// xxx1: int32 wert
+// xxx2: int16 len string
+// xxx3: int32 len data
 
 // FAREA_INFO
 #define TAG_INFO_NAME 0x0002
@@ -164,8 +164,8 @@ struct AREA {
 
 // Speicherformat für Events
 struct FEVENT {
-	LONG zeit;
-	UBYTE status;
-	UBYTE data1;
-	UBYTE data2;
+	int32 zeit;
+	uint8 status;
+	uint8 data1;
+	uint8 data2;
 };

@@ -5,7 +5,7 @@
 #include "Sequenzen.h"
 
 struct CLIPBOARD {
-	LONG ersttakt;
+	int32 ersttakt;
 	struct SEQUENZ *seq;
 };
 
@@ -30,7 +30,7 @@ void ClipboardLoeschen(void) {
 	clip.seq = NULL;
 }
 
-void ClipboardAliaseRechnen(BYTE add) {
+void ClipboardAliaseRechnen(int8 add) {
 	struct SEQUENZ *akt;
 	
 	akt = clip.seq;
@@ -64,7 +64,7 @@ void ClipboardAliasZuReal(void) {
 }
 
 void ClipboardKopieren(void) {
-	WORD s;
+	int16 s;
 	struct SEQUENZ *seq;
 	struct SEQUENZ *seqkopie;
 	
@@ -90,11 +90,11 @@ void ClipboardKopieren(void) {
 	}
 }
 
-LONG ClipboardEinfuegen(LONG t) {
+int32 ClipboardEinfuegen(int32 t) {
 	struct SEQUENZ *seq;
 	struct SEQUENZ *seqkopie;
-	LONG ende;
-	WORD s;
+	int32 ende;
+	int16 s;
 	
 	ende = t;
 	seq = clip.seq;

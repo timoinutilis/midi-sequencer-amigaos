@@ -1,7 +1,7 @@
 #include <exec/types.h>
 
 void ClipboardLoeschen(void);
-void ClipboardAliaseRechnen(BYTE add);
+void ClipboardAliaseRechnen(int8 add);
 void ClipboardAliasZuReal(void);
 void ClipboardKopieren(void);
-LONG ClipboardEinfuegen(LONG t);
+int32 ClipboardEinfuegen(int32 t);

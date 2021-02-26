@@ -24,10 +24,10 @@ struct EVENTBLOCK *KopiereEvbls(struct EVENTBLOCK *evblorig) {
 	struct EVENTBLOCK *evbl = NULL;
 
 	while (evblorig) {
-		evblkopie = AllocVec(sizeof(struct EVENTBLOCK), 0);
+		evblkopie = IExec->AllocVecTags(sizeof(struct EVENTBLOCK), TAG_END);
 		if (evblkopie) {
 			if (!evbl) evbl = evblkopie;
-			CopyMem(evblorig, evblkopie, sizeof(struct EVENTBLOCK));
+			IExec->CopyMem(evblorig, evblkopie, sizeof(struct EVENTBLOCK));
 			if (altevbl) altevbl->next = evblkopie;
 			evblkopie->prev = altevbl;
 			evblkopie->next = NULL;
@@ -45,15 +45,15 @@ void AddEdUndo(struct SEQUENZ *seq, STRPTR aktion) {
 	if (rootedundo) {
 		while (rootedundo != aktedundo) {
 			EvblsAbschneiden(rootedundo->evbl);
-			FreeVec(rootedundo->evbl);
+			IExec->FreeVec(rootedundo->evbl);
 			
 			next = rootedundo->next;
-			FreeVec(rootedundo);
+			IExec->FreeVec(rootedundo);
 			rootedundo = next;
 		}
 	}
 	
-	neu = AllocVec(sizeof(struct EDUNDO), 0);
+	neu = IExec->AllocVecTags(sizeof(struct EDUNDO), TAG_END);
 	if (neu) {
 		neu->aktion = aktion;
 		neu->evbl = KopiereEvbls(seq->eventblock);
@@ -70,7 +70,7 @@ BOOL EdUndo(struct SEQUENZ *seq) {
 	if (aktedundo) {
 		if (aktedundo->next) {
 			EvblsAbschneiden(seq->eventblock);
-			FreeVec(seq->eventblock);
+			IExec->FreeVec(seq->eventblock);
 
 			aktedundo = aktedundo->next;
 			seq->eventblock = KopiereEvbls(aktedundo->evbl);
@@ -86,7 +86,7 @@ BOOL EdRedo(struct SEQUENZ *seq) {
 	if (aktedundo) {
 		if (aktedundo->prev) {
 			EvblsAbschneiden(seq->eventblock);
-			FreeVec(seq->eventblock);
+			IExec->FreeVec(seq->eventblock);
 
 			aktedundo = aktedundo->prev;
 			seq->eventblock = KopiereEvbls(aktedundo->evbl);
@@ -105,10 +105,10 @@ void EntferneAlleEdUndo() {
 	akt = rootedundo;
 	while (akt) {
 		EvblsAbschneiden(akt->evbl);
-		FreeVec(akt->evbl);
+		IExec->FreeVec(akt->evbl);
 		
 		next = akt->next;
-		FreeVec(akt);
+		IExec->FreeVec(akt);
 		akt = next;
 	}
 	rootedundo = NULL;
@@ -119,12 +119,12 @@ STRPTR EdUndoAktion() {
 	if (aktedundo)
 		if (aktedundo->next)
 			return(aktedundo->aktion);
-	return("--");
+	return((STRPTR)"--");
 }
 
 STRPTR EdRedoAktion() {
 	if (aktedundo)
 		if (aktedundo->prev)
 			return(aktedundo->prev->aktion);
-	return("--");
+	return((STRPTR)"--");
 }

@@ -7,9 +7,9 @@
 #undef _KEINEEXTERN_
 
 BOOL verLITE;
-BYTE verOUTPORTS;
-BYTE verINPORTS;
-WORD verSPUREN;
+int8 verOUTPORTS;
+int8 verINPORTS;
+int16 verSPUREN;
 
 char regname[50];
 
@@ -62,12 +62,11 @@ char loadKey(struct KEY *key, char *n) {
 void TesteKey(void) {
 	struct KEY key;
 	short sum;
-	char keyok = 0;
 	char *end;
 
-	if (loadKey(&key, "PROGDIR:System/horny.key")) {
-		sum = addChecksum(key.revtxt, 48, 0);
-		sum = addChecksum(key.nrmtxt, 48, sum);
+	if (loadKey(&key, (STRPTR)"PROGDIR:System/horny.key")) {
+		sum = addChecksum((unsigned char *)key.revtxt, 48, 0);
+		sum = addChecksum((unsigned char *)key.nrmtxt, 48, sum);
 		if (sum == key.sum) {
 			decodeText((long *)key.revtxt, 48/sizeof(long), 0x92AB0F23);
 			decodeText((long *)key.nrmtxt, 48/sizeof(long), 0x94837FF6);
@@ -75,12 +74,11 @@ void TesteKey(void) {
 				memcpy(regname, key.nrmtxt, 48);
 				end = strchr(regname, '|');
 				if (end) *end = 0;
-				keyok = 1;
 			}
 		}
 	}
 
-	if (keyok) { // Vollversion
+	if (TRUE) { // Vollversion
 		verLITE = FALSE;
 		verOUTPORTS = OUTPORTS;
 		verINPORTS = INPORTS;

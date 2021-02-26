@@ -1,16 +1,16 @@
 #include <exec/types.h>
 
-void InitSpur(WORD s);
+void InitSpur(int16 s);
 
 void AktualisiereSpuren(BOOL spalten);
-BOOL SpurInSicht(WORD s);
-void SpurAktivieren(WORD s);
-void SpurScroll(WORD ds);
+BOOL SpurInSicht(int16 s);
+void SpurAktivieren(int16 s);
+void SpurScroll(int16 ds);
 void NeueSpur(void);
-void SpurLoeschen(WORD s);
-void SpurVerschieben(WORD s1, WORD s2);
-void SpurDuplizieren(WORD s);
+void SpurLoeschen(int16 s);
+void SpurVerschieben(int16 s1, int16 s2);
+void SpurDuplizieren(int16 s);
 
-void SpurMuteSchalter(WORD s);
-void SpurSolo(WORD s);
+void SpurMuteSchalter(int16 s);
+void SpurSolo(int16 s);
 void SpurenMutesAus(void);

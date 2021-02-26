@@ -42,13 +42,13 @@ extern struct Gadget *edgad[];
 extern struct LIED lied;
 extern struct SPUR spur[];
 extern struct SPURTEMP sp[];
-extern BYTE contrspur[];
+extern int8 contrspur[];
 
-extern LONG takt;
-extern LONG tick;
-extern LONG edittakt;
-BYTE editnote = -1;
-BYTE playnote = -1;
+extern int32 takt;
+extern int32 tick;
+extern int32 edittakt;
+int8 editnote = -1;
+int8 playnote = -1;
 
 struct SEQUENZ *edseq = NULL;
 struct EVENT *wahlnote = NULL;
@@ -57,16 +57,15 @@ extern struct INSTRCONTR *edinstrcontr;
 extern struct EDGUI edgui;
 extern struct UMGEBUNG umgebung;
 
-BYTE ganz2halb[77];
-BYTE halb2ganz[132];
+int8 ganz2halb[77];
+int8 halb2ganz[132];
 
 
-LONG RasterTakt(LONG t)
+int32 RasterTakt(int32 t)
 {
-	BOOL tripled = TRUE;
-	LONG faktor;
-	LONG rtakt = t;
-	LONG rest;
+	int32 faktor;
+	int32 rtakt = t;
+	int32 rest;
 
 	if (edgui.raster > 0) {
 		if (edgui.tripled) { //Triolen
@@ -85,7 +84,7 @@ LONG RasterTakt(LONG t)
 }
 
 void InitUmrechnungstabellen(void) {
-	WORD o;
+	int16 o;
 	
 	for (o = 0; o<11; o++) {
 		ganz2halb[0 + (o*7)] = 0 + (o*12);
@@ -111,10 +110,10 @@ void InitUmrechnungstabellen(void) {
 	}
 }
 
-BYTE MittlereNotenhoehe(struct SEQUENZ *seq) {
+int8 MittlereNotenhoehe(struct SEQUENZ *seq) {
 	struct EVENTBLOCK *evbl;
-	WORD evnum;
-	UBYTE h, n, a;
+	int16 evnum;
+	uint8 h, n, a;
 
 	evbl = seq->eventblock; evnum = 0; h = 0; n = 127;
 	while (evbl) {
@@ -137,8 +136,8 @@ void ZeichneFeld(BOOL anders) {
 }
 
 void NotenSequenzEditor(struct SEQUENZ *seq) {
-	WORD s;
-	LONG a;
+	int16 s;
+	int32 a;
 	
 	if (seq->aliasorig) {
 		a = Frage(CAT(MSG_0595, "Aliases cannot be edited. Do you want to...\n...edit the original, or...\n...change alias to real sequence?"), CAT(MSG_0596, "Original|Alias to real|Cancel"));
@@ -160,8 +159,8 @@ void NotenSequenzEditor(struct SEQUENZ *seq) {
 			ErstelleEditorNotenFenster();
 		} else {
 			EntferneAlleEdUndo();
-			ActivateWindow(edfenster);
-			WindowToFront(edfenster);
+			IIntuition->ActivateWindow(edfenster);
+			IIntuition->WindowToFront(edfenster);
 		}
 		
 		if (edfenster) {
@@ -177,7 +176,7 @@ void NotenSequenzEditor(struct SEQUENZ *seq) {
 			InitController();
 			KeineEventsMarkieren(edseq);
 
-			AddEdUndo(edseq, "");
+			AddEdUndo(edseq, (STRPTR)"");
 
 			EdFensterTitel();
 			ZeichneEdZeitleiste();
@@ -198,8 +197,8 @@ void NotenSequenzEditor(struct SEQUENZ *seq) {
 	}
 }
 
-void EdSchleifeGadgets(struct Gadget *g, UWORD code, BOOL final) {
-	WORD id = g->GadgetID;
+void EdSchleifeGadgets(struct Gadget *g, uint16 code, BOOL final) {
+	int16 id = g->GadgetID;
 	
 	if ((id >= 5) && (id <= 10)) {
 		if (id<10) edgui.raster = VIERTEL+5-id; else edgui.raster = 0;
@@ -280,8 +279,8 @@ void EdSchleifeGadgets(struct Gadget *g, UWORD code, BOOL final) {
 	}
 }
 
-void EdNeuLen(LONG len) {
-	LONG neulen;
+void EdNeuLen(int32 len) {
+	int32 neulen;
 	
 	neulen = 5;
 	if (len * 4 >= 3 * VIERTELWERT / 4) neulen = 4; // 1/16
@@ -296,15 +295,15 @@ void EdNeuLen(LONG len) {
 	}
 }
 
-void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
+void EdSchleifeNoten(int16 mousex, int16 mousey, uint16 qualifier) {
 	struct IntuiMessage *mes;
-	LONG alttakt;
-	LONG neutakt;
-	BYTE neunote;
+	int32 alttakt;
+	int32 neutakt;
+	int8 neunote;
 	BOOL verlassen = FALSE;
 	BOOL bewegt = FALSE;
-	WORD mx2 = 0, my2 = 0;
-	BYTE greifp = 0;
+	int16 mx2 = 0, my2 = 0;
+	int8 greifp = 0;
 	struct EVENT ev1;
 	struct EVENT ev2;
 
@@ -326,12 +325,12 @@ void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
 			ZeichneNotenVelos();
 			my2 = mousey;
 			do {
-				WaitPort(edfenster->UserPort);
-				while (mes = (struct IntuiMessage *)GetMsg(edfenster->UserPort)) {
+				IExec->WaitPort(edfenster->UserPort);
+				while ((mes = (struct IntuiMessage *)IExec->GetMsg(edfenster->UserPort))) {
 					switch (mes->Class) {
 						case IDCMP_MOUSEMOVE:
 						bewegt = TRUE;
-						MarkEventsDynamik(edseq, 0, 0, (BYTE)(my2 - mes->MouseY)); my2 = mes->MouseY;
+						MarkEventsDynamik(edseq, 0, 0, (int8)(my2 - mes->MouseY)); my2 = mes->MouseY;
 						SendeEvent(edseq->spur, MS_NoteOff, playnote, 0);
 						SendeEvent(edseq->spur, wahlnote->status, playnote, wahlnote->data2);
 						ZeichneNotenVelos(); ZeichneEdInfobox();
@@ -339,7 +338,7 @@ void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
 						
 						case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 					}
-					ReplyMsg((struct Message *)mes);
+					IExec->ReplyMsg((struct Message *)mes);
 				}
 			} while (!verlassen);
 			if (bewegt) AddEdUndo(edseq, CAT(MSG_0598, "Edit Dynamics"));
@@ -353,8 +352,8 @@ void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
 			}
 			if (greifp == 0) alttakt = edittakt; else alttakt = neutakt;
 			do {
-				WaitPort(edfenster->UserPort);
-				while (mes = (struct IntuiMessage *)GetMsg(edfenster->UserPort)) {
+				IExec->WaitPort(edfenster->UserPort);
+				while ((mes = (struct IntuiMessage *)IExec->GetMsg(edfenster->UserPort))) {
 					switch (mes->Class) {
 						case IDCMP_MOUSEMOVE:
 						if (greifp == 0) neutakt = RasterTakt(EdPunktPosition(mes->MouseX));
@@ -383,7 +382,7 @@ void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
 						
 						case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 					}
-					ReplyMsg((struct Message *)mes);
+					IExec->ReplyMsg((struct Message *)mes);
 				}
 			} while (!verlassen);
 			if (bewegt) {
@@ -413,8 +412,8 @@ void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
 			ZeichneNote(&ev1, &ev2, TRUE);
 			SendeEvent(edseq->spur, MS_NoteOn, playnote = ev1.data1, ev1.data2);
 			do {
-				WaitPort(edfenster->UserPort);
-				while (mes = (struct IntuiMessage *)GetMsg(edfenster->UserPort)) {
+				IExec->WaitPort(edfenster->UserPort);
+				while ((mes = (struct IntuiMessage *)IExec->GetMsg(edfenster->UserPort))) {
 					switch (mes->Class) {
 						case IDCMP_MOUSEMOVE:
 						neutakt = EdPunktPosition(mes->MouseX);
@@ -442,7 +441,7 @@ void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
 						
 						case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 					}
-					ReplyMsg((struct Message *)mes);
+					IExec->ReplyMsg((struct Message *)mes);
 				}
 			} while (!verlassen);
 			wahlnote = EventEinfuegen(edseq, ev1.zeit, MS_NoteOn, editnote, 100, TRUE);
@@ -466,16 +465,16 @@ void EdSchleifeNoten(WORD mousex, WORD mousey, UWORD qualifier) {
 	ZeichneEdInfobox();
 }
 
-void EdSchleifeContr(WORD mousex, WORD mousey, UWORD qualifier) {
+void EdSchleifeContr(int16 mousex, int16 mousey, uint16 qualifier) {
 	struct IntuiMessage *mes;
 	BOOL verlassen = FALSE;
-	WORD cs;
-	BYTE contr;
-	LONG neutakt;
+	int16 cs;
+	int8 contr;
+	int32 neutakt;
 	struct EVENT *fcev;
 	BOOL mitte, onoff;
-	UBYTE neustatus;
-	BYTE neudata1;
+	uint8 neustatus;
+	int8 neudata1;
 	BOOL erzeugt = FALSE;
 	BOOL bewegt = FALSE;
 
@@ -506,8 +505,8 @@ void EdSchleifeContr(WORD mousex, WORD mousey, UWORD qualifier) {
 				ZeichneContr(cs, wahlnote, fcev, mitte, TRUE);
 			}
 			do {
-				WaitPort(edfenster->UserPort);
-				while (mes = (struct IntuiMessage *)GetMsg(edfenster->UserPort)) {
+				IExec->WaitPort(edfenster->UserPort);
+				while ((mes = (struct IntuiMessage *)IExec->GetMsg(edfenster->UserPort))) {
 					switch (mes->Class) {
 						case IDCMP_MOUSEMOVE:
 						neutakt = EdPunktPosition(mes->MouseX);
@@ -521,7 +520,7 @@ void EdSchleifeContr(WORD mousex, WORD mousey, UWORD qualifier) {
 	
 						case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 					}
-					ReplyMsg((struct Message *)mes);
+					IExec->ReplyMsg((struct Message *)mes);
 				}
 			} while (!verlassen);
 
@@ -541,8 +540,8 @@ void EdSchleifeContr(WORD mousex, WORD mousey, UWORD qualifier) {
 				erzeugt = TRUE;
 			}
 			do {
-				WaitPort(edfenster->UserPort);
-				while (mes = (struct IntuiMessage *)GetMsg(edfenster->UserPort)) {
+				IExec->WaitPort(edfenster->UserPort);
+				while ((mes = (struct IntuiMessage *)IExec->GetMsg(edfenster->UserPort))) {
 					switch (mes->Class) {
 						case IDCMP_MOUSEMOVE:
 						neutakt = EdPunktPosition(mes->MouseX);
@@ -566,7 +565,7 @@ void EdSchleifeContr(WORD mousex, WORD mousey, UWORD qualifier) {
 	
 						case IDCMP_MOUSEBUTTONS: verlassen = TRUE; break;
 					}
-					ReplyMsg((struct Message *)mes);
+					IExec->ReplyMsg((struct Message *)mes);
 				}
 			} while (!verlassen);
 			if (erzeugt) {
@@ -582,7 +581,7 @@ void EdSchleifeContr(WORD mousex, WORD mousey, UWORD qualifier) {
 }
 
 void NeuerController(void) {
-	BYTE c;
+	int8 c;
 	
 	c = InstrControllerFenster(edfenster, spur[edseq->spur].channel, spur[edseq->spur].port, -128);
 	if (c > -128) {
@@ -601,13 +600,13 @@ void KontrolleEditorNotenFenster(void) {
 	struct IntuiMessage *mes;
 	struct IntuiMessage mescpy;
 	BOOL schliessen = FALSE;
-	BYTE note;
-	ULONG b;
-	BYTE u, v, w;
-	WORD n;
-	WORD updateid = -1, updatecode = -1;
+	int8 note;
+	uint32 b;
+	int8 u, v, w;
+	int16 n;
+	int16 updateid = -1, updatecode = -1;
 
-	while (mes = (struct IntuiMessage *)GetMsg(edfenster->UserPort)) {
+	while ((mes = (struct IntuiMessage *)IExec->GetMsg(edfenster->UserPort))) {
 		if (mes->Class == IDCMP_IDCMPUPDATE) SchleifeUpdate((struct TagItem *)mes->IAddress, &updateid, &updatecode);
 		mescpy.Class = mes->Class;
 		mescpy.Code = mes->Code;
@@ -615,7 +614,7 @@ void KontrolleEditorNotenFenster(void) {
 		mescpy.Qualifier = mes->Qualifier;
 		mescpy.MouseX = mes->MouseX;
 		mescpy.MouseY = mes->MouseY;
-		ReplyMsg((struct Message *)mes);
+		IExec->ReplyMsg((struct Message *)mes);
 		
 		switch (mescpy.Class) {
 			case IDCMP_CLOSEWINDOW: schliessen = TRUE; break;
@@ -764,8 +763,8 @@ void KontrolleEditorNotenFenster(void) {
 
 #ifndef __amigaos4__
 				//os3 (newmouse) mouse wheel
-				WORD vscroll = 0;
-				WORD hscroll = 0;
+				int16 vscroll = 0;
+				int16 hscroll = 0;
 
 				if (!umgebung.mausradtauschen) {
 					switch (mescpy.Code) {
@@ -893,11 +892,10 @@ void KontrolleEditorNotenFenster(void) {
 			}
 			break;
 
-#ifdef __amigaos4__
 			case IDCMP_EXTENDEDMOUSE:
 				if (mescpy.Code == IMSGCODE_INTUIWHEELDATA) {
 					struct IntuiWheelData *data = (struct IntuiWheelData *)mescpy.IAddress;
-					WORD vscroll = 0, hscroll = 0;
+					int16 vscroll = 0, hscroll = 0;
 					BOOL tauschen = umgebung.mausradtauschen;
 					if (mescpy.Qualifier & QUALIFIER_ALT) {
 						tauschen = !tauschen;
@@ -930,7 +928,6 @@ void KontrolleEditorNotenFenster(void) {
 					}
 				}
 			break;
-#endif
 			
 			case IDCMP_MOUSEBUTTONS:
 			if (mescpy.Code == 104) {

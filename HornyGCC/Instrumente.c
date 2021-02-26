@@ -51,25 +51,25 @@ struct INSTRCONTR *LadeInstrContr(STRPTR datei) {
 	BPTR file;
 	char zeile[256];
 	struct INSTRCONTR *neu;
-	WORD n;
-	WORD lz;
+	int16 n;
+	int16 lz;
 
-	file = Open(datei, MODE_OLDFILE);
+	file = IDOS->Open(datei, MODE_OLDFILE);
 	if (file) {
-		FGets(file, zeile, 256);
+		IDOS->FGets(file, zeile, 256);
 		if (strcmp(zeile, "HORNY INSTRUMENT CONTROLLER\n") != 0) {
-			Close(file);
+			IDOS->Close(file);
 			return(NULL);
 		}
 
-		neu = AllocVec(sizeof(struct INSTRCONTR), 0);
+		neu = IExec->AllocVecTags(sizeof(struct INSTRCONTR), TAG_END);
 		if (neu) {
 			for (n = 0; n < 128; n++) {
 				sprintf(neu->name[n], "(Contr. %d)", n);
 				neu->flags[n] = 0;
 			}
 			
-			while (FGets(file, zeile, 256)) {
+			while (IDOS->FGets(file, zeile, 256)) {
 				lz = -1;
 				for (n = 0; n < 6; n++) {
 					if (zeile[n] == 0) break;
@@ -85,18 +85,18 @@ struct INSTRCONTR *LadeInstrContr(STRPTR datei) {
 				}
 			}
 		}
-		Close(file);
+		IDOS->Close(file);
 		return(neu);
 	}
 	return(NULL);
 }
 
 
-void NeuesProgramm(struct KATEGORIE *kat, BYTE bank0, BYTE bank32, BYTE prog, STRPTR name) {
+void NeuesProgramm(struct KATEGORIE *kat, int8 bank0, int8 bank32, int8 prog, STRPTR name) {
 	struct PROGRAMM *neu;
 	struct PROGRAMM *akt;
 	
-	neu = AllocVec(sizeof(struct PROGRAMM), 0);
+	neu = IExec->AllocVecTags(sizeof(struct PROGRAMM), TAG_END);
 	if (neu) {
 		strncpy(neu->name, name, 128);
 		neu->bank0 = bank0;
@@ -114,11 +114,11 @@ void NeuesProgramm(struct KATEGORIE *kat, BYTE bank0, BYTE bank32, BYTE prog, ST
 	}
 }
 
-struct KATEGORIE *NeueKategorie(struct INSTRUMENT *instr, STRPTR name, BYTE chanvon, BYTE chanbis) {
+struct KATEGORIE *NeueKategorie(struct INSTRUMENT *instr, STRPTR name, int8 chanvon, int8 chanbis) {
 	struct KATEGORIE *neu;
 	struct KATEGORIE *akt;
 	
-	neu = AllocVec(sizeof(struct KATEGORIE), 0);
+	neu = IExec->AllocVecTags(sizeof(struct KATEGORIE), TAG_END);
 	if (neu) {
 		strncpy(neu->name, name, 128);
 		neu->programm = NULL;
@@ -144,36 +144,36 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 	struct INSTRUMENT *neu;
 	struct INSTRUMENT *akt;
 	struct KATEGORIE *kat = NULL;
-	BYTE prog = 0;
-	BYTE bank0 = -1;
-	BYTE bank32 = -1;
-	BYTE chanvon = 0, chanbis = 15;
-	WORD schwanz;
+	int8 prog = 0;
+	int8 bank0 = -1;
+	int8 bank32 = -1;
+	int8 chanvon = 0, chanbis = 15;
+	int16 schwanz;
 	char *leer;
-	WORD von, bis;
-	WORD n;
+	int16 von, bis;
+	int16 n;
 	STRPTR numname;
 	char progname[128];
 	
-	neu = AllocVec(sizeof(struct INSTRUMENT), 0);
+	neu = IExec->AllocVecTags(sizeof(struct INSTRUMENT), TAG_END);
 	if (neu) {
 		strncpy(neu->name, name, 128);
 		neu->kategorie = NULL;
 		neu->next = NULL;
 		
 		
-		strcpy(datei, "PROGDIR:System/Instruments/");
-		strncat(datei, name, 512);
-		file = Open(datei, MODE_OLDFILE);
+		snprintf(datei, sizeof(datei), "PROGDIR:System/Instruments/%s", name);
+		
+		file = IDOS->Open(datei, MODE_OLDFILE);
 		if (file) {
-			FGets(file, zeile, 256);
+			IDOS->FGets(file, zeile, 256);
 			if (strcmp(zeile, "HORNY INSTRUMENT\n") != 0) {
-				Close(file);
-				FreeVec(neu);
+				IDOS->Close(file);
+				IExec->FreeVec(neu);
 				return(NULL);
 			}
 
-			while (FGets(file, zeile, 256)) {
+			while (IDOS->FGets(file, zeile, 256)) {
 				schwanz = strlen(zeile) - 1;
 				if (zeile[schwanz] == '\n') zeile[schwanz] = 0;
 				
@@ -186,9 +186,9 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 					
 					case '#':
 					leer = strchr(zeile, ' ');
-					if ((zeile[1] == 'B') && (zeile[5] != '3')) bank0 = (BYTE)atoi(leer); // #BANK0 x
-					if ((zeile[1] == 'B') && (zeile[5] == '3')) bank32 = (BYTE)atoi(leer); // #BANK32 x
-					if (zeile[1] == 'P') prog = (BYTE)atoi(leer); // #PROG x
+					if ((zeile[1] == 'B') && (zeile[5] != '3')) bank0 = (int8)atoi(leer); // #BANK0 x
+					if ((zeile[1] == 'B') && (zeile[5] == '3')) bank32 = (int8)atoi(leer); // #BANK32 x
+					if (zeile[1] == 'P') prog = (int8)atoi(leer); // #PROG x
 					if (zeile[1] == 'C') { // #CHAN x x
 						chanvon = atol(leer++) - 1;
 						leer = strchr(leer, ' ');
@@ -214,11 +214,12 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 				}
 			}
 	
-			Close(file);
+			IDOS->Close(file);
 			
-			strncat(datei, ".controller", 512);
+			snprintf(datei, sizeof(datei), "PROGDIR:System/Instruments/%s.controller", name);
+			
 			neu->contr = LadeInstrContr(datei);
-			if (!neu->contr) neu->contr = LadeInstrContr("PROGDIR:System/Instruments/GM.controller");
+			if (!neu->contr) neu->contr = LadeInstrContr((STRPTR)"PROGDIR:System/Instruments/GM.controller");
 
 			if (!rootinstrument) {
 				rootinstrument = neu;
@@ -228,7 +229,7 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 				akt->next = neu;
 			}
 		} else {
-			FreeVec(neu);
+			IExec->FreeVec(neu);
 		}
 	}
 	return(neu);
@@ -236,14 +237,14 @@ struct INSTRUMENT *LadeInstrument(STRPTR name) {
 
 void ErstelleVorgabeInstrument(void) {
 	struct KATEGORIE *kat;
-	WORD prog;
+	int16 prog;
 	char progname[128];
 	
-	rootinstrument = AllocVec(sizeof(struct INSTRUMENT), 0);
+	rootinstrument = IExec->AllocVecTags(sizeof(struct INSTRUMENT), TAG_END);
 	if (rootinstrument) {
 		strcpy(rootinstrument->name, "???");
 		rootinstrument->kategorie = NULL;
-		rootinstrument->contr = LadeInstrContr("PROGDIR:System/Instruments/GM.controller");
+		rootinstrument->contr = LadeInstrContr((STRPTR)"PROGDIR:System/Instruments/GM.controller");
 		rootinstrument->next = NULL;
 		
 		kat = NeueKategorie(rootinstrument, CAT(MSG_0470, "Standard"), 0, 15);
@@ -257,25 +258,19 @@ void ErstelleVorgabeInstrument(void) {
 }
 
 void LadeAlleInstrumente(void) {
-	struct FileInfoBlock *fib = NULL;
-	BPTR lock;
+	APTR context;
 
-	fib = AllocVec(sizeof(struct FileInfoBlock), 0);
-	if (fib)
-	{
-		ErstelleVorgabeInstrument();
-		lock = Lock("PROGDIR:System/Instruments/", ACCESS_READ);
-		if (lock) {
-			if (Examine(lock, fib)) {
-				while (ExNext(lock, fib)) {
-					if (strchr(fib->fib_FileName, '.') == NULL) {
-						LadeInstrument(fib->fib_FileName);
-					}
+	struct ExamineData *xd = NULL;
+
+	ErstelleVorgabeInstrument();
+	context = IDOS->ObtainDirContextTags(EX_StringNameInput, "PROGDIR:System/Instruments/", TAG_END);
+	if (context) {
+		while ((xd = IDOS->ExamineDir(context))) {
+				if (EXD_IS_FILE(xd)){
+					LadeInstrument(xd->Name);
 				}
-			}
-			UnLock(lock);
 		}
-		FreeVec(fib);
+		IDOS->ReleaseDirContext(context);
 	}
 }
 
@@ -298,17 +293,17 @@ void EntferneAlleInstrumente(void) {
 			prog = kat->programm;
 			while (prog) {
 				nextprog = prog->next;
-				FreeVec(prog);
+				IExec->FreeVec(prog);
 				prog = nextprog;
 			}
 			
-			FreeVec(kat);
+			IExec->FreeVec(kat);
 			kat = nextkat;
 		}
 		
-		if (instr->contr) FreeVec(instr->contr);
+		if (instr->contr) IExec->FreeVec(instr->contr);
 		
-		FreeVec(instr);
+		IExec->FreeVec(instr);
 		instr = nextinstr;
 	}
 	rootinstrument = NULL;
@@ -325,9 +320,9 @@ struct INSTRUMENT *SucheInstrument(STRPTR name) {
 	return(NULL);
 }
 
-WORD SucheInstrumentNum(STRPTR name) {
+int16 SucheInstrumentNum(STRPTR name) {
 	struct INSTRUMENT *instr;
-	WORD n;
+	int16 n;
 	
 	instr = rootinstrument; n = 0;
 	while (instr) {
@@ -337,9 +332,9 @@ WORD SucheInstrumentNum(STRPTR name) {
 	return(-1);
 }
 
-struct INSTRUMENT *NtesInstrument(WORD n) {
+struct INSTRUMENT *NtesInstrument(int16 n) {
 	struct INSTRUMENT *instr;
-	WORD z;
+	int16 z;
 	
 	instr = rootinstrument;
 	for (z = 0; z < n; z++) {
@@ -348,11 +343,11 @@ struct INSTRUMENT *NtesInstrument(WORD n) {
 	return(instr);
 }
 
-BOOL SucheProgrammNum(struct INSTRUMENT *instr, BYTE channel, BYTE bank0, BYTE bank32, BYTE midiprog, WORD *katnum, WORD *prognum) {
+BOOL SucheProgrammNum(struct INSTRUMENT *instr, int8 channel, int8 bank0, int8 bank32, int8 midiprog, int16 *katnum, int16 *prognum) {
 	struct KATEGORIE *kat;
 	struct PROGRAMM *prog;
-	WORD zkat;
-	WORD zprog;
+	int16 zkat;
+	int16 zprog;
 	
 	if (midiprog >= 0) {
 		kat = instr->kategorie; zkat = 0;
@@ -376,8 +371,8 @@ BOOL SucheProgrammNum(struct INSTRUMENT *instr, BYTE channel, BYTE bank0, BYTE b
 	return(FALSE);
 }
 
-struct INSTRUMENT *SucheChannelInstrument(UBYTE port, BYTE channel) {
-	BYTE n;
+struct INSTRUMENT *SucheChannelInstrument(uint8 port, int8 channel) {
+	int8 n;
 	STRPTR instrname;
 	struct INSTRUMENT *instr;
 	struct OUTPORT *outp;
@@ -394,8 +389,8 @@ struct INSTRUMENT *SucheChannelInstrument(UBYTE port, BYTE channel) {
 }
 
 void TesteInstrumente(void) {
-	BYTE n;
-	BYTE p;
+	int8 n;
+	int8 p;
 	struct INSTRUMENT *i;
 	STRPTR meldung = NULL;
 	char instr[130];
@@ -423,43 +418,43 @@ void TesteInstrumente(void) {
 //==================
 
 
-void ErstelleKategorieListe(struct List *katlist, struct INSTRUMENT *instr, BYTE channel) {
+void ErstelleKategorieListe(struct List *katlist, struct INSTRUMENT *instr, int8 channel) {
 	struct KATEGORIE *kat;
 	struct Node *node;
-	WORD n = 0;
+	uint32 n = 0;
 	
 	kat = instr->kategorie;
 	while (kat) {
 		if ((channel >= kat->chanvon) && (channel <= kat->chanbis)) {
-			node = AllocChooserNode(CNA_Text, kat->name, CNA_UserData, (ULONG *)n, TAG_DONE);
-			if (node) AddTail(katlist, node);
+			node = IChooser->AllocChooserNode(CNA_Text, kat->name, CNA_UserData, (uint32 *)n, TAG_DONE);
+			if (node) IExec->AddTail(katlist, node);
 		}
 		n++;
 		kat = kat->next;
 	}
 }
 
-WORD HoleChooserUserData(struct List *list, WORD num) {
-	LONG userdata = 0;
-	WORD n;
+int16 HoleChooserUserData(struct List *list, int16 num) {
+	int32 userdata = 0;
+	int16 n;
 	struct Node *node;
 	
 	if (!IsListEmpty(list)) {
 		node = list->lh_Head;
 		for (n = 0; n < num; n++) node = node->ln_Succ;
-		GetChooserNodeAttrs(node, CNA_UserData, &userdata, TAG_DONE);
+		IChooser->GetChooserNodeAttrs(node, CNA_UserData, &userdata, TAG_DONE);
 	}
-	return((WORD)userdata);
+	return((int16)userdata);
 }
 
-WORD WoIstChooserUserData(struct List *list, WORD userdata) {
+int16 WoIstChooserUserData(struct List *list, int16 userdata) {
 	struct Node *node;
-	LONG ud;
-	WORD n = 0;
+	int32 ud;
+	int16 n = 0;
 	
 	node = list->lh_Head;
 	while (node) {
-		GetChooserNodeAttrs(node, CNA_UserData, &ud, TAG_DONE);
+		IChooser->GetChooserNodeAttrs(node, CNA_UserData, &ud, TAG_DONE);
 		if (ud == userdata) return(n);
 		n++; node = node->ln_Succ;
 	}
@@ -472,8 +467,11 @@ void ErstelleProgrammListe(struct List *proglist, struct KATEGORIE *kat) {
 	
 	prog = kat->programm;
 	while (prog) {
-		node = AllocListBrowserNode(1, LBNCA_Text, prog->name, TAG_DONE);
-		if (node) AddTail(proglist, node);
+		node = IListBrowser->AllocListBrowserNode(1, LBNCA_Text, prog->name, TAG_DONE);
+		if (node)
+		{
+			IExec->AddTail(proglist, node);
+		}
 		prog = prog->next;
 	}
 }
@@ -481,16 +479,22 @@ void ErstelleProgrammListe(struct List *proglist, struct KATEGORIE *kat) {
 void EntferneChooserListe(struct List *list) {
 	struct Node *node;
 	
-	while (node = RemTail(list)) FreeChooserNode(node);
+	while ((node = IExec->RemTail(list)))
+	{
+		IChooser->FreeChooserNode(node);
+	}
 }
 
 void EntferneListBrowserListe(struct List *list) {
 	struct Node *node;
 	
-	while (node = RemTail(list)) FreeListBrowserNode(node);
+	while ((node = IExec->RemTail(list)))
+	{
+		IListBrowser->FreeListBrowserNode(node);
+	}
 }
 
-void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *bank0, BYTE *bank32, BYTE *prog) {
+void InstrumentenFenster2(struct Window *fen, int8 channel, uint8 port, int8 *bank0, int8 *bank32, int8 *prog) {
 	Object *fensterobj;
 	struct Window *fenster;
 	struct Gadget *gadkat;
@@ -499,22 +503,22 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 	struct Gadget *gadintbank32;
 	struct Gadget *gadintprog;
 	BOOL schliessen = FALSE;
-	ULONG result;
-	UWORD code;
-	ULONG var;
+	uint32 result;
+	uint16 code;
+	uint32 var;
 	struct List katlist;
 	struct List proglist;
 	struct INSTRUMENT *instr = NULL;
 	struct KATEGORIE *kat = NULL;
 	struct PROGRAMM *progr = NULL;
-	WORD n;
-	WORD katnum = 0;
-	WORD prognum = -1;
+	int16 n;
+	int16 katnum = 0;
+	int16 prognum = -1;
 	char fenstername[300];
-	BYTE b0, b32, pr;
+	int8 b0, b32, pr;
 	
-	NewList(&katlist);
-	NewList(&proglist);
+	IExec->NewList(&katlist);
+	IExec->NewList(&proglist);
 	
 	instr = SucheChannelInstrument(port, channel);
 	
@@ -540,7 +544,7 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 		WINDOW_ParentGroup, VLayoutObject,
 			LAYOUT_SpaceOuter, TRUE,
 			
-			LAYOUT_AddChild, gadkat = ChooserObject,
+			LAYOUT_AddChild, gadkat = (struct Gadget *)ChooserObject,
 				GA_ID, 0, GA_RelVerify, TRUE,
 				CHOOSER_PopUp, TRUE,
 				CHOOSER_Labels, &katlist,
@@ -548,7 +552,7 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 			End,				
 			CHILD_WeightedHeight, 0,
 			
-			LAYOUT_AddChild, gadprog = ListBrowserObject,
+			LAYOUT_AddChild, gadprog = (struct Gadget *)ListBrowserObject,
 				GA_ID, 1, GA_RelVerify, TRUE,
 				LISTBROWSER_Labels, &proglist,
 				LISTBROWSER_ShowSelected, TRUE,
@@ -557,7 +561,7 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 			LAYOUT_AddChild, VLayoutObject,
 
 				LAYOUT_AddChild, HLayoutObject,
-					LAYOUT_AddChild, gadintbank0 = IntegerObject,
+					LAYOUT_AddChild, gadintbank0 = (struct Gadget *)IntegerObject,
 						GA_ID, 2, GA_RelVerify, TRUE,
 						INTEGER_Number, *bank0,
 						INTEGER_Minimum, -1,
@@ -565,7 +569,7 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 					End,
 					CHILD_Label, LabelObject, LABEL_Text, "Bank", End,
 		
-					LAYOUT_AddChild, gadintbank32 = IntegerObject,
+					LAYOUT_AddChild, gadintbank32 = (struct Gadget *)IntegerObject,
 						GA_ID, 3, GA_RelVerify, TRUE,
 						INTEGER_Number, *bank32,
 						INTEGER_Minimum, -1,
@@ -573,7 +577,7 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 					End,
 				End,
 	
-				LAYOUT_AddChild, gadintprog = IntegerObject,
+				LAYOUT_AddChild, gadintprog = (struct Gadget *)IntegerObject,
 					GA_ID, 4, GA_RelVerify, TRUE,
 					INTEGER_Number, *prog,
 					INTEGER_Minimum, 0,
@@ -596,15 +600,15 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 		fenster = (struct Window *)RA_OpenWindow(fensterobj);
 		if (fenster) {
 			if (prognum >= 0) {
-				SetGadgetAttrs(gadkat, fenster, NULL, CHOOSER_Selected, WoIstChooserUserData(&katlist, katnum), TAG_DONE);
-				SetGadgetAttrs(gadprog, fenster, NULL,
+				IIntuition->SetGadgetAttrs(gadkat, fenster, NULL, CHOOSER_Selected, WoIstChooserUserData(&katlist, katnum), TAG_DONE);
+				IIntuition->SetGadgetAttrs(gadprog, fenster, NULL,
 					LISTBROWSER_Selected, prognum,
 					LISTBROWSER_MakeVisible, prognum,
 					TAG_DONE);
 			}
 			
 			do {
-				WaitPort(fenster->UserPort);
+				IExec->WaitPort(fenster->UserPort);
 				while ((result = RA_HandleInput(fensterobj, &code)) != WMHI_LASTMSG) {
 					switch (result & WMHI_CLASSMASK) {
 						case WMHI_INACTIVE:
@@ -617,25 +621,25 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 							katnum = HoleChooserUserData(&katlist, code);
 							kat = instr->kategorie;
 							for (n = 0; n < katnum; n++) kat = kat->next;
-							SetGadgetAttrs(gadprog, fenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
+							IIntuition->SetGadgetAttrs(gadprog, fenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
 							EntferneListBrowserListe(&proglist);
 							ErstelleProgrammListe(&proglist, kat);
-							SetGadgetAttrs(gadprog, fenster, NULL, LISTBROWSER_Labels, &proglist, TAG_DONE);
+							IIntuition->SetGadgetAttrs(gadprog, fenster, NULL, LISTBROWSER_Labels, &proglist, TAG_DONE);
 							break;
 							
 							case 1: // Programm
 							progr = kat->programm;
 							for (n = 0; n < code; n++) progr = progr->next;
-							SetGadgetAttrs(gadintbank0, fenster, NULL, INTEGER_Number, progr->bank0, TAG_DONE);
-							SetGadgetAttrs(gadintbank32, fenster, NULL, INTEGER_Number, progr->bank32, TAG_DONE);
-							SetGadgetAttrs(gadintprog, fenster, NULL, INTEGER_Number, progr->prog, TAG_DONE);
+							IIntuition->SetGadgetAttrs(gadintbank0, fenster, NULL, INTEGER_Number, progr->bank0, TAG_DONE);
+							IIntuition->SetGadgetAttrs(gadintbank32, fenster, NULL, INTEGER_Number, progr->bank32, TAG_DONE);
+							IIntuition->SetGadgetAttrs(gadintprog, fenster, NULL, INTEGER_Number, progr->prog, TAG_DONE);
 							SendeKanalInstrument(port, channel, progr->bank0, progr->bank32, progr->prog);
 							break;
 							
 							case 4:
-							GetAttr(INTEGER_Number, gadintbank0, &var); b0 = (BYTE)var;
-							GetAttr(INTEGER_Number, gadintbank32, &var); b32 = (BYTE)var;
-							GetAttr(INTEGER_Number, gadintprog, &var); pr = (BYTE)var;
+							IIntuition->GetAttr(INTEGER_Number, (Object *)gadintbank0, &var); b0 = (int8)var;
+							IIntuition->GetAttr(INTEGER_Number, (Object *)gadintbank32, &var); b32 = (int8)var;
+							IIntuition->GetAttr(INTEGER_Number, (Object *)gadintprog, &var); pr = (int8)var;
 							SendeKanalInstrument(port, channel, b0, b32, pr);
 							break;
 							
@@ -649,9 +653,9 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 							break;
 							
 							case 7: // Okay
-							GetAttr(INTEGER_Number, gadintbank0, &var); *bank0 = (BYTE)var;
-							GetAttr(INTEGER_Number, gadintbank32, &var); *bank32 = (BYTE)var;
-							GetAttr(INTEGER_Number, gadintprog, &var); *prog = (BYTE)var;
+							IIntuition->GetAttr(INTEGER_Number, (Object *)gadintbank0, &var); *bank0 = (int8)var;
+							IIntuition->GetAttr(INTEGER_Number, (Object *)gadintbank32, &var); *bank32 = (int8)var;
+							IIntuition->GetAttr(INTEGER_Number, (Object *)gadintprog, &var); *prog = (int8)var;
 							schliessen = TRUE;
 							break;
 						}
@@ -661,7 +665,7 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 			if (progr) SetzeAktInstrument(port, channel, progr->bank0, progr->bank32, progr->prog);
 		}
 
-		DisposeObject(fensterobj);
+		IIntuition->DisposeObject(fensterobj);
 	}
 
 	EntferneListBrowserListe(&proglist);
@@ -672,11 +676,11 @@ void InstrumentenFenster2(struct Window *fen, BYTE channel, UBYTE port, BYTE *ba
 
 void ErstelleControllerListe(struct List *contrlist, struct INSTRCONTR *instrcontr, BOOL extra, BOOL alle) {
 	struct Node *node;
-	WORD n;
+	uint32 n;
 	char puf[5];
 	
 	if (extra) {
-		node = AllocListBrowserNode(2,
+		node = IListBrowser->AllocListBrowserNode(2,
 			LBNA_Column, 0,
 			LBNCA_Justification, LCJ_RIGHT,
 			LBNCA_Text, "-",
@@ -684,8 +688,8 @@ void ErstelleControllerListe(struct List *contrlist, struct INSTRCONTR *instrcon
 			LBNCA_Text, "Poly Press",
 			LBNA_UserData, (APTR)-5,
 			TAG_DONE);
-		if (node) AddTail(contrlist, node);
-		node = AllocListBrowserNode(2,
+		if (node) IExec->AddTail(contrlist, node);
+		node = IListBrowser->AllocListBrowserNode(2,
 			LBNA_Column, 0,
 			LBNCA_Justification, LCJ_RIGHT,
 			LBNCA_Text, "-",
@@ -693,8 +697,8 @@ void ErstelleControllerListe(struct List *contrlist, struct INSTRCONTR *instrcon
 			LBNCA_Text, "Chan Press",
 			LBNA_UserData, (APTR)-2,
 			TAG_DONE);
-		if (node) AddTail(contrlist, node);
-		node = AllocListBrowserNode(2,
+		if (node) IExec->AddTail(contrlist, node);
+		node = IListBrowser->AllocListBrowserNode(2,
 			LBNA_Column, 0,
 			LBNCA_Justification, LCJ_RIGHT,
 			LBNCA_Text, "-",
@@ -702,13 +706,13 @@ void ErstelleControllerListe(struct List *contrlist, struct INSTRCONTR *instrcon
 			LBNCA_Text, "Pitch Bend",
 			LBNA_UserData, (APTR)-1,
 			TAG_DONE);
-		if (node) AddTail(contrlist, node);
+		if (node) IExec->AddTail(contrlist, node);
 	}
 	for (n = 0; n < 128; n++) {
 		node = NULL;
-		sprintf(puf, "%d", n);
+		sprintf(puf, "%ld", n);
 		if (instrcontr->flags[n] & CONTR_SET) {
-			node = AllocListBrowserNode(2,
+			node = IListBrowser->AllocListBrowserNode(2,
 				LBNA_Column, 0,
 				LBNCA_Justification, LCJ_RIGHT,
 				LBNCA_CopyText, TRUE,
@@ -718,7 +722,7 @@ void ErstelleControllerListe(struct List *contrlist, struct INSTRCONTR *instrcon
 				LBNA_UserData, (APTR)n,
 				TAG_DONE);
 		} else if (alle) {
-			node = AllocListBrowserNode(2,
+			node = IListBrowser->AllocListBrowserNode(2,
 				LBNA_Column, 0,
 				LBNCA_Justification, LCJ_RIGHT,
 				LBNCA_CopyText, TRUE,
@@ -730,7 +734,7 @@ void ErstelleControllerListe(struct List *contrlist, struct INSTRCONTR *instrcon
 				LBNA_UserData, (APTR)n,
 				TAG_DONE);
 		}
-		if (node) AddTail(contrlist, node);
+		if (node) IExec->AddTail(contrlist, node);
 	}
 }
 
@@ -758,18 +762,18 @@ int SucheControllerPosition(struct INSTRUMENT *instr, int contr, BOOL extra)
 	return wahl;
 }
 
-BYTE InstrControllerFenster(struct Window *fen, BYTE channel, UBYTE port, BYTE vorwahl) {
+int8 InstrControllerFenster(struct Window *fen, int8 channel, uint8 port, int8 vorwahl) {
 	Object *fensterobj;
 	struct Window *fenster;
 	struct Gadget *gadliste;
 	struct Gadget *gadabbruch;
 	BOOL schliessen = FALSE;
-	ULONG result;
-	UWORD code;
-	LONG var;
+	uint32 result;
+	uint16 code;
+	int32 var;
 	struct List contrlist;
 	struct INSTRUMENT *instr;
-	BYTE contr = -128;
+	int8 contr = -128;
 	struct Node *node;
 	char fenstername[300];
 
@@ -779,7 +783,7 @@ BYTE InstrControllerFenster(struct Window *fen, BYTE channel, UBYTE port, BYTE v
 		contralle = TRUE;
 	}
 
-	NewList(&contrlist);
+	IExec->NewList(&contrlist);
 	ErstelleControllerListe(&contrlist, instr->contr, (vorwahl == -128), contralle);
 
 	sprintf(fenstername, CAT(MSG_0483, "Controller Choice(%s)"), instr->name);
@@ -797,7 +801,7 @@ BYTE InstrControllerFenster(struct Window *fen, BYTE channel, UBYTE port, BYTE v
 		WINDOW_ParentGroup, VLayoutObject,
 			LAYOUT_SpaceOuter, TRUE,
 			
-			LAYOUT_AddChild, gadliste = ListBrowserObject,
+			LAYOUT_AddChild, gadliste = (struct Gadget *)ListBrowserObject,
 				GA_ID, 0, GA_RelVerify, TRUE,
 				LISTBROWSER_Labels, &contrlist,
 				LISTBROWSER_ColumnInfo, contrcolinfo,
@@ -813,7 +817,7 @@ BYTE InstrControllerFenster(struct Window *fen, BYTE channel, UBYTE port, BYTE v
 			CHILD_WeightedHeight, 0,
 			
 			LAYOUT_AddChild, HLayoutObject,
-				LAYOUT_AddChild, gadabbruch = ButtonObject, GA_RelVerify, TRUE, GA_ID, 1, GA_Text, CAT(MSG_0477, "Cancel"), End,
+				LAYOUT_AddChild, gadabbruch = (struct Gadget *)ButtonObject, GA_RelVerify, TRUE, GA_ID, 1, GA_Text, CAT(MSG_0477, "Cancel"), End,
 				LAYOUT_AddChild, ButtonObject, GA_RelVerify, TRUE, GA_ID, 2, GA_Text, CAT(MSG_0485, "Okay"), End,
 			End,
 			CHILD_WeightedHeight, 0,
@@ -824,17 +828,17 @@ BYTE InstrControllerFenster(struct Window *fen, BYTE channel, UBYTE port, BYTE v
 		fenster = (struct Window *)RA_OpenWindow(fensterobj);
 		if (fenster) {
 
-			if (vorwahl != -128) SetGadgetAttrs(gadabbruch, fenster, NULL, GA_Text, CAT(MSG_0478, "Nothing"), TAG_DONE);
+			if (vorwahl != -128) IIntuition->SetGadgetAttrs(gadabbruch, fenster, NULL, GA_Text, CAT(MSG_0478, "Nothing"), TAG_DONE);
 
 			if (vorwahl >= 0) {
 				int wahl = SucheControllerPosition(instr, vorwahl, FALSE);
-				SetGadgetAttrs(gadliste, fenster, NULL,
+				IIntuition->SetGadgetAttrs(gadliste, fenster, NULL,
 					LISTBROWSER_Selected, wahl,
 					LISTBROWSER_MakeVisible, wahl,
 					TAG_DONE);
 			}
 			do {
-				WaitPort(fenster->UserPort);
+				IExec->WaitPort(fenster->UserPort);
 				while ((result = RA_HandleInput(fensterobj, &code)) != WMHI_LASTMSG) {
 					switch (result & WMHI_CLASSMASK) {
 						case WMHI_INACTIVE:
@@ -850,29 +854,29 @@ BYTE InstrControllerFenster(struct Window *fen, BYTE channel, UBYTE port, BYTE v
 							break;
 
 							case 2:
-							GetAttr(LISTBROWSER_SelectedNode, gadliste, (ULONG *)&node);
-							GetListBrowserNodeAttrs(node, LBNA_UserData, &var, TAG_DONE);
-							contr = (BYTE)var;
+							IIntuition->GetAttr(LISTBROWSER_SelectedNode, (Object *)gadliste, (uint32 *)&node);
+							IListBrowser->GetListBrowserNodeAttrs(node, LBNA_UserData, &var, TAG_DONE);
+							contr = (int8)var;
 							schliessen = TRUE;
 							break;
 							
 							case 3: {
 								int wahl;
-								BYTE c;
-								GetAttr(LISTBROWSER_SelectedNode, gadliste, (ULONG *)&node);
-								GetListBrowserNodeAttrs(node, LBNA_UserData, &var, TAG_DONE);
-								c = (BYTE)var;
+								int8 c;
+								IIntuition->GetAttr(LISTBROWSER_SelectedNode, (Object *)gadliste, (uint32 *)&node);
+								IListBrowser->GetListBrowserNodeAttrs(node, LBNA_UserData, &var, TAG_DONE);
+								c = (int8)var;
 
 								contralle = (BOOL)code;
-								SetGadgetAttrs(gadliste, fenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
+								IIntuition->SetGadgetAttrs(gadliste, fenster, NULL, LISTBROWSER_Labels, NULL, TAG_DONE);
 								EntferneListBrowserListe(&contrlist);
 								ErstelleControllerListe(&contrlist, instr->contr, (vorwahl == -128), contralle);
 								wahl = SucheControllerPosition(instr, c, (vorwahl == -128));
-								SetGadgetAttrs(gadliste, fenster, NULL,
+								IIntuition->SetGadgetAttrs(gadliste, fenster, NULL,
 									LISTBROWSER_Labels, &contrlist,
 									LISTBROWSER_AutoFit, TRUE,
 									TAG_DONE);
-								SetGadgetAttrs(gadliste, fenster, NULL,
+								IIntuition->SetGadgetAttrs(gadliste, fenster, NULL,
 									LISTBROWSER_Selected, wahl,
 									LISTBROWSER_MakeVisible, wahl,
 									TAG_DONE);
@@ -884,7 +888,7 @@ BYTE InstrControllerFenster(struct Window *fen, BYTE channel, UBYTE port, BYTE v
 			} while (!schliessen);
 		}
 
-		DisposeObject(fensterobj);
+		IIntuition->DisposeObject(fensterobj);
 	}
 	
 	EntferneListBrowserListe(&contrlist);

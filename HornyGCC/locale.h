@@ -3,6 +3,6 @@
 
 extern struct Catalog *catalog;
 
-#define CAT(X,Y) (STRPTR)GetCatalogStr(catalog,X,Y)
+#define CAT(X,Y) (STRPTR)ILocale->GetCatalogStr(catalog,X,Y)
 
 #include "catalogids.h"

@@ -1,11 +1,11 @@
+#define __USE_OLD_TIMEVAL__ 1
+
 #include <stdio.h>
 #include <string.h>
 
 #include <proto/exec.h>
 #include <proto/camd.h>
-#ifdef __amigaos4__
 #include <proto/eXtreamSync.h>
-#endif
 #define __NOLIBBASE__
 #include <proto/timer.h>
 #undef __NOLIBBASE__
@@ -31,10 +31,10 @@
 #include "Midi.h"
 
 #include "Gui.h"
+#include "Gui2.h"
 
 struct Library *CamdBase = NULL;
 
-#ifdef __amigaos4__
 struct MsgPort *TimerMP = NULL;
 struct timerequest *TimerIO = NULL;
 struct Library *TimerBase = NULL;
@@ -42,7 +42,6 @@ struct TimerIFace *ITimer = NULL;
 struct CamdIFace *ICamd = NULL;
 struct Library *eXtreamSyncBase = NULL;
 struct eXtreamSyncIFace *IeXtreamSync = NULL;
-#endif
 
 extern struct Window *edfenster;
 extern struct Process *thruproc;
@@ -53,8 +52,8 @@ struct OUTPORT outport[OUTPORTS];
 struct INPORT inport[INPORTS];
 
 struct EClockVal eclock;
-ULONG efreq = 0;
-struct timeval warteende;
+uint32 efreq = 0;
+struct TimeVal warteende;
 
 struct Task *hornytask = NULL;
 
@@ -64,20 +63,20 @@ struct KANALTEMP kt[16][16];
 extern struct MPKANAL mpkanal[OUTPORTS][16];
 extern struct UMGEBUNG umgebung;
 
-LONG takt = 0;
-LONG tick = 0;
+int32 takt = 0;
+int32 tick = 0;
 
-LONG starttakt = 0;
-ULONG zeit = 0;
-ULONG startzeit = 0;
-ULONG starthiclock = 0;
+int32 starttakt = 0;
+uint32 zeit = 0;
+uint32 startzeit = 0;
+uint32 starthiclock = 0;
 
-WORD altmetro = 0;
-BYTE midisig = -1;
-BYTE playsig = -1;
-BYTE playerprocsig = -1;
-BYTE thruprocsig = -1;
-LONG delay = 0;
+int16 altmetro = 0;
+int8 midisig = -1;
+int8 playsig = -1;
+int8 playerprocsig = -1;
+int8 thruprocsig = -1;
+int32 delay = 0;
 struct METRONOM metro = {
 	0, 9, // port, channel
 	75, 76, // taste1, taste2
@@ -85,26 +84,26 @@ struct METRONOM metro = {
 	VIERTEL, //raster
 	TRUE, FALSE // rec, play
 };
-BYTE hornystatus = STATUS_UNINIT;
+int8 hornystatus = STATUS_UNINIT;
 BOOL tmarkwechsel = FALSE;
 struct MARKER *ltmark = NULL;
 struct MARKER *lkmark = NULL;
 struct MARKER *lxmark = NULL;
 struct LOOPZEIT lzeit;
-UBYTE playsigaktion = 0;
+uint8 playsigaktion = 0;
 
 extern struct MARKER *rootmark;
 extern struct LIED lied;
 extern struct LOOP loop;
-extern WORD snum;
+extern int16 snum;
 extern BOOL sysexrec;
 
 struct MsgPort *syncport = NULL;
 BOOL syncaktiv = FALSE;
 //--------------------------------------------------------------------------------------------------
 
-void InitOutPortInstr(BYTE n) {
-	BYTE i;
+void InitOutPortInstr(int8 n) {
+	int8 i;
 	for (i = 0; i < 4; i++) strcpy(outport[n].outinstr[i].name, "???");
 	outport[n].outinstr[0].unten = 0;
 	for (i = 1; i < 4; i++) {
@@ -113,44 +112,38 @@ void InitOutPortInstr(BYTE n) {
 }
 
 void ErstelleCamd(void) {
-	BYTE n;
+	int8 n;
 
-	CamdBase = OpenLibrary("camd.library", 37);
+	CamdBase = IExec->OpenLibrary("camd.library", 37);
 	if (CamdBase) {
-#ifdef __amigaos4__
-		ICamd = (struct CamdIFace *)GetInterface(CamdBase, "main", 1, NULL);
-		if (!ICamd) Meldung("Could not obtain camd interface");
-#endif
-	} else Meldung("Could not open camd.library");
+		ICamd = (struct CamdIFace *)IExec->GetInterface(CamdBase, "main", 1, NULL);
+		if (!ICamd) Meldung((STRPTR)"Could not obtain camd interface");
+	} else Meldung((STRPTR)"Could not open camd.library");
 
-#ifdef __amigaos4__
-	TimerMP = AllocSysObject(ASOT_PORT, NULL);
+	TimerMP = IExec->AllocSysObject(ASOT_PORT, NULL);
 	if (TimerMP) {
-		TimerIO = AllocSysObjectTags(ASOT_IOREQUEST,
+		TimerIO = IExec->AllocSysObjectTags(ASOT_IOREQUEST,
 			ASOIOR_Size, sizeof(struct timerequest),
 			ASOIOR_ReplyPort, TimerMP,
 			TAG_DONE);
 
 		if (TimerIO) {
-			if (OpenDevice("timer.device", UNIT_MICROHZ, (struct IORequest *)TimerIO, 0L) == 0) {
+			if (IExec->OpenDevice("timer.device", UNIT_MICROHZ, (struct IORequest *)TimerIO, 0L) == 0) {
 				TimerBase = (struct Library *)TimerIO->tr_node.io_Device;
-				ITimer = (struct TimerIFace *)GetInterface(TimerBase, "main", 1, NULL);
-				if (!ITimer) Meldung("Could not obtain timer interface");
-			} else Meldung("Could not open timer device");
-		} else Meldung("Could not allocate TimerIO");
-	} else Meldung("Could not allocate TimerMP");
-#endif
+				ITimer = (struct TimerIFace *)IExec->GetInterface(TimerBase, "main", 1, NULL);
+				if (!ITimer) Meldung((STRPTR)"Could not obtain timer interface");
+			} else Meldung((STRPTR)"Could not open timer device");
+		} else Meldung((STRPTR)"Could not allocate TimerIO");
+	} else Meldung((STRPTR)"Could not allocate TimerMP");
 
 	if (CamdBase) {
-#ifdef __amigaos4__
 		if (ICamd) {
-#endif
 
 			while (midisig == -1) {
-				Delay(10);
+				IDOS->Delay(10);
 			}
 			
-			midi = CreateMidi(
+			midi = ICamd->CreateMidi(
 				MIDI_MsgQueue, 2048,
 				MIDI_SysExSize, umgebung.sysexpuffer * 1024,
 				MIDI_TimeStamp, &takt,
@@ -158,11 +151,9 @@ void ErstelleCamd(void) {
 				MIDI_RecvSignal, midisig,
 				MIDI_ClientType, CCType_Sequencer,
 				TAG_DONE);
-			playsig = AllocSignal(-1);
-			hornytask = FindTask(NULL);
-#ifdef __amigaos4__
+			playsig = IExec->AllocSignal(-1);
+			hornytask = IExec->FindTask(NULL);
 		}
-#endif
 	}
 
 	for(n = 0; n < verOUTPORTS; n++) {
@@ -177,74 +168,72 @@ void ErstelleCamd(void) {
 		inport[n].name[0] = 0;
 	}
 	
-#ifdef __amigaos4__
-	eXtreamSyncBase = OpenLibrary("eXtreamSync.library", 0);
+	eXtreamSyncBase = IExec->OpenLibrary("eXtreamSync.library", 0);
 	if (eXtreamSyncBase) {
-		IeXtreamSync = (struct eXtreamSyncIFace *)GetInterface(eXtreamSyncBase, "main", 1, NULL);
+		IeXtreamSync = (struct eXtreamSyncIFace *)IExec->GetInterface(eXtreamSyncBase, "main", 1, NULL);
 		if (IeXtreamSync) {
-			syncport = CreateMsgPort();
-		} else Meldung("Could not obtain eXtreamSync interface");
+			syncport = IExec->AllocSysObjectTags(ASOT_PORT, TAG_END);
+		} else Meldung((STRPTR)"Could not obtain eXtreamSync interface");
 	};
-#endif
 
 }
 
 void EntferneCamd(void) {
-#ifdef __amigaos4__
 	DeaktiviereExtreamSync();
-	DeleteMsgPort(syncport);
-	DropInterface((struct Interface *)IeXtreamSync);
-	CloseLibrary(eXtreamSyncBase);
-#endif
+	IExec->FreeSysObject(ASOT_PORT, syncport);
+	IExec->DropInterface((struct Interface *)IeXtreamSync);
+	IExec->CloseLibrary(eXtreamSyncBase);
 
-	if (CamdBase) DeleteMidi(midi);
-#ifdef __amigaos4__
-	DropInterface((struct Interface *)ICamd);
-#endif
-	CloseLibrary(CamdBase);
+	if (CamdBase) ICamd->DeleteMidi(midi);
+	IExec->DropInterface((struct Interface *)ICamd);
+	IExec->CloseLibrary(CamdBase);
 
-#ifdef __amigaos4__
-	if (!CheckIO((struct IORequest *)TimerIO)) {
-		AbortIO((struct IORequest *)TimerIO);
-		WaitIO((struct IORequest *)TimerIO);
+	if (!IExec->CheckIO((struct IORequest *)TimerIO)) {
+		IExec->AbortIO((struct IORequest *)TimerIO);
+		IExec->WaitIO((struct IORequest *)TimerIO);
 	}
-	DropInterface((struct Interface *)ITimer);
-	CloseDevice((struct IORequest *)TimerIO);
-	FreeSysObject(ASOT_IOREQUEST, TimerIO);
-	FreeSysObject(ASOT_PORT, TimerMP);
-#endif
+	IExec->DropInterface((struct Interface *)ITimer);
+	IExec->CloseDevice((struct IORequest *)TimerIO);
+	IExec->FreeSysObject(ASOT_IOREQUEST, TimerIO);
+	IExec->FreeSysObject(ASOT_PORT, TimerMP);
+
+	if(-1 != playsig)
+	{
+		IExec->FreeSignal(playsig);
+		playsig = -1;
+	}
 }
 
-void WarteStart(WORD s) {
-	struct timeval warte = {s, 0};
+void WarteStart(int16 s) {
+	struct TimeVal warte = {s, 0};
 	
-	GetSysTime(&warteende);
-	AddTime(&warteende, &warte);
+	ITimer->GetSysTime(&warteende);
+	ITimer->AddTime(&warteende, &warte);
 }
 
 void WarteEnde(void) {
-	struct timeval aktzeit;
+	struct TimeVal aktzeit;
 	
 	do {
-		GetSysTime(&aktzeit);
-		if (CmpTime(&aktzeit, &warteende) == -1) break;
-		Delay(10);
+		ITimer->GetSysTime(&aktzeit);
+		if (ITimer->CmpTime(&aktzeit, &warteende) == -1) break;
+		IDOS->Delay(10);
 	} while (TRUE);
 }
 
 void EntferneLinks(void) {
-    BYTE l;
+    int8 l;
 
 	for (l = 0; l < verINPORTS; l++) {
 		if (midiin[l]) {
-			RemoveMidiLink(midiin[l]);
+			ICamd->RemoveMidiLink(midiin[l]);
 			midiin[l] = NULL;
 		}
 		inport[l].name[0] = 0;
 	}
 	for (l = 0; l < verOUTPORTS; l++) {
 		if (midiout[l]) {
-			RemoveMidiLink(midiout[l]);
+			ICamd->RemoveMidiLink(midiout[l]);
 			midiout[l] = NULL;
 		}
 		outport[l].name[0] = 0;
@@ -252,18 +241,18 @@ void EntferneLinks(void) {
 }
 
 void ErneuereLinks(void) {
-    BYTE l;
+    int8 l;
 	char linkname[32];
 
 	for (l = 0; l < verINPORTS; l++) {
 		if (midiin[l]) {
-			RemoveMidiLink(midiin[l]);
+			ICamd->RemoveMidiLink(midiin[l]);
 			midiin[l] = NULL;
 		}
 	}
 	for (l = 0; l < verOUTPORTS; l++) {
 		if (midiout[l]) {
-			RemoveMidiLink(midiout[l]);
+			ICamd->RemoveMidiLink(midiout[l]);
 			midiout[l] = NULL;
 		}
 	}
@@ -271,7 +260,7 @@ void ErneuereLinks(void) {
 	for (l = 0; l < verINPORTS; l++) {
 		if (inport[l].name[0]) {
 			sprintf(linkname, "horny%d.in", l);
-			midiin[l] = AddMidiLink(midi, MLTYPE_Receiver,
+			midiin[l] = ICamd->AddMidiLink(midi, MLTYPE_Receiver,
 				MLINK_Name, linkname,
 				MLINK_Location, inport[l].name,
 				TAG_END);
@@ -280,7 +269,7 @@ void ErneuereLinks(void) {
 	for (l = 0; l < verOUTPORTS; l++) {
 		if (outport[l].name[0]) {
 			sprintf(linkname, "horny%d.out", l);
-			midiout[l] = AddMidiLink(midi, MLTYPE_Sender,
+			midiout[l] = ICamd->AddMidiLink(midi, MLTYPE_Sender,
 				MLINK_Name, linkname,
 				MLINK_Location, outport[l].name,
 				TAG_END);
@@ -290,13 +279,13 @@ void ErneuereLinks(void) {
 
 void ErstelleLinks(void) {
 	struct MidiCluster *cluster = NULL;
-	BYTE lin = 0;
-	BYTE lout = 0;
+	int8 lin = 0;
+	int8 lout = 0;
 	STRPTR name;
 	APTR camdlock;
 
-	camdlock = LockCAMD(CD_Linkages);
-	while (cluster = NextCluster(cluster)) {
+	camdlock = ICamd->LockCAMD(CD_Linkages);
+	while ((cluster = ICamd->NextCluster(cluster))) {
 		name = cluster->mcl_Node.ln_Name;
 
 		if ((lin < verINPORTS) && (strstr(name, "in."))) {
@@ -308,7 +297,7 @@ void ErstelleLinks(void) {
 			lout++;
 		}
 	}
-	UnlockCAMD(camdlock);
+	ICamd->UnlockCAMD(camdlock);
 	ErneuereLinks();
 }
 
@@ -321,20 +310,20 @@ BOOL LinkVorhanden(STRPTR name) {
 		return TRUE;
 	}
 
-	camdlock = LockCAMD(CD_Linkages);
-	while (cluster = NextCluster(cluster)) {
+	camdlock = ICamd->LockCAMD(CD_Linkages);
+	while ((cluster = ICamd->NextCluster(cluster))) {
 		if (strcmp(name, cluster->mcl_Node.ln_Name) == 0) {
 			vorhanden = TRUE;
 			break;
 		}
 	}
-	UnlockCAMD(camdlock);
+	ICamd->UnlockCAMD(camdlock);
 	return(vorhanden);
 }
 
 void InitOutportLatenzen()
 {
-	WORD p;
+	int16 p;
 	for (p = 0; p < verOUTPORTS; p++) {
 		outport[p].latenz = 0;
 	}
@@ -343,22 +332,18 @@ void InitOutportLatenzen()
 //--------------------------------------------------------------------------------
 
 void AktiviereExtreamSync(void) {
-#ifdef __amigaos4__
 	if (!syncaktiv) {
-		if (syncport && Connect(syncport) == 0) {
+		if (syncport && IeXtreamSync->Connect(syncport) == 0) {
 			syncaktiv = TRUE;
-		} else Meldung("Could not connect to eXtreamSync");
+		} else Meldung((STRPTR)"Could not connect to eXtreamSync");
 	}
-#endif
 }
 
 void DeaktiviereExtreamSync(void) {
-#ifdef __amigaos4__
 	if (syncaktiv) {
-		Disconnect(syncport);
+		IeXtreamSync->Disconnect(syncport);
 		syncaktiv = FALSE;
 	}
-#endif
 }
 
 BOOL IstExtreamSyncAktiv(void) {
@@ -366,11 +351,10 @@ BOOL IstExtreamSyncAktiv(void) {
 }
 
 void KontrolleExtreamSync(void) {
-#ifdef __amigaos4__
 	struct eXtreamSyncStandardMessage *mes;
 	DOUBLE seconds;
 	
-	while (mes = (struct eXtreamSyncStandardMessage*)GetMsg(syncport)) {
+	while ((mes = (struct eXtreamSyncStandardMessage*)IExec->GetMsg(syncport))) {
 
 		switch (mes->type) {
 			case SYNC_Start:
@@ -391,7 +375,7 @@ void KontrolleExtreamSync(void) {
 
 			case SYNC_Locate:
 			seconds = ((struct eXtreamSyncLocateMessage*)mes)->timecode;
-			takt = SmpteTicksTakt((LONG)(seconds * 600));
+			takt = SmpteTicksTakt((int32)(seconds * 600));
 			tick = TaktSmpteTicks(takt);
 			ResetteLMarker();
 			ZeichneAnzeigen(TRUE);
@@ -399,26 +383,27 @@ void KontrolleExtreamSync(void) {
 			break;
 
 			case SYNC_PreLoad:
-			PreloadReady(syncport, mes->SystemMsg.mn_ReplyPort);
+			IeXtreamSync->PreloadReady(syncport, mes->SystemMsg.mn_ReplyPort);
+			break;
+
+			default:
 			break;
 		}
 	}
-#endif
 }
 
 void StartExtreamSync(void) {
-#ifdef __amigaos4__
 	struct eXtreamSyncStandardMessage *mes;
 	BOOL weiter = FALSE;
 	
 	if (syncaktiv) {
 		LocateExtreamSync();
 		
-		Start(syncport);
+		IeXtreamSync->Start(syncport);
 		
 		do {
-			WaitPort(syncport);
-			while (mes = (struct eXtreamSyncStandardMessage*)GetMsg(syncport)) {
+			IExec->WaitPort(syncport);
+			while ((mes = (struct eXtreamSyncStandardMessage*)IExec->GetMsg(syncport))) {
 				if (mes->type == SYNC_PreLoadDone) {
 					weiter = TRUE;
 					break;
@@ -430,29 +415,23 @@ void StartExtreamSync(void) {
 			}
 		} while (!weiter);
 	}
-#endif
 }
 
 void StopExtreamSync(void) {
-#ifdef __amigaos4__
 	if (syncaktiv) {
-		Stop(syncport);
+		IeXtreamSync->Stop(syncport);
 	}
-#endif
 }
 
 void LocateExtreamSync(void) {
-#ifdef __amigaos4__
 	DOUBLE timecode;
-	LONG timeticks;
+	int32 timeticks;
 	
 	if (syncaktiv) {
 		timeticks = TaktSmpteTicks(takt);
 		timecode = (DOUBLE)timeticks / 600;
-
-		Locate(syncport, timecode);
+		IeXtreamSync->Locate(syncport, timecode);
 	}
-#endif
 }
 
 //--------------------------------------------------------------------------------
@@ -464,7 +443,7 @@ void ResetteLMarker(void) {
 }
 
 void ResetteZeit(void) {
-	efreq = ReadEClock(&eclock) / 1200;
+	efreq = ITimer->ReadEClock(&eclock) / 1200;
 	startzeit = eclock.ev_lo / efreq;
 	starthiclock = eclock.ev_hi;
 
@@ -477,13 +456,13 @@ void ResetteZeit(void) {
 }
 
 void AktualisiereTakt(void) {
-	ULONG z;
+	uint32 z;
 	struct MARKER *next;
 
-	ReadEClock(&eclock);
+	ITimer->ReadEClock(&eclock);
 	zeit = eclock.ev_lo / efreq;
-	zeit += (eclock.ev_hi - starthiclock) * ((ULONG)0xFFFFFFFF / efreq);
-	if (zeit < startzeit) Meldung("Internal Time Error");
+	zeit += (eclock.ev_hi - starthiclock) * ((uint32)0xFFFFFFFF / efreq);
+	if (zeit < startzeit) Meldung((STRPTR)"Internal Time Error");
 
 	z = zeit - startzeit;
 	//takt = starttakt + ltakt + (z << VIERTEL) * bpm / 72000; (eigentliche Rechnung der nächsten Zeile)
@@ -518,7 +497,7 @@ void AktualisiereTakt(void) {
 	}
 }
 
-void SendeEvent(WORD s, UBYTE status, UBYTE data1, UBYTE data2) {
+void SendeEvent(int16 s, uint8 status, uint8 data1, uint8 data2) {
 	MidiMsg msg;
 
 	if (midiout[spur[s].port]) {
@@ -526,11 +505,11 @@ void SendeEvent(WORD s, UBYTE status, UBYTE data1, UBYTE data2) {
 		if (spur[s].channel < 16) msg.mm_Status = (msg.mm_Status & MS_StatBits) | spur[s].channel;
 		msg.mm_Data1 = data1;
 		msg.mm_Data2 = data2;
-		PutMidi(midiout[spur[s].port], msg.mm_Msg);
+		ICamd->PutMidi(midiout[spur[s].port], msg.mm_Msg);
 	}
 }
 
-void SendeKanalEvent(BYTE port, BYTE channel, UBYTE status, UBYTE data1, UBYTE data2) {
+void SendeKanalEvent(int8 port, int8 channel, uint8 status, uint8 data1, uint8 data2) {
 	MidiMsg msg;
 
 	if (midiout[port]) {
@@ -538,25 +517,25 @@ void SendeKanalEvent(BYTE port, BYTE channel, UBYTE status, UBYTE data1, UBYTE d
 		msg.mm_Status = (msg.mm_Status & MS_StatBits) | channel;
 		msg.mm_Data1 = data1;
 		msg.mm_Data2 = data2;
-		PutMidi(midiout[port], msg.mm_Msg);
+		ICamd->PutMidi(midiout[port], msg.mm_Msg);
 	}
 }
 
-void SetzeAktInstrument(BYTE p, BYTE c, BYTE bank0, BYTE bank32, BYTE prog) {
+void SetzeAktInstrument(int8 p, int8 c, int8 bank0, int8 bank32, int8 prog) {
 	kt[p][c].aktbank0 = bank0;
 	kt[p][c].aktbank32 = bank32;
 	kt[p][c].aktprog = prog;
 }
 
-void SendeKanalInstrument(BYTE p, BYTE c, BYTE bank0, BYTE bank32, BYTE prog) {
+void SendeKanalInstrument(int8 p, int8 c, int8 bank0, int8 bank32, int8 prog) {
 	if (bank0 >= 0) SendeKanalEvent(p, c, MS_Ctrl, MC_Bank, bank0);
 	if (bank32 >= 0) SendeKanalEvent(p, c, MS_Ctrl, MC_Bank + 0x20, bank32);
 	SendeKanalEvent(p, c, MS_Prog, prog, 0);
 }
 
-void SendeInstrument(WORD s) {
-	UBYTE p = spur[s].port;
-	UBYTE c = spur[s].channel;
+void SendeInstrument(int16 s) {
+	uint8 p = spur[s].port;
+	uint8 c = spur[s].channel;
 
 	if (spur[s].prog >= 0) {
 		if (spur[s].bank0 >= 0) SendeEvent(s, MS_Ctrl, MC_Bank, spur[s].bank0);
@@ -570,7 +549,7 @@ void SendeInstrument(WORD s) {
 }
 
 void Panik(void) {
-	BYTE p, c;
+	int8 p, c;
 
 	for (p = 0; p < verOUTPORTS; p++) {
 		if (midiout[p]) {
@@ -579,7 +558,7 @@ void Panik(void) {
 	}
 }
 
-BOOL AddEvent(WORD s, LONG t, UBYTE status, UBYTE data1, UBYTE data2) {
+BOOL AddEvent(int16 s, int32 t, uint8 status, uint8 data1, uint8 data2) {
 	struct SPUR *spr;
 	struct EVENT *ev;
 	BOOL ok = TRUE;
@@ -618,43 +597,43 @@ BOOL AddEvent(WORD s, LONG t, UBYTE status, UBYTE data1, UBYTE data2) {
 	return(ok);
 }
 
-LONG verschobenerTakt(WORD s, LONG zeit)
+int32 verschobenerTakt(int16 s, int32 zeit)
 {
 	return verschobenerPortTakt(spur[s].port, zeit) + spur[s].shift;
 }
 
-LONG verschobenerPortTakt(WORD p, LONG zeit)
+int32 verschobenerPortTakt(int16 p, int32 zeit)
 {
-	LONG shift = (outport[p].latenz * (ltmark->m_bpm << VIERTEL) / 60000L);
+	int32 shift = (outport[p].latenz * (ltmark->m_bpm << VIERTEL) / 60000L);
 	return zeit - shift;
 }
 
-LONG vorgeschobenerPortTakt(WORD p, LONG zeit)
+int32 vorgeschobenerPortTakt(int16 p, int32 zeit)
 {
-	LONG shift = (outport[p].latenz * (ltmark->m_bpm << VIERTEL) / 60000L);
+	int32 shift = (outport[p].latenz * (ltmark->m_bpm << VIERTEL) / 60000L);
 	return zeit + shift;
 }
 
-LONG aufnahmeLatenzAusgleich(WORD s, LONG zeit)
+int32 aufnahmeLatenzAusgleich(int16 s, int32 zeit)
 {
-	LONG shift = (outport[spur[s].port].latenz * (ltmark->m_bpm << VIERTEL) / 60000L);
+	int32 shift = (outport[spur[s].port].latenz * (ltmark->m_bpm << VIERTEL) / 60000L);
 	return zeit + shift;
 }
 
 
-BOOL SpurAufnehmen(WORD s) {
+BOOL SpurAufnehmen(int16 s) {
 	MidiMsg msg;
-	UBYTE p = spur[s].port;
+	uint8 p = spur[s].port;
 
-	if (GetMidi(midi, &msg)) {
-		if (MidiMsgType(&msg) < CMB_RealTime) {
+	if (ICamd->GetMidi(midi, &msg)) {
+		if (ICamd->MidiMsgType(&msg) < CMB_RealTime) {
 			// Controller Wandler...
 			if ((msg.mm_Status & MS_StatBits) == MS_Ctrl) msg.mm_Data1 = WandleController(msg.mm_Data1);
 
 			AddEvent(s, aufnahmeLatenzAusgleich(s, msg.mm_Time), msg.mm_Status, msg.mm_Data1, msg.mm_Data2);
 			if (midiout[p]) {
 				if (spur[s].channel < 16) msg.mm_Status = (msg.mm_Status & MS_StatBits) | spur[s].channel;
-				PutMidi(midiout[p], msg.mm_Msg);
+				ICamd->PutMidi(midiout[p], msg.mm_Msg);
 			}
 			return(TRUE);
 		}
@@ -662,18 +641,18 @@ BOOL SpurAufnehmen(WORD s) {
 	return(FALSE);
 }
 
-void AbspielenVorbereiten(WORD s) {
+void AbspielenVorbereiten(int16 s) {
 	struct EVENT *event;
 	MidiMsg msg;
-	UBYTE n;
-	UBYTE p = spur[s].port;
-	UBYTE c = spur[s].channel;
+	uint8 n;
+	uint8 p = spur[s].port;
+	uint8 c = spur[s].channel;
 
 	if (midiout[p]) {
 		msg.mm_Status = MS_PitchBend | c;
 		msg.mm_Data1 = 0;
 		msg.mm_Data2 = 64;
-		PutMidi(midiout[p], msg.mm_Msg);
+		ICamd->PutMidi(midiout[p], msg.mm_Msg);
 	}
 
 	spur[s].aktseq = spur[s].seq;
@@ -725,7 +704,7 @@ void AbspielenVorbereiten(WORD s) {
 						if ((!mpkanal[p][c].mute) && (!spur[s].mute)) { // Mutes testen
 							msg.mm_Data1 = n;
 							msg.mm_Data2 = kt[p][c].note[n];
-							PutMidi(midiout[p], msg.mm_Msg);
+							ICamd->PutMidi(midiout[p], msg.mm_Msg);
 						}
 					}
 				}
@@ -735,7 +714,7 @@ void AbspielenVorbereiten(WORD s) {
 	}
 }
 
-void LoopVorbereiten(WORD s) {
+void LoopVorbereiten(int16 s) {
 	sp[s].loopseq = spur[s].seq;
 	sp[s].loopevnum = 0;
 
@@ -788,11 +767,11 @@ void ResetteLoopZeit(void) {
 	lzeit.delay = 60000000L / lzeit.ltmark->m_bpm / VIERTELWERT;
 }
 
-void SpurAbspielen(WORD s, LONG *nexteventtakt) {
+void SpurAbspielen(int16 s, int32 *nexteventtakt) {
 	MidiMsg msg;
-	UBYTE p = spur[s].port;
-	UBYTE c = spur[s].channel;
-	LONG eventtakt;
+	uint8 p = spur[s].port;
+	uint8 c = spur[s].channel;
+	int32 eventtakt;
 
 	if (spur[s].aktseq && midiout[p]) {
 		if (takt >= spur[s].aktseq->start) {
@@ -822,7 +801,7 @@ void SpurAbspielen(WORD s, LONG *nexteventtakt) {
 					msg.mm_Data1 = spur[s].aktevbl->event[spur[s].aktevnum].data1;
 				}
 				msg.mm_Data2 = spur[s].aktevbl->event[spur[s].aktevnum].data2;
-				PutMidi(midiout[p], msg.mm_Msg);
+				ICamd->PutMidi(midiout[p], msg.mm_Msg);
 
 				if ((msg.mm_Status & MS_StatBits) == MS_NoteOn) {
 					kt[p][c].note[msg.mm_Data1] = 1;
@@ -851,8 +830,8 @@ void SpurAbspielen(WORD s, LONG *nexteventtakt) {
 	}
 }
 
-void KanalAbklingen(BYTE port, BYTE channel) {
-	UBYTE n;
+void KanalAbklingen(int8 port, int8 channel) {
+	uint8 n;
 
 	if (midiout[port]) {
 		for (n = 0; n < 128; n++) {
@@ -864,14 +843,14 @@ void KanalAbklingen(BYTE port, BYTE channel) {
 	}
 }
 
-void SpurAbklingen(WORD s) {
+void SpurAbklingen(int16 s) {
 	KanalAbklingen(spur[s].port, spur[s].channel);
 }
 
 void SpieleMetronom(void) {
 	MidiMsg msg;
 
-	LONG t = vorgeschobenerPortTakt(metro.port, takt);
+	int32 t = vorgeschobenerPortTakt(metro.port, takt);
 
 	if (midiout[metro.port]) {
 		if (t >> metro.raster != altmetro) {
@@ -885,18 +864,18 @@ void SpieleMetronom(void) {
 
 			msg.mm_Status = MS_NoteOn;
 			if (metro.channel < 16) msg.mm_Status |= metro.channel;
-			PutMidi(midiout[metro.port], msg.mm_Msg);
+			ICamd->PutMidi(midiout[metro.port], msg.mm_Msg);
 
 			msg.mm_Status = MS_NoteOff;
 			if (metro.channel < 16) msg.mm_Status |= metro.channel;
-			PutMidi(midiout[metro.port], msg.mm_Msg);
+			ICamd->PutMidi(midiout[metro.port], msg.mm_Msg);
 
 			altmetro = t >> metro.raster;
 		}
 	}
 }
 
-void TesteMetronom(BYTE taste) {
+void TesteMetronom(int8 taste) {
 	MidiMsg msg;
 
 	if (midiout[metro.port]) {
@@ -908,10 +887,10 @@ void TesteMetronom(BYTE taste) {
 			msg.mm_Data1 = metro.taste2;
 			msg.mm_Data2 = metro.velo2;
 		}
-		PutMidi(midiout[metro.port], msg.mm_Msg);
+		ICamd->PutMidi(midiout[metro.port], msg.mm_Msg);
 
 		msg.mm_Status = MS_NoteOff | metro.channel;
-		PutMidi(midiout[metro.port], msg.mm_Msg);
+		ICamd->PutMidi(midiout[metro.port], msg.mm_Msg);
 	}
 }
 
@@ -919,9 +898,9 @@ void TesteMetronom(BYTE taste) {
 
 void TesteMidiThru(void) {
 	MidiMsg msg;
-	UBYTE p = spur[snum].port;
+	uint8 p = spur[snum].port;
 
-	while (GetMidi(midi, &msg)) {
+	while (ICamd->GetMidi(midi, &msg)) {
 		//printf("Bekam: %X %d %d\n", msg.mm_Status, msg.mm_Data1, msg.mm_Data2);
 		if (msg.mm_Status >= MS_RealTime) { //Real Time Messages
 
@@ -932,9 +911,9 @@ void TesteMidiThru(void) {
 				if (sysexrec) {
 					SysExAufnehmen();
 					playsigaktion = 1;
-					Signal(hornytask, 1L << playsig);
+					IExec->Signal(hornytask, 1L << playsig);
 				} else {
-					SkipSysEx(midi);
+					ICamd->SkipSysEx(midi);
 				}
 			}
 		} else { //Channel Voice Messages
@@ -943,7 +922,7 @@ void TesteMidiThru(void) {
 				// Controller Wandler...
 				if ((msg.mm_Status & MS_StatBits) == MS_Ctrl) msg.mm_Data1 = WandleController(msg.mm_Data1);
 
-				PutMidi(midiout[p], msg.mm_Msg);
+				ICamd->PutMidi(midiout[p], msg.mm_Msg);
 				//printf("Taste: %d\n", msg.mm_Data1);
 			}
 		}
@@ -951,47 +930,48 @@ void TesteMidiThru(void) {
 }
 
 void ThruProcess(void) {
-	int n = 0;
-	thruprocsig = AllocSignal(-1);
-	midisig = AllocSignal(-1);
+	thruprocsig = IExec->AllocSignal(-1);
+	midisig = IExec->AllocSignal(-1);
 	do {
-		Wait((1L << midisig) | (1L << thruprocsig));
+		IExec->Wait((1L << midisig) | (1L << thruprocsig));
 		if (hornystatus == STATUS_STOP || hornystatus == STATUS_PLAY) TesteMidiThru();
 	} while (hornystatus != STATUS_ENDE);
-	if (thruprocsig != -1) FreeSignal(thruprocsig);
-	if (midisig != -1) FreeSignal(midisig);
+	if (thruprocsig != -1) IExec->FreeSignal(thruprocsig);
+	if (midisig != -1) IExec->FreeSignal(midisig);
 }
 
-void ShortDelay(ULONG val) {
-	struct MsgPort *ReplyMP2 = CreatePort( (STRPTR)NULL, 0 );
-	struct timerequest *TimerIO2 = NULL;
+void ShortDelay(uint32 val) {
+//	struct MsgPort *ReplyMP2 = CreatePort( (STRPTR)NULL, 0 );
+	struct MsgPort *ReplyMP2 = IExec->AllocSysObjectTags( ASOT_PORT, TAG_END );
+	struct TimeRequest *TimerIO2 = NULL;
 
 	if (ReplyMP2) {
-		TimerIO2 = (struct timerequest *)CreateIORequest( ReplyMP2, sizeof( struct timerequest) );
+//		TimerIO2 = (struct timerequest *)CreateIORequest( ReplyMP2, sizeof( struct timerequest) );
+		TimerIO2 = (struct TimeRequest *)IExec->AllocSysObjectTags( ASOT_IOREQUEST,ASOIOR_ReplyPort, ReplyMP2, ASOIOR_Size, sizeof( struct TimeRequest) ,TAG_END);
 		if (TimerIO2) {
-			if (OpenDevice( "timer.device", UNIT_MICROHZ, (struct IORequest *) TimerIO2, 0) == 0) {
-				TimerIO2->tr_node.io_Command = TR_ADDREQUEST; /* Add a request.   */
-				TimerIO2->tr_time.tv_secs = 0;                /* 0 seconds.      */
-				TimerIO2->tr_time.tv_micro = val;             /* 'val' micro seconds. */
-				DoIO( (struct IORequest *) TimerIO2 );
-				CloseDevice( (struct IORequest *) TimerIO2 );
+			if (IExec->OpenDevice( "timer.device", UNIT_MICROHZ, (struct IORequest *) TimerIO2, 0) == 0) {
+				TimerIO2->Request.io_Command = TR_ADDREQUEST; /* Add a request.   */
+				TimerIO2->Time.Seconds = 0;                /* 0 seconds.      */
+				TimerIO2->Time.Microseconds = val;             /* 'val' micro seconds. */
+				IExec->DoIO( (struct IORequest *) TimerIO2 );
+				IExec->CloseDevice( (struct IORequest *) TimerIO2 );
 			}
-			DeleteIORequest( (struct IORequest *) TimerIO2);
+			IExec->FreeSysObject(ASOT_IOREQUEST, TimerIO2);
 		}
-		DeletePort( ReplyMP2);
+		IExec->FreeSysObject(ASOT_PORT, ReplyMP2);
 	}
 }
 
 void PlayerProcess(void) {
-	WORD s;
-	LONG alttakt = 0;
+	int16 s;
+	int32 alttakt = 0;
 	BOOL midiaufgenommen;
-	LONG nexteventtakt;
-	LONG warte;
+	int32 nexteventtakt;
+	int32 warte;
 
-	playerprocsig = AllocSignal(-1);
+	playerprocsig = IExec->AllocSignal(-1);
 	do {
-		while (hornystatus == STATUS_STOP || hornystatus == STATUS_UNINIT) Wait(1L << playerprocsig);
+		while (hornystatus == STATUS_STOP || hornystatus == STATUS_UNINIT) IExec->Wait(1L << playerprocsig);
 		
 		if (hornystatus == STATUS_PLAY) {
 			for (s = 0; s < lied.spuranz; s++) {
@@ -1031,7 +1011,7 @@ void PlayerProcess(void) {
 
 				if ((takt >> (VIERTEL - 3)) != alttakt) {
 					alttakt = takt >> (VIERTEL - 3);
-					Signal(hornytask, 1L << playsig);
+					IExec->Signal(hornytask, 1L << playsig);
 				}
 
 				if (warte > (VIERTELWERT >> 3)) warte = (VIERTELWERT >> 3) * delay;
@@ -1086,7 +1066,7 @@ void PlayerProcess(void) {
 
 				if ((takt >> (VIERTEL - 3)) != alttakt) {
 					alttakt = takt >> (VIERTEL - 3);
-					Signal(hornytask, 1L << playsig);
+					IExec->Signal(hornytask, 1L << playsig);
 				}
 				
 				ShortDelay(delay);
@@ -1096,5 +1076,5 @@ void PlayerProcess(void) {
 		}
 	} while (hornystatus != STATUS_ENDE && hornystatus != STATUS_UNINIT);
 
-	if (playerprocsig != -1) FreeSignal(playerprocsig);
+	if (playerprocsig != -1) IExec->FreeSignal(playerprocsig);
 }

@@ -38,7 +38,7 @@
 
 void AktualisiereEditFeld(BOOL spalte, BOOL zl);
 
-extern WORD snum;
+extern int16 snum;
 
 extern struct SYSEXUNIT *rootsexunit;
 extern struct SYSEXUNIT *wahlsexunit;
@@ -56,7 +56,7 @@ extern struct Process *playproc;
 extern struct Window *hfenster;
 extern struct Window *aktfenster;
 extern struct Gadget *gadget[];
-extern BYTE playerprocsig;
+extern int8 playerprocsig;
 
 extern struct Window *setfenster;
 extern struct Window *envfenster;
@@ -64,9 +64,9 @@ extern struct Window *sexfenster;
 extern struct Window *mpfenster;
 extern struct Window *ccfenster;
 
-extern LONG takt;
-extern LONG tick;
-extern BYTE hornystatus;
+extern int32 takt;
+extern int32 tick;
+extern int8 hornystatus;
 extern struct SPUR spur[];
 extern struct SPURTEMP sp[];
 extern struct KANALTEMP kt[OUTPORTS][16];
@@ -80,8 +80,8 @@ extern Object *bmo[];
 
 
 void EntferneLied(void) {
-	WORD s;
-	WORD p, c;
+	int16 s;
+	int16 p, c;
 	
 	ClipboardAliasZuReal();
 	EntferneAlleMarker();
@@ -98,9 +98,9 @@ void EntferneLied(void) {
 }
 
 void InitLied(void) {
-	WORD s;
-	UBYTE p;
-	UBYTE n;
+	int16 s;
+	uint8 p;
+	uint8 n;
 
 	for (s = 0; s < verSPUREN; s++) {
 		InitSpur(s);
@@ -147,7 +147,7 @@ void NeuesLied(void) {
 
 
 void Stoppen(void) {
-	WORD s;
+	int16 s;
 	
 	if (hornystatus == STATUS_REC) {
 		NichtsMarkieren();
@@ -165,8 +165,8 @@ void Stoppen(void) {
 
 	StopExtreamSync();
 	
-	SetGadgetAttrs(gadget[GAD_T_PLAY], hfenster, NULL, GA_Image, bmo[IMG_PLAY], TAG_DONE);
-	SetGadgetAttrs(gadget[GAD_T_REC], hfenster, NULL, GA_Image, bmo[IMG_REC], TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_T_PLAY], hfenster, NULL, GA_Image, bmo[IMG_PLAY], TAG_DONE);
+	IIntuition->SetGadgetAttrs(gadget[GAD_T_REC], hfenster, NULL, GA_Image, bmo[IMG_REC], TAG_DONE);
 	MenuDeaktivieren(0, 4, FALSE);
 	MenuItemDeaktivieren(0, 0xF802, FALSE);
 	MenuItemDeaktivieren(0, 0xF822, FALSE);
@@ -195,9 +195,9 @@ void WiedergabeStarten(BOOL remote) {
 		
 		if (!remote) StartExtreamSync();
 		hornystatus = STATUS_PLAY;
-		Signal(&playproc->pr_Task, 1L << playerprocsig);
+		IExec->Signal(&playproc->pr_Task, 1L << playerprocsig);
 
-		SetGadgetAttrs(gadget[GAD_T_PLAY], hfenster, NULL, GA_Image, bmo[IMG_PLAY_A], TAG_DONE);
+		IIntuition->SetGadgetAttrs(gadget[GAD_T_PLAY], hfenster, NULL, GA_Image, bmo[IMG_PLAY_A], TAG_DONE);
 	}
 }
 
@@ -209,13 +209,13 @@ void AufnahmeStarten(void) {
 		
 		StartExtreamSync();
 		hornystatus = STATUS_REC;
-		Signal(&playproc->pr_Task, 1L << playerprocsig);
+		IExec->Signal(&playproc->pr_Task, 1L << playerprocsig);
 		
-		SetGadgetAttrs(gadget[GAD_T_REC], hfenster, NULL, GA_Image, bmo[IMG_REC_A], TAG_DONE);
+		IIntuition->SetGadgetAttrs(gadget[GAD_T_REC], hfenster, NULL, GA_Image, bmo[IMG_REC_A], TAG_DONE);
 	}
 }
 
-void SpringeTakt(LONG t) {
+void SpringeTakt(int32 t) {
 	if (t < 0) t = 0;
 	if (hornystatus == STATUS_STOP) {
 		takt = t;
@@ -234,13 +234,13 @@ void SpringeTakt(LONG t) {
 	}
 }
 
-void Springe(BYTE n) {
+void Springe(int8 n) {
 	if (sprung[n]) {
 		SpringeTakt(sprung[n]->takt);
 	}
 }
 
-void TransportKontrolleRaw(UBYTE taste) {
+void TransportKontrolleRaw(uint8 taste) {
 	if (umgebung.tastatur == TASTATUR_PC) {
 		switch (taste) {
 			case 72: // PgUp
@@ -254,7 +254,7 @@ void TransportKontrolleRaw(UBYTE taste) {
 	}
 }
 
-void TransportKontrolle(UBYTE taste) {
+void TransportKontrolle(uint8 taste) {
 	if ((taste >= '1') && (taste <= '9')) {
 		Springe(taste - '1');
 	} else {
@@ -293,7 +293,7 @@ void TransportKontrolle(UBYTE taste) {
 }
 
 void StartProjekt(STRPTR startdatei) {
-	WORD s;
+	int16 s;
 	STRPTR datei;
 	
 	if (startdatei) datei = startdatei;
@@ -301,7 +301,7 @@ void StartProjekt(STRPTR startdatei) {
 	else datei = NULL;
 	
 	if (datei) {
-		if (hfenster) SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
+		if (hfenster) IIntuition->SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
 		if (LadenHorny(datei)) {
 			if (startdatei) strncpy(projdatei, startdatei, 1024);
 			wahlsexunit = rootsexunit;
@@ -312,20 +312,20 @@ void StartProjekt(STRPTR startdatei) {
 			SammleMPKanaele();
 			SendeMischpult();
 		}
-		if (hfenster) ClearPointer(hfenster);
+		if (hfenster) IIntuition->ClearPointer(hfenster);
 	}
 }
 
 void FensterFrontActive(struct Window *fen) {
-	WindowToFront(fen);
-	ActivateWindow(fen);
+	IIntuition->WindowToFront(fen);
+	IIntuition->ActivateWindow(fen);
 }
 
 void ProjektLadenKomplett(void) {
-	WORD s;
+	int16 s;
 	
 	if (hornystatus > STATUS_STOP) Stoppen();
-	SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
+	IIntuition->SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
 	if (!LadenHorny(projdatei)) projdatei[0] = 0;
 	FensterTitel(projdatei);
 	wahlsexunit = rootsexunit;
@@ -348,11 +348,11 @@ void ProjektLadenKomplett(void) {
 
 	TesteInstrumente();
 
-	ClearPointer(hfenster);
+	IIntuition->ClearPointer(hfenster);
 }
 
-void MinMenuKontrolle(ULONG item) {
-	WORD s;
+void MinMenuKontrolle(uint32 item) {
+	int16 s;
 	STRPTR strpuf;
 
 	switch (item) {
@@ -433,7 +433,7 @@ void MinMenuKontrolle(ULONG item) {
 		break;
 		
 		case MENU_SPEICHERN:
-		SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
+		IIntuition->SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
 		ClipboardAliaseRechnen(-1);
 		SammleMPKanaele();
 		if (projdatei[0]) {
@@ -445,32 +445,32 @@ void MinMenuKontrolle(ULONG item) {
 			}
 		}
 		ClipboardAliaseRechnen(+1);
-		ClearPointer(hfenster);
+		IIntuition->ClearPointer(hfenster);
 		break;
 
 		case MENU_SPEICHERNALS:
 		if (AslProjSpeichern()) {
-			SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
+			IIntuition->SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
 			ClipboardAliaseRechnen(-1);
 			SammleMPKanaele();
 			SpeichernHorny(projdatei);
 			ClipboardAliaseRechnen(+1);
 			FensterTitel(projdatei);
-			ClearPointer(hfenster);
+			IIntuition->ClearPointer(hfenster);
 		}
 		break;
 
 		case MENU_SPEICHERNALSAUTOLOAD:
 		strpuf = String_Copy(NULL, CAT(MSG_0217, "Save as '"));
 		strpuf = String_Cat(strpuf, umgebung.startproj);
-		strpuf = String_Cat(strpuf, "'?");
+		strpuf = String_Cat(strpuf, (STRPTR)"'?");
 		if (Frage(strpuf, CAT(MSG_0213, "Yes|No"))) {
-			SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
+			IIntuition->SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
 			ClipboardAliaseRechnen(-1);
 			SammleMPKanaele();
 			SpeichernHorny(umgebung.startproj);
 			ClipboardAliaseRechnen(+1);
-			ClearPointer(hfenster);
+			IIntuition->ClearPointer(hfenster);
 		}
 		String_Free(strpuf);
 		break;
@@ -478,7 +478,7 @@ void MinMenuKontrolle(ULONG item) {
 		case MENU_IMPORTSMF:
 		if (AslSMFLaden()) {
 			if (hornystatus > STATUS_STOP) Stoppen();
-			SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
+			IIntuition->SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
 			ImportSMF(smfdatei);
 			projdatei[0] = 0;
 			FensterTitel(smfdatei);
@@ -493,16 +493,16 @@ void MinMenuKontrolle(ULONG item) {
 			for (s = 0; s < lied.spuranz; s++) SendeInstrument(s);
 			SendeMischpult();
 			AktualisiereMischpult();
-			ClearPointer(hfenster);
+			IIntuition->ClearPointer(hfenster);
 		}
 		break;
 
 		case MENU_EXPORTSMF:
 		if (AslSMFSpeichern()) {
-			SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
+			IIntuition->SetWindowPointer(hfenster, WA_BusyPointer, TRUE, TAG_DONE);
 			ExportSMF(smfdatei);
 			FensterTitel(smfdatei);
-			ClearPointer(hfenster);
+			IIntuition->ClearPointer(hfenster);
 		}
 		break;
 	}

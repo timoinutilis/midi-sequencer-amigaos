@@ -1,22 +1,22 @@
 #include <exec/types.h>
 
-struct MARKER *NeuerMarker(BYTE typ, LONG t, WORD d1, WORD d2);
+struct MARKER *NeuerMarker(int8 typ, int32 t, int16 d1, int16 d2);
 void EntferneMarker(struct MARKER *mark);
 void EntferneAlleMarker(void);
-struct MARKER *TaktDirektMarker(LONG t);
-struct MARKER *TaktMarker(struct MARKER *start, BYTE typ, LONG t);
+struct MARKER *TaktDirektMarker(int32 t);
+struct MARKER *TaktMarker(struct MARKER *start, int8 typ, int32 t);
 struct MARKER *NextMarker(struct MARKER *akt);
 void MarkerTauschen(struct MARKER *mark1, struct MARKER *mark2);
 void MarkerSortieren(void);
 void ErstelleGrundMarker(void);
-void TaktWahlMark(LONG t);
+void TaktWahlMark(int32 t);
 
-LONG TaktZeit(LONG t);
-LONG TaktSmpteTicks(LONG t);
-LONG SmpteTicksTakt(LONG ticks);
+int32 TaktZeit(int32 t);
+int32 TaktSmpteTicks(int32 t);
+int32 SmpteTicksTakt(int32 ticks);
 void SmpteTicksAktualisieren(void);
 
 void TakteAktualisieren(void);
 
-LONG NextXMarkerTakt(LONG t);
-LONG PrevXMarkerTakt(LONG t);
+int32 NextXMarkerTakt(int32 t);
+int32 PrevXMarkerTakt(int32 t);

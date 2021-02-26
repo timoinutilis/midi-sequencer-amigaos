@@ -9,12 +9,12 @@ extern struct Window *hfenster;
 
 
 void AppWindowAnmelden(void) {
-	appwindow = AddAppWindowA(0, 0, hfenster, hfenster->UserPort, NULL);
+	appwindow = IWorkbench->AddAppWindowA(0, 0, hfenster, hfenster->UserPort, NULL);
 }
 
 void AppWindowAbmelden(void) {
 	if (appwindow) {
-		RemoveAppWindow(appwindow);
+		IWorkbench->RemoveAppWindow(appwindow);
 		appwindow = NULL;
 	}
 }
@@ -23,6 +23,6 @@ STRPTR HoleAppMessageDatei(struct IntuiMessage *msg) {
 	struct AppMessage *amsg;
 	
 	amsg = (struct AppMessage *)msg;
-	CurrentDir(amsg->am_ArgList->wa_Lock);
+	IDOS->SetCurrentDir(amsg->am_ArgList->wa_Lock);
 	return(amsg->am_ArgList->wa_Name);
 }

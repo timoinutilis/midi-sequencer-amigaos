@@ -1,0 +1,1218 @@
+## version $VER: Horny.catalog 1.4 (22.01.2020)
+## codeset 0
+## language italiano
+## chunk AUTH Translated by Samir Hawamdeh (http://www.betatesting.it/backforthefuture)
+;
+; ATO Italia
+; Compiled with FlexCat 2.18 PPC (AmigaOS4)
+; flexcat Horny.cd Horny.ct catalog=Horny.catalog
+; 
+; Italian translation of Horny
+;
+; Traduzione italiana di Horny
+;
+; ==Automation.c==================================
+;
+MSG_0000
+Non erano presenti eventi del controller adeguati nelle sequenze selezionate.
+; There were no fitting controller events in marked sequences
+;
+MSG_0001
+L'automazione che si desidera convertire deve prima essere selezionata.
+; The automation you want to convert to must be selected
+;
+; ==CtrlWandler.c=================================
+;
+MSG_0005
+Nome
+; Name
+;
+MSG_0005A
+Originale
+; Original
+;
+MSG_0005B
+Destinazione
+; Destination
+;
+MSG_0005C
+Trasformatore Controller
+; Controller Transformer
+;
+MSG_0005D
+Nuovo
+; New
+;
+MSG_0005E
+Elimina
+; Delete
+;
+MSG_0005F
+Modifica Trasformatore
+; Adjust Transformer
+;
+MSG_0005G
+Imposta originale
+; Set Original
+;
+MSG_0005H
+Imposta destinazione
+; Set Destination
+;
+; ==Mischpult.c===================================
+;
+MSG_0006
+Mixer
+; Mixer
+;
+; ==Spuren.c======================================
+;
+MSG_0007
+Traccia %d
+; Track %d
+;
+MSG_0009
+Nella versione Lite non è possibile creare più di 16 tracce!
+; In Lite version, it's not possible\nto create more than 16 tracks
+;
+MSG_0010
+Impossibile creare altre tracce!
+; It's not possible to create more tracks
+;
+MSG_0011
+La traccia contiene sequenze originali di alias.
+; Track contains original sequence(s) of aliases
+;
+; ==Einstellungen.c===============================
+;
+MSG_0016
+<nessuna porta disponibile>
+; <no ports available>
+;
+MSG_0017
+%s: Canale %d
+; %s: Channel %d
+;
+MSG_0018
+Output
+; Outputs
+;
+MSG_0019
+Cambia Attivo
+; Change Active
+;
+MSG_0020
+Aggiungi
+; Add
+;
+MSG_0021
+Rimuovi
+; Remove
+;
+MSG_0022
+Output strumenti
+; Output Instruments
+;
+MSG_0023
+Input
+; Inputs
+;
+MSG_0026
+Note 1/8
+; 1/8 Notes
+;
+MSG_0027
+Note 1/4
+; 1/4 Notes
+;
+MSG_0028
+Note 1/2
+; 1/2 Notes
+;
+MSG_0029
+Barre
+; Bars
+;
+MSG_0030
+Canale
+; Channel
+;
+MSG_0031
+Griglia
+; Grid
+;
+MSG_0032
+Beat Principale
+; Main Beat
+;
+MSG_0033
+Chiave
+; Key
+;
+MSG_0034
+Velocità
+; Velocity
+;
+MSG_0035
+Beat Laterale
+; Side Beat
+;
+MSG_0041
+Ora di Inizio   OO:MM:SS:FF
+; Start Time   HH:MM:SS:FF
+;
+MSG_0042
+_Elimina
+; Delete
+;
+MSG_0043
+_Accetta
+; Accept
+;
+MSG_0044
+Porte Midi
+; Midi Ports
+;
+MSG_0045
+Metronomo
+; Metronome
+;
+MSG_0046
+SMPTE
+; SMPTE
+;
+MSG_0047
+Gestione Progetto
+; Project Settings
+;
+; ==Marker.c======================================
+;
+MSG_0048
+Memoria insufficiente per il marcatore\n<Marker.c>
+; Not enough memory for marker\n<Marker.c>
+;
+MSG_0049
+Inizio
+; Beginning
+;
+; ==Umgebung.c====================================
+;
+MSG_0053
+_Usa Workbench
+; Use Workbench
+;
+MSG_0054
+Modo
+; Mode
+;
+MSG_0055
+_Finestra principale come sfondo
+; Main Window as Background
+;
+MSG_0057
+Progetti Horny
+; Horny Projects
+;
+MSG_0058
+File Midi (SMF)
+; Midi Files (SMF)
+;
+MSG_0058A
+File SysEx
+; SysEx Files
+;
+MSG_0059
+Progetto Iniziale
+; Start Project
+;
+MSG_0060
+_Usa per nuovi progetti
+; Use for New Projects
+;
+MSG_0062
+File
+; File
+;
+MSG_0062A
+Funzioni Transport (Tastierino numerico)
+; Transport Functions (Numpad)
+;
+MSG_0062B
+Tastiera Amiga (Reg: <*> Veloce: <[> <]> Marcatore: <+> <->)
+; Amiga Keyboard (Rec: <*> Fast: <[> <]> Marker: <+> <->)
+;
+MSG_0062C
+Tastiera PC (Reg: <-> Veloce: </> <*> Marcatore: <PgSu> <PgGiù>)
+; PC Keyboard (Rec: <-> Fast: </> <*> Marker: <PgUp> <PgDn>)
+;
+MSG_0062I
+Rotellina del Mouse
+; Mouse Wheels
+;
+MSG_0062J
+_Scambio orizontale/verticale
+; Swap Horizontal/Vertical
+;
+MSG_0062D
+Queste modifiche avranno effetto al prossimo riavvio di Horny
+; System settings take affect after application restart
+;
+MSG_0062E
+Priorità Multitasking
+; Multitasking Priorities
+;
+MSG_0062F
+Processo Player
+; Player Process
+;
+MSG_0062G
+Processo Thru
+; Thru Process
+;
+MSG_0062H
+Dimensioni del buffer SysEx ricevuto (kB)
+; SysEx Receive Buffer Size (kB)
+;
+MSG_0063
+Schermo
+; Screen
+;
+MSG_0064
+Percorsi
+; Paths
+;
+MSG_0064A
+Controlli
+; Control
+;
+MSG_0064B
+Sistema
+; System
+;
+MSG_0065
+Impostazioni di Horny
+; Environment Settings
+;
+MSG_0066
+_Salva
+; Save
+;
+MSG_0067
+_Usa
+; Use
+;
+MSG_0068
+_Annulla
+; Cancel
+;
+; ==Gui.c=========================================
+;
+MSG_0138
+Schermo di Horny
+; Horny's Screen
+;
+MSG_0140
+Impossible aprire lo schermo!
+; Could not open screen
+;
+MSG_0141
+Sono rimaste aperte delle finestre.\nImpossibile chiudere lo schermo!
+; There are open windows.\nCannot close screen.
+;
+; ==Midi.c========================================
+;
+MSG_0158
+Memoria insufficiente per il blocco della sequenza/evento\n<Midi.c>
+; Not enough memory for sequence/event block\n<Midi.c>
+;
+; ==Main.c========================================
+;
+MSG_0159A
+Impossibile modificare lo stato di sincronizzazione durante la riproduzione!
+; Cannot change sync status while playback
+;
+MSG_0159
+Senza nome
+; Unnamed
+;
+MSG_0160
+Si desidera eliminare la traccia?
+; Really delete track?
+;
+MSG_0161
+Si|No
+; Yes|No
+;
+MSG_0162
+Si desidera aprire il progetto?
+; Really open project?
+;
+MSG_0163
+Impossibile creare il processo del player!
+; Could not create player process
+;
+MSG_0163A
+Impossibile creare il processo thru!
+; Could not create thru process
+;
+MSG_0164
+Si desidera chiudere il programma?
+; Really quit program?
+;
+; ==Fenster.c=====================================
+;
+MSG_0194
+Annulla
+; Cancel
+;
+MSG_0195
+Ok
+; Okay
+;
+MSG_0197
+Soglia
+; Threshold
+;
+MSG_0198
+Compressione
+; Compression
+;
+MSG_0199
+Gain
+; Gain
+;
+; ==MidiEdit.c====================================
+;
+MSG_0206
+Le correzioni sono state applicate.
+; Corrections were done
+;
+MSG_0207
+Tutte le note sono corrette.
+; All notes are okay
+;
+MSG_0208
+Le note si trovano in un punto di divisione.
+; Notes are lying on split point
+;
+MSG_0209
+Dividi|Accorcia
+; Split|Shorten
+;
+; ==Projekt.c=====================================
+;
+MSG_0210
+Senza nome
+; Unnamed
+;
+MSG_0211
+Standard
+; Standard
+;
+MSG_0212
+Si desidera chiudere il programma?
+; Really quit program?
+;
+MSG_0213
+Si|No
+; Yes|No
+;
+MSG_0214
+Si desidera avviare un nuovo progetto?
+; Really start new project?
+;
+MSG_0216
+Si desidera inviare tutti i messaggi SysEx\n(eccetto quelli bloccati)?
+; Should really all SysEx messages\n(except locked ones) be sent?
+;
+MSG_0217
+Salva come '
+; Save as '
+;
+; ==Gui2.c========================================
+;
+MSG_0218
+Volume
+; Volume
+;
+MSG_0219
+Panorama
+; Panorama
+;
+MSG_0224
+Titolo:
+; Title:
+;
+MSG_0225
+Durata:
+; Length:
+;
+MSG_0226
+Modifica Posizione
+; Edit Position
+;
+MSG_0227
+Tempo:
+; Tempo:
+;
+MSG_0228
+Firma:
+; Signature:
+;
+MSG_0229
+Testo:
+; Text:
+;
+MSG_0230
+Traccia:
+; Track:
+;
+MSG_0231
+Canale:
+; Channel:
+;
+MSG_0232
+Thru
+; Thru
+;
+MSG_0233
+Program:
+; Program:
+;
+MSG_0236
+non scelto
+; not chosen
+;
+MSG_0237
+Shift:
+; Shift:
+;
+MSG_0238
+Sequenza:
+; Sequence:
+;
+MSG_0240
+Transpose:
+; Transpose:
+;
+MSG_0241
+Muto:
+; Mute:
+;
+MSG_0241A
+ON
+; ON
+;
+MSG_0241B
+OFF
+; OFF
+;
+MSG_0242
+Alias:
+; Aliases:
+;
+; ==Menu.c========================================
+;
+MSG_0247
+Horny
+; Program
+;
+MSG_0248
+Informazioni...
+; About...
+;
+MSG_0249
+Impostazioni...
+; Environment...
+;
+MSG_0251
+Fissa finestre
+; Snapshot All Windows
+;
+MSG_0252
+Esci
+; Quit
+;
+MSG_0254
+Progetto
+; Project
+;
+MSG_0255
+Nuovo
+; New
+;
+MSG_0257
+Carica...
+; Load...
+;
+MSG_0259
+Importa Midi...
+; Import SMF...
+;
+MSG_0260
+Salva
+; Save
+;
+MSG_0261
+Salva come progetto iniziale
+; Save as Start Project
+;
+MSG_0262
+Salva come...
+; Save as...
+;
+MSG_0263
+Esporta Midi...
+; Export SMF...
+;
+MSG_0264
+Gestisci progetto...
+; Settings...
+;
+MSG_0266
+Gestisci SysEx...
+; SysEx Manager...
+;
+MSG_0268
+Mixer...
+; Mixer...
+;
+MSG_0269
+Trasformatore Controller...
+; Controller Transformer...
+;
+MSG_0270
+Invia Programmi
+; Send Programs
+;
+MSG_0271
+Invia SysEx
+; Send All SysEx
+;
+MSG_0272
+Invia Mix
+; Send Mix
+;
+MSG_0273
+Invia Note (Off)
+; Send All Notes Off
+;
+MSG_0275
+Traccia
+; Track
+;
+MSG_0276
+Aggiungi
+; Add
+;
+MSG_0278
+Duplica
+; Duplicate
+;
+MSG_0280
+Elimina
+; Delete
+;
+MSG_0282
+Silenzia (On/Off)
+; Mute On/Off
+;
+MSG_0284
+Solo
+; Solo
+;
+MSG_0286
+Silenzia tutto (Off)
+; All Mutes Off
+;
+MSG_0288
+Automazione
+; Track Automation
+;
+MSG_0289
+Volume
+; Volume
+;
+MSG_0290
+Panorama
+; Panorama
+;
+MSG_0291
+Controller 1
+; Controller 1
+;
+MSG_0292
+Controller 2
+; Controller 2
+;
+MSG_0293
+Controller 3
+; Controller 3
+;
+MSG_0294
+Controller 4
+; Controller 4
+;
+MSG_0295
+Controller 5
+; Controller 5
+;
+MSG_0296
+Controller 6
+; Controller 6
+;
+MSG_0297
+Nascondi
+; Hide Automation
+;
+MSG_0298A
+Converti in sequenza
+; Convert to Sequence
+;
+MSG_0298B
+Ottieni da sequenza
+; Get from Sequences
+;
+MSG_0299
+Sequenza
+; Sequence(s)
+;
+MSG_0300
+Seleziona
+; Mark
+;
+MSG_0301
+Tutto nella traccia attiva
+; All in Active Track
+;
+MSG_0302
+Tutto nel pezzo musicale
+; All in Song
+;
+MSG_0303
+Tutto da posizione modificata
+; All From Edit Position
+;
+MSG_0303A
+Imposta loop su sequenze
+; Set Loop around Sequence(s)
+;
+MSG_0304
+Copia
+; Copy
+;
+MSG_0306
+Incolla
+; Paste
+;
+MSG_0308
+Elimina
+; Delete
+;
+MSG_0310
+Quantizza...
+; Quantize...
+;
+MSG_0312
+Dividi
+; Split
+;
+MSG_0314
+Suddividi
+; Subdivide
+;
+MSG_0316
+Unisci
+; Merge
+;
+MSG_0318
+Alias su reale
+; Alias to Real
+;
+MSG_0376
+Modifica
+; Edit
+;
+MSG_0377
+Annulla
+; Undo
+;
+MSG_0379
+Ripristina
+; Redo
+;
+MSG_0380
+Note
+; Note(s)
+;
+MSG_0381
+Seleziona
+; Mark
+;
+MSG_0382
+Tutte
+; All
+;
+MSG_0383
+Stesse note e più alte
+; Higher and same Notes
+;
+MSG_0384
+Stesse note e più basse
+; Lower and same Notes
+;
+MSG_0385
+Note più silenziose
+; Quieter Notes
+;
+MSG_0386
+Tutte sullo stesso canale
+; All with same Channel
+;
+MSG_0387
+Elimina
+; Delete
+;
+MSG_0389
+Quantizza
+; Quantize
+;
+MSG_0390
+Inizio
+; Starts
+;
+MSG_0392
+Fine
+; Ends
+;
+MSG_0393
+Inizio più vicino
+; Starts Nearer
+;
+MSG_0395
+Velocità compressione...
+; Velocity Compressor...
+;
+MSG_0397
+Ripara note
+; Repair Notes
+;
+MSG_0399
+Controller
+; Controller
+;
+MSG_0400
+Nessuno selezionato
+; Nothing Marked
+;
+MSG_0402
+Aggiungi...
+; Add...
+;
+MSG_0404
+Elimina
+; Delete
+;
+MSG_0406
+Riduci...
+; Reduce...
+;
+MSG_0408
+Comprimi...
+; Compressor...
+;
+MSG_0410
+Smooth
+; Smooth
+;
+; ==Sequenzen.c===================================
+;
+MSG_0412
+Memoria insufficiente per il blocco dell'evento\n<Sequenzen.c>
+; Not enough memory for event block\n<Sequenzen.c>
+;
+MSG_0413
+Memoria insufficiente per la sequenza\n<Sequenzen.c>
+; Not enough memory for sequence\n<Sequenzen.c>
+;
+MSG_0414
+Le sequenze con alias (possibilmente nella clipboard)\nnon possono essere eliminate.
+; Sequences with aliases (possibly in clipboard)\ncannot be deleted
+;
+MSG_0415
+Memoria insufficiente per l'alias\n<Sequenzen.c>
+; Not enough memory for alias\n<Sequenzen.c>
+;
+MSG_0421
+Gli alias non possono essere divisi.
+; Aliases cannot be splitted
+;
+MSG_0422
+Le sequenza originali possono solo essere unite.
+; Original sequences can be merged only
+;
+; ==DiskSMF.c=====================================
+;
+MSG_0437
+Errore durante l'importazione.
+; Error while importing
+;
+MSG_0438
+Memoria insufficiente per il chunk SMF\n<DiskSMF.c>
+; Not enough memory for SMF chunk\n<DiskSMF.c>
+;
+MSG_0438A
+Dati SysEx trovati e copiati nel gestore SysEx.
+; SysEx data was found and copied to SysEx Manager
+;
+MSG_0439
+Non è un file SMF.
+; Not a SMF file
+;
+MSG_0440
+Impossibile salvare il file
+; Could not save file
+;
+MSG_0441
+Memoria insufficiente per la scrittura nel buffer\n<DiskSMF.c>
+; Not enough memory for write buffer\n<DiskSMF.c>
+;
+; ==Requester.c===================================
+;
+MSG_0444
+Avviso
+; Message
+;
+MSG_0446
+Ok
+; Okay
+;
+MSG_0449
+Carica progetto Horny
+; Load Horny Project
+;
+MSG_0450
+Salva progetto Horny
+; Save Horny Project
+;
+MSG_0452
+Un file con questo nome è già esistente!
+; File with this name already exists
+;
+MSG_0453
+Sovrascrivi|Annulla
+; Overwrite|Cancel
+;
+MSG_0454
+Importa progetto MIDI SMF
+; Load MIDI Project
+;
+MSG_0455
+Salva progetto MIDI SMF
+; Save MIDI Project
+;
+MSG_0456
+Carica file SysEx
+; Load SysEx File
+;
+MSG_0457
+Salva file SysEx
+; Save SysEx File
+;
+; ==Instrumente.c=================================
+;
+MSG_0470
+Standard
+; Standard
+;
+MSG_0471
+Programma %d
+; Program %d
+;
+MSG_0472
+I seguenti strumenti dei file sono\nmancanti per il progetto:\n
+; Following instrument files\nare missing for this project:\n
+;
+MSG_0474
+Scelta Programma (%s)
+; Program Choice(%s)
+;
+MSG_0477
+_Annulla
+; Cancel
+;
+MSG_0478
+_Annulla
+; Nothing
+;
+MSG_0479
+Accetta
+; Accept
+;
+MSG_0483
+Scelta Controller (%s)
+; Controller Choice (%s)
+;
+MSG_0485
+_Ok
+; Okay
+;
+MSG_0486
+_Mostra tutto
+; Show All
+;
+; ==EditorNotenGui.c==============================
+;
+MSG_0505
+liberi
+; free
+;
+MSG_0506
+Griglia
+; Grid
+;
+MSG_0507
+Durata
+; Length
+;
+MSG_0508
+Triplet
+; Triplet
+;
+MSG_0512
+Editor Piano <-> Editor Controller
+; Piano Editor <-> Controller Editor
+;
+MSG_0513
+xxx
+; xxx
+;
+MSG_0514
+Editor [ %s: %s ]     ANNULLA: %s, RIPRISTINA: %s
+; Editor [ %s: %s ]     UNDO: %s, REDO: %s
+;
+MSG_0518
+Pos. Rel:
+; Rel Pos:
+; "Relative Position"
+;
+MSG_0520
+Note:
+; Note:
+;
+MSG_0521
+Velocità:
+; Velocity:
+;
+MSG_0522
+Canale:
+; Channel:
+;
+; ==SysEx.c===================================
+;
+MSG_0525A
+Errore nel file SysEx.
+; Error in SysEx file
+;
+MSG_0525B
+Per salvare è necessario selezionare almeno un messaggio SysEx.
+; At least one SysEx message must be selected for saving
+;
+MSG_0525
+Ricevuto un messaggio SysEx non corretto.
+; Incorrect SysEx message received
+;
+MSG_0526
+Memoria insufficiente per SysEx\n<SysEx.c>
+; Not enough memory for SysEx\n<SysEx.c>
+;
+MSG_0527
+Gestione SysEx
+; SysEx Manager
+;
+MSG_0528
+Gruppi
+; Groups
+;
+MSG_0529
+Nuovo
+; New
+;
+MSG_0530
+Elimina
+; Delete
+;
+MSG_0531
+Invia Gruppo
+; Send Group
+;
+MSG_0532
+Invia tutti i Gruppi
+; Send All Groups
+;
+MSG_0533
+Messaggi SysEx
+; SysEx Messages
+;
+MSG_0535
+Invia
+; Send
+;
+MSG_0535A
+Carica...
+; Load...
+;
+MSG_0535B
+Salva...
+; Save...
+;
+MSG_0536
+Registra SysEx
+; Record SysEx
+;
+MSG_0538
+Standard
+; Standard
+;
+; ==EditorContrGui.c==============================
+;
+MSG_0545
+Pos. Rel:
+; Rel Pos:
+; "Relative Position"
+;
+MSG_0546
+Control.:
+; Control.:
+; "Controller:"
+;
+MSG_0547
+Valore:
+; Value:
+;
+MSG_0548
+Canale:
+; Channel:
+;
+; ==DiskHornyLaden.c==============================
+;
+MSG_0549
+Questo progetto è stato creato con un altro tipo di configurazione midi.\nPer favore modifica le impostazioni della porta.
+; This project was created in another midi configuration.\nPlease adjust port settings.
+;
+MSG_0550
+Memoria insufficiente per i dati SysEx\n<DiskHornyLaden.c>
+; Not enough memory for SysEx data\n<DiskHornyLaden.c>
+;
+MSG_0551
+Memoria insufficiente per il blocco dell'evento\n<DiskHornyLaden.c>
+; Not enough memory for event block\n<DiskHornyLaden.c>
+;
+MSG_0552
+File non corretto.
+; Incorrect file
+;
+MSG_0553
+Memoria insufficiente per l'area\n<DiskHornyLaden.c>
+; Not enough memory for area\n<DiskHornyLaden.c>
+;
+MSG_0554
+Questo formato del file di Horny è\nobsoleto e non più supportato.
+; Obsolete Horny file format\nis not supported anymore
+;
+MSG_0555
+Non è un file di Horny!
+; Not a Horny file
+;
+MSG_0556
+Impossibile caricare il progetto!
+; Could not load project
+;
+; ==DiskHornySpeichern.c==========================
+;
+MSG_0592
+Il buffer è troppo piccolo!
+; Buffer too small
+;
+MSG_0593
+Impossibile salvare il progetto!
+; Could not save project
+;
+MSG_0594
+Memoria insufficiente per l'area del buffer\n<DiskHornySpeichern.c>
+; Not enough memory for area buffer\n<DiskHornySpeichern.c>
+;
+; ==EditorNoten.c=================================
+;
+MSG_0595
+Gli alias non possono essere modificati. Si desidera...\n...modificare l'originale, o...\n...modificare l'alias in una sequenza reale?
+; Aliases cannot be edited. Do you want to...\n...edit the original, or...\n...change alias to real sequence?
+;
+MSG_0596
+Originale|Alias su reale|Annulla
+; Original|Alias to real|Cancel
+;
+MSG_0598
+Modifica dinamiche
+; Edit Dynamics
+;
+MSG_0599
+Sposta note
+; Move Notes
+;
+MSG_0600
+Crea note
+; Create Note
+;
+MSG_0601
+Crea Controller
+; Create Controller
+;
+MSG_0602
+Sposta Controller
+; Move Controller
+;
+MSG_0603
+Elimina
+; Delete
+;
+MSG_0606
+La nota di riferimento deve essere selezionata.
+; A reference note must be marked
+;
+MSG_0609
+Modifica dinamiche
+; Edit Dynamics
+;
+MSG_0610
+Quantizza
+; Quantize
+;
+MSG_0611
+Quantizzare all'interno di una griglia libera è inutile.
+; Quantizing on free grid is useless
+;
+MSG_0612
+Quantizza (Fine)
+; Quantize (Ends)
+;
+MSG_0614
+Quantizza (Vicino)
+; Quantize (Near)
+;
+MSG_0616
+Ripara
+; Repair
+;
+MSG_0617
+Riduci
+; Reduce
+;
+MSG_0618
+Smooth
+; Smooth
+;
+MSG_0619
+Elimina
+; Delete
+;

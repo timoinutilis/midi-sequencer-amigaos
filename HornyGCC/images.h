@@ -1,9 +1,9 @@
 #include <intuition/intuition.h>
 
 struct RGB {
-	ULONG r;
-	ULONG g;
-	ULONG b;
+	uint32 r;
+	uint32 g;
+	uint32 b;
 } farbe[] = {
 	{0x8EEEEEEE,0x8EEEEEEE,0x8EEEEEEE}, // 4   Dunkelgrau
 	{0x80000000,0x92222222,0xC2222222}, //     Tracks Spalte
